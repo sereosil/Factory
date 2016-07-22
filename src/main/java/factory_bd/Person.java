@@ -1,7 +1,6 @@
 package factory_bd;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+
 /**
  * Created by Валерий on 20.07.2016.
  */
@@ -15,16 +14,17 @@ public class Person {
 
     private String lastName;
 
-    private String pasportIdentificator;
+    private String passportIdentification;
 
-    private String companyName;
+    @ManyToOne(cascade = {CascadeType.ALL})
+    private Company company;
 
-    public String getCompanyName() {
-        return companyName;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     public String getFirstName() {
@@ -43,33 +43,41 @@ public class Person {
         this.lastName = lastName;
     }
 
-    public String getPasportIdentificator() {
-        return pasportIdentificator;
+    public String getPassportIdentification() {
+        return passportIdentification;
     }
 
-    public void setPasportIdentificator(String pasportIdentificator) {
-        this.pasportIdentificator = pasportIdentificator;
+    public void setPassportIdentification(String passportIdentification) {
+        this.passportIdentification = passportIdentification;
     }
 
-    public Integer getId() {
+    protected Integer getId() {
         return id;
     }
 
-    public Person(String firstName, String companyName, String lastName, String pasportIdentificator) {
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    Person() {
+
+    }
+
+    public Person(String firstName, String lastName, Company companyName, String passportIdentification) {
         this.firstName = firstName;
-        this.companyName = companyName;
         this.lastName = lastName;
-        this.pasportIdentificator = pasportIdentificator;
+        //this.company = companyName;
+        this.passportIdentification = passportIdentification;
     }
 
     @Override
     public String toString() {
         return "Person{" +
-                "companyName='" + companyName + '\'' +
-                ", id=" + id +
+                "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", pasportIdentificator='" + pasportIdentificator + '\'' +
+                /*", company='" + company + '\'' +*/
+                ", passportIdentification='" + passportIdentification + '\'' +
                 '}';
     }
 }

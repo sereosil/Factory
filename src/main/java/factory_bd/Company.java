@@ -1,9 +1,7 @@
 package factory_bd;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 
@@ -15,16 +13,17 @@ public class Company {
 
     @Id
     @GeneratedValue
-    public Integer Id;
+    private Integer Id;
 
-    private Person person;//ссылка на персону
+    //By specifying the above options you tell hibernate to save them to the database when saving their parent.
+    @ManyToOne(cascade = {CascadeType.ALL})
+    private Person person;//FactoryUser
 
     private Date additionDate;
 
     private Date endDate;
 
     private String companyName;
-    protected Company(){}
 
     public Date getAdditionDate() {
         return additionDate;
@@ -56,5 +55,31 @@ public class Company {
 
     public void setPerson(Person person) {
         this.person = person;
+    }
+
+    protected Company(){
+
+    }
+
+    public Company(String companyName) {
+        this.companyName = companyName;
+    }
+
+    protected Company(String companyName, Person person/*, Date additionDate, Date endDate*/) {
+        this.companyName = companyName;
+        this.person = person;
+        /*this.additionDate = additionDate;
+        this.endDate = endDate;*/
+    }
+
+    @Override
+    public String toString() {
+        return "Company{" +
+                "Id=" + Id +
+                ", companyName='" + companyName + '\'' +
+                ", person=" + person +
+                ", additionDate=" + additionDate +
+                ", endDate=" + endDate +
+                '}';
     }
 }
