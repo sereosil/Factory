@@ -9,6 +9,6 @@ import java.util.List;
  */
 public interface PersonRepository extends JpaRepository<Person,Integer>{
 
-    List<Person> findByCompany (Company company);
+    List<Person> findByCompanyName (Company companyName);
     //List<Person> findByCompany(Company company);
 }

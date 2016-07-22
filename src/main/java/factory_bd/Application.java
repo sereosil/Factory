@@ -111,17 +111,21 @@ public class Application {
             * */
             //компании
             Company itmo = new Company("ITMO");
+            Company gti = new Company("GTI");
 
             companyRepository.save(itmo);
+            companyRepository.save(gti);
 
 
-            Person testPerson = new Person("Yarik", "Schehvatow", companyRepository.getOne(1), "1234");
-            //Person testPerson1 = new Person("qwer", "qwer", "SPbGTI", "1234");
-            companyRepository.save(new Company("lll", testPerson));
-            //companyRepository.save(new Company("qwer", testPerson1));
+            Person testPerson = new Person("Yarik", "Schehvatow", itmo, "1234");
+            Person testPerson1 = new Person("qwer", "qwer", gti, "1234");
+
+            personRepository.save(testPerson);
+            personRepository.save(testPerson1);
+            /*companyRepository.save(new Company("lll", testPerson));
+            companyRepository.save(new Company("qwer", testPerson1));*/
             //сохраним персон
 
-            personRepository.save(new Person("Yarik", "Schehvatow", itmo, "1234"));
             /*personRepository.save(new Person("Valerii", "Koval", "SPbGTI", "2345"));
             personRepository.save(new Person("Dasha", "Lathisheva", "SPbGTI", "8966"));
             personRepository.save(new Person("Gorge", "Mayster", "ITMO", "8898"));*/
@@ -178,7 +182,7 @@ public class Application {
 
             log.info("Find persons by companyName");
             log.info("---------------------------------");
-            for (Person person : personRepository.findByCompany(itmo)) {
+            for (Person person : personRepository.findByCompanyName(itmo)) {
                 log.info(person.toString());
             }
             log.info("");
