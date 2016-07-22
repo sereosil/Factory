@@ -24,6 +24,7 @@ public class Company {
     private Date endDate;
 
     private String companyName;
+    protected Company(){}
 
     public Date getAdditionDate() {
         return additionDate;

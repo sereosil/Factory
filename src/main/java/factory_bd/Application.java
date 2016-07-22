@@ -25,15 +25,15 @@ public class Application {
             UserRole role;
             User ivan;
             Date date =new Date();
+            Company company = new Company();
             long delta=date.getTime();
             roleRepository.save(new UserRole(false,false,true,false));
             roleRepository.save(role=new UserRole(true,false,true,false));
             roleRepository.save(new UserRole(false,false,false,false));
             roleRepository.save(new UserRole(true,true,true,false));
             roleRepository.save(new UserRole(false,true,false,true));
-
             repository.save(ivan=new User("Иван", "Иванов","88005553535",role));
-            requestRepository.save(new Request(new Date(), new Date(delta+5000000000000000L),ivan));
+            requestRepository.save(new Request(company,"21.04.2015", "23.05.2015",ivan));
           //  repository.save(new User("Иван", "Васильевич","88001488228",new UserRole(true,false,true,false)));
            // repository.save(new User("Василий", "Петров","12345678900",new UserRole(false,false,false,false)));
             //repository.save(new User("Петр", "Сидоров","12",new UserRole(true,true,true,false)));

@@ -1,6 +1,7 @@
 package factory_bd;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -25,14 +26,21 @@ public class Request {
     @Enumerated
     private RequestState requestState = RequestState.undefined;
     private String description;
+    String d1 = " 23.11.2011";
+    String d2 = " 25.11.2011";
+    SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
     private Date dateFrom;
     private Date dateTo;
     protected Request(){}
 
-    public Request(Date dateFrom, Date dateTo, User createdBy) {
-        //this.company = company;
-        this.dateFrom = dateFrom;
-        this.dateTo = dateTo;
+    public Request(Company company,String d1, String d2, User createdBy) {
+        this.company = company;
+        try {
+            dateFrom = format.parse(d1);
+            dateTo = format.parse(d2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         this.createdBy = createdBy;
     }
 
