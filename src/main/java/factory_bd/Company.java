@@ -61,6 +61,10 @@ public class Company {
 
     }
 
+    public Company(String companyName) {
+        this.companyName = companyName;
+    }
+
     protected Company(String companyName, Person person/*, Date additionDate, Date endDate*/) {
         this.companyName = companyName;
         this.person = person;

@@ -21,10 +21,10 @@ public class Application {
     @Bean
     public CommandLineRunner loadData(UserRepository repository,
                                       UserRoleRepository roleRepository,
-                                      RequestRepository requestRepository/*,
+                                      RequestRepository requestRepository/**/,
                                       PersonRepository personRepository,
                                       CarRepository carRepository,
-                                      CompanyRepository companyRepository*/) {
+                                      CompanyRepository companyRepository) {
         return (args) -> {
             //добавить немного  кастомеров
             UserRole role;
@@ -106,6 +106,89 @@ public class Application {
             }
             log.info("");
 
+            /*
+            * Из другого проекта
+            * */
+            //компании
+            Company itmo = new Company("ITMO");
+
+            companyRepository.save(itmo);
+
+
+            Person testPerson = new Person("Yarik", "Schehvatow", companyRepository.getOne(1), "1234");
+            //Person testPerson1 = new Person("qwer", "qwer", "SPbGTI", "1234");
+            companyRepository.save(new Company("lll", testPerson));
+            //companyRepository.save(new Company("qwer", testPerson1));
+            //сохраним персон
+
+            personRepository.save(new Person("Yarik", "Schehvatow", itmo, "1234"));
+            /*personRepository.save(new Person("Valerii", "Koval", "SPbGTI", "2345"));
+            personRepository.save(new Person("Dasha", "Lathisheva", "SPbGTI", "8966"));
+            personRepository.save(new Person("Gorge", "Mayster", "ITMO", "8898"));*/
+            //сохраним автомобили
+            carRepository.save(new Car("Red", "889", "Toyota"));
+            carRepository.save(new Car("Pink", "336", "Nissan"));
+            carRepository.save(new Car("Black", "986", "Mercedes"));
+
+             /*
+          * Поиск в carRepository
+          * */
+            log.info("Find all cars");
+            log.info("---------------------------------");
+            for (Car car : carRepository.findAll()) {
+                log.info(car.toString());
+            }
+            log.info("");
+
+            log.info("Find cars by color");
+            log.info("---------------------------------");
+            for (Car car : carRepository.findByCarColorStartsWithIgnoreCase("Red")) {
+                log.info(car.toString());
+            }
+            log.info("");
+
+            log.info("Find cars by registrationNumber");
+            log.info("---------------------------------");
+            for (Car car : carRepository.findByCarRegistrationNumberStartsWithIgnoreCase("889")) {
+                log.info(car.toString());
+            }
+            log.info("");
+
+            log.info("Find cars by carModel");
+            log.info("---------------------------------");
+            for (Car car : carRepository.findByCarModelStartsWithIgnoreCase("Nissan")) {
+                log.info(car.toString());
+            }
+            log.info("");
+
+          /*
+          * Поиск в companyRepository
+          * */
+            log.info("Find all company");
+            log.info("---------------------------------");
+            for (Company company : companyRepository.findAll()) {
+                log.info(company.toString());
+            }
+            log.info("");
+
+
+          /*
+          * Поиск в personRepository
+          * */
+
+            log.info("Find persons by companyName");
+            log.info("---------------------------------");
+            for (Person person : personRepository.findByCompany(itmo)) {
+                log.info(person.toString());
+            }
+            log.info("");
+
+            log.info("Find all persons");
+            log.info("---------------------------------");
+            for (Person person : personRepository.findAll()) {
+                log.info(person.toString());
+            }
+            log.info("");
 
         };
     }

@@ -9,5 +9,6 @@ import java.util.List;
  */
 public interface PersonRepository extends JpaRepository<Person,Integer>{
 
-    //List<Person> findByCompanyStartsWithIgnoreCase(Company company);
+    List<Person> findByCompany (Company company);
+    //List<Person> findByCompany(Company company);
 }
