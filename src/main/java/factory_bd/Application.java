@@ -19,7 +19,12 @@ public class Application {
         SpringApplication.run(Application.class);
     }
     @Bean
-    public CommandLineRunner loadData(UserRepository repository,UserRoleRepository roleRepository,RequestRepository requestRepository) {
+    public CommandLineRunner loadData(UserRepository repository,
+                                      UserRoleRepository roleRepository,
+                                      RequestRepository requestRepository/*,
+                                      PersonRepository personRepository,
+                                      CarRepository carRepository,
+                                      CompanyRepository companyRepository*/) {
         return (args) -> {
             //добавить немного  кастомеров
             UserRole role;
@@ -34,10 +39,10 @@ public class Application {
 
             repository.save(ivan=new User("Иван", "Иванов","88005553535",role));
             requestRepository.save(new Request(new Date(), new Date(delta+5000000000000000L),ivan));
-          //  repository.save(new User("Иван", "Васильевич","88001488228",new UserRole(true,false,true,false)));
-           // repository.save(new User("Василий", "Петров","12345678900",new UserRole(false,false,false,false)));
-            //repository.save(new User("Петр", "Сидоров","12",new UserRole(true,true,true,false)));
-            //repository.save(new User("Сидор", "Васильев","22",new UserRole(false,true,false,true)));
+            // repository.save(new User("Иван", "Васильевич","88001488228",new UserRole(true,false,true,false)));
+            // repository.save(new User("Василий", "Петров","12345678900",new UserRole(false,false,false,false)));
+            // repository.save(new User("Петр", "Сидоров","12",new UserRole(true,true,true,false)));
+            // repository.save(new User("Сидор", "Васильев","22",new UserRole(false,true,false,true)));
             // выборка всех кастомеров
             log.info("Кастомеры найденые через findAll(): ");
             log.info("____________________________________");
@@ -100,6 +105,8 @@ public class Application {
                 log.info(userRole.toString());
             }
             log.info("");
+
+
         };
     }
 }

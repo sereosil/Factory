@@ -12,21 +12,27 @@ public class Request {
     @Id
     @GeneratedValue
     private Integer id;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Person> persons; // fAnnotation
-    @ManyToMany(fetch = FetchType.EAGER)
+
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Car> cars; //JPA Annotation
+
     @ManyToOne(fetch = FetchType.EAGER)
     private Company company;
+
     @ManyToOne(fetch = FetchType.EAGER)
     private User createdBy;
+
     @ManyToOne(fetch = FetchType.EAGER)
     private User approvedBy;
+
     @Enumerated
     private RequestState requestState = RequestState.undefined;
     private String description;
     private Date dateFrom;
     private Date dateTo;
+
     protected Request(){}
 
     public Request(Date dateFrom, Date dateTo, User createdBy) {
