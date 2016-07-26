@@ -1,4 +1,4 @@
-package factory_bd;
+package factory_bd.entity;
 
 import org.apache.commons.codec.digest.DigestUtils;
 

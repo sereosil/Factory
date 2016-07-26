@@ -1,5 +1,10 @@
-package factory_bd;
+package factory_bd.repository;
 
+import factory_bd.entity.Car;
+import factory_bd.entity.Person;
+import factory_bd.entity.Request;
+import factory_bd.entity.User;
+import factory_bd.entity.Company;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

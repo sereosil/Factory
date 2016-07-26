@@ -1,4 +1,4 @@
-package factory_bd;
+package factory_bd.entity;
 
 import javax.persistence.*;
 import java.util.Date;

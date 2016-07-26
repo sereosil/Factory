@@ -1,6 +1,8 @@
-package factory_bd;
+package factory_bd.repository;
 
 import java.util.List;
+
+import factory_bd.entity.Car;
 import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * Created by Валерий on 20.07.2016.

@@ -1,4 +1,7 @@
-package factory_bd;
+package factory_bd.entity;
+
+import factory_bd.entity.Company;
+
 import javax.persistence.*;
 
 /**

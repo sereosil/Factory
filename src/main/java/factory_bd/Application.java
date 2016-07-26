@@ -1,5 +1,8 @@
 package factory_bd;
 
+import factory_bd.entity.*;
+import factory_bd.repository.*;
+import factory_bd.service.CompanyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -7,6 +10,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import java.util.Date;
+
+
 
 /**
  * Created by sereo_000 on 21.07.2016.
@@ -21,7 +26,7 @@ public class Application {
     @Bean
     public CommandLineRunner loadData(UserRepository repository,
                                       UserRoleRepository roleRepository,
-                                      RequestRepository requestRepository/**/,
+                                      RequestRepository requestRepository,
                                       PersonRepository personRepository,
                                       CarRepository carRepository,
                                       CompanyRepository companyRepository) {
@@ -110,29 +115,29 @@ public class Application {
             * Из другого проекта
             * */
             //компании
-            Company itmo = new Company("ITMO");
-            Company gti = new Company("GTI");
+            Company itmo = new Company(1,"ITMO","123","123");
+            Company gti = new Company(2,"GTI","234","345");
 
             companyRepository.save(itmo);
             companyRepository.save(gti);
 
+            CompanyService serv = new CompanyService(companyRepository);
+            //serv.changeCompanyAdress(1,"2222");
 
             Person testPerson = new Person("Yarik", "Schehvatow", itmo, "1234");
             Person testPerson1 = new Person("qwer", "qwer", gti, "1234");
 
             personRepository.save(testPerson);
             personRepository.save(testPerson1);
-            /*companyRepository.save(new Company("lll", testPerson));
-            companyRepository.save(new Company("qwer", testPerson1));*/
-            //сохраним персон
 
-            /*personRepository.save(new Person("Valerii", "Koval", "SPbGTI", "2345"));
-            personRepository.save(new Person("Dasha", "Lathisheva", "SPbGTI", "8966"));
-            personRepository.save(new Person("Gorge", "Mayster", "ITMO", "8898"));*/
-            //сохраним автомобили
             carRepository.save(new Car("Red", "889", "Toyota"));
             carRepository.save(new Car("Pink", "336", "Nissan"));
             carRepository.save(new Car("Black", "986", "Mercedes"));
+
+
+
+
+
 
              /*
           * Поиск в carRepository

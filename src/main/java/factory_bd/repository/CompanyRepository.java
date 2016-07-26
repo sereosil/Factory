@@ -1,5 +1,6 @@
-package factory_bd;
+package factory_bd.repository;
 
+import factory_bd.entity.Company;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
