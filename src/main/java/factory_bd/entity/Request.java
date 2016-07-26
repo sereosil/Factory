@@ -1,7 +1,6 @@
 package factory_bd.entity;
 
 import javax.persistence.*;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -13,34 +12,33 @@ public class Request {
     @Id
     @GeneratedValue
     private Integer id;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Person> persons; // fAnnotation
-    @ManyToMany(fetch = FetchType.EAGER)
+
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Car> cars; //JPA Annotation
+
     @ManyToOne(fetch = FetchType.EAGER)
     private Company company;
+
     @ManyToOne(fetch = FetchType.EAGER)
     private User createdBy;
+
     @ManyToOne(fetch = FetchType.EAGER)
     private User approvedBy;
+
     @Enumerated
     private RequestState requestState = RequestState.undefined;
     private String description;
-    private String d1;
-    private String d2;
-    private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
     private Date dateFrom;
     private Date dateTo;
+
     protected Request(){}
 
-    public Request(Company company,String d1, String d2, User createdBy) {
-        this.company = company;
-        try {
-            dateFrom = format.parse(d1);
-            dateTo = format.parse(d2);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public Request(Date dateFrom, Date dateTo, User createdBy) {
+        //this.company = company;
+        this.dateFrom = dateFrom;
+        this.dateTo = dateTo;
         this.createdBy = createdBy;
     }
 
