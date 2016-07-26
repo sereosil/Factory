@@ -1,6 +1,4 @@
-package factory_bd;
-
-import org.apache.commons.codec.digest.DigestUtils;
+package factory_bd.entity;
 
 import javax.persistence.*;
 
@@ -22,16 +20,13 @@ public class User {
     protected User(){
     }
 
-    public User(String email, String password) {
-        this.email = email;
-        this.passwordHash = DigestUtils.md5Hex(password);
-    }
-
-    public User(String firstName, String lastName, String contact,UserRole role) {
+    public User(String firstName, String lastName, String contact,UserRole role, String email) {
+        this.email=email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.contact = contact;
-        this.userRole=role;
+        //this.userRole=role;
+        passwordHash="55555";
     }
 
     public void setId(Integer id) {

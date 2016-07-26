@@ -1,4 +1,4 @@
-package factory_bd;
+package factory_bd.entity;
 
 /**
  * Created by sereo_000 on 20.07.2016.

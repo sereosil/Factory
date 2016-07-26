@@ -1,4 +1,4 @@
-package factory_bd;
+package factory_bd.entity;
 
 import javax.persistence.*;
 import java.text.SimpleDateFormat;
@@ -26,9 +26,9 @@ public class Request {
     @Enumerated
     private RequestState requestState = RequestState.undefined;
     private String description;
-    String d1 = " 23.11.2011";
-    String d2 = " 25.11.2011";
-    SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+    private String d1;
+    private String d2;
+    private SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
     private Date dateFrom;
     private Date dateTo;
     protected Request(){}
