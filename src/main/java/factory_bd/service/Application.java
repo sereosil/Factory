@@ -41,7 +41,7 @@ public class Application {
             roleRepository.save(new UserRole(true,true,true,false));
             roleRepository.save(new UserRole(false,true,false,true));
 
-            repository.save(ivan=new User("Иван", "Иванов","88005553535",role));
+            repository.save(ivan=new User("Иван", "Иванов","88005553535",role,"sdf"));
             requestRepository.save(new Request(new Date(), new Date(delta+5000000000000000L),ivan));
             // repository.save(new User("Иван", "Васильевич","88001488228",new UserRole(true,false,true,false)));
             // repository.save(new User("Василий", "Петров","12345678900",new UserRole(false,false,false,false)));
@@ -120,7 +120,7 @@ public class Application {
             companyRepository.save(itmo);
             companyRepository.save(gti);
 
-            CompanyService serv = new CompanyService(companyRepository);
+            //CompanyService serv = new CompanyService(companyRepository);
             //serv.changeCompanyAdress(1,"2222");
 
             Person testPerson = new Person("Yarik", "Schehvatow", itmo, "1234");
