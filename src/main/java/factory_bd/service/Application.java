@@ -1,8 +1,7 @@
-package factory_bd;
+package factory_bd.service;
 
 import factory_bd.entity.*;
 import factory_bd.repository.*;
-import factory_bd.service.CompanyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
