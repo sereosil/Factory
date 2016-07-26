@@ -1,4 +1,5 @@
 package factory_bd.entity;
+
 import factory_bd.entity.Company;
 
 import javax.persistence.*;
@@ -19,14 +20,14 @@ public class Person {
     private String passportIdentification;
 
     @ManyToOne(cascade = {CascadeType.ALL})
-    private Company company;
+    private Company companyName;
 
-    public Company getCompany() {
-        return company;
+    public Company getCompanyName() {
+        return companyName;
     }
 
-    public void setCompany(Company company) {
-        this.company = company;
+    public void setCompanyName(Company companyName) {
+        this.companyName = companyName;
     }
 
     public String getFirstName() {
@@ -68,7 +69,7 @@ public class Person {
     public Person(String firstName, String lastName, Company companyName, String passportIdentification) {
         this.firstName = firstName;
         this.lastName = lastName;
-        //this.company = companyName;
+        //this.companyName = companyName;
         this.passportIdentification = passportIdentification;
     }
 
@@ -78,7 +79,7 @@ public class Person {
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                /*", company='" + company + '\'' +*/
+                /*", companyName='" + companyName + '\'' +*/
                 ", passportIdentification='" + passportIdentification + '\'' +
                 '}';
     }

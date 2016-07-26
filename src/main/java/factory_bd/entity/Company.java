@@ -25,6 +25,26 @@ public class Company {
 
     private String companyName;
 
+    private String phoneNumber;
+
+    private String companyAdress;
+
+    public String getCompanyAdress() {
+        return companyAdress;
+    }
+
+    public void setCompanyAdress(String companyAdress) {
+        this.companyAdress = companyAdress;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public Date getAdditionDate() {
         return additionDate;
     }
@@ -39,6 +59,14 @@ public class Company {
 
     public String getCompanyName() {
         return companyName;
+    }
+
+    public Integer getId() {
+        return Id;
+    }
+
+    public void setId(Integer id) {
+        Id = id;
     }
 
     public void setAdditionDate(Date additionDate) {
@@ -65,11 +93,11 @@ public class Company {
         this.companyName = companyName;
     }
 
-    protected Company(String companyName, Person person/*, Date additionDate, Date endDate*/) {
+    public Company(Integer Id, String companyName, String companyAdress, String phoneNumber) {
+        this.Id = Id;
         this.companyName = companyName;
-        this.person = person;
-        /*this.additionDate = additionDate;
-        this.endDate = endDate;*/
+        this.companyAdress = companyAdress;
+        this.phoneNumber = phoneNumber;
     }
 
     @Override
@@ -77,9 +105,8 @@ public class Company {
         return "Company{" +
                 "Id=" + Id +
                 ", companyName='" + companyName + '\'' +
-                ", person=" + person +
-                ", additionDate=" + additionDate +
-                ", endDate=" + endDate +
+                ", companyAdress='" + companyAdress + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
                 '}';
     }
 }
