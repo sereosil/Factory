@@ -32,6 +32,7 @@ public class UserService {
             if(passwordChecker.equals(password)) {
                 passwordChecker = hashPassword(password);
                 user.setPasswordHash(passwordChecker);
+                repository.save(user);
                 return user;
             }
         }
@@ -66,6 +67,7 @@ public class UserService {
             if(passwordChecker.equals(oldPassword)) {
                 passwordChecker = hashPassword(newPassword);
                 user.setPasswordHash(passwordChecker);
+                repository.save(user);
             }
         }
     }

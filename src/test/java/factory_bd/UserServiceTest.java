@@ -65,7 +65,7 @@ public class UserServiceTest {
     @Test
     public void ifDefaultPasswordTest() throws Exception {
         UserService userService = new UserService(repository);
-        boolean b = userService.ifDefaultPassword("qwe@mail.ru","55555");
+        boolean b = userService.ifDefaultPassword("qwe@mail.ru","5555");
         assertTrue(b);
     }
 
