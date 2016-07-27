@@ -50,6 +50,10 @@ public class UserSettingsView extends VerticalLayout {
         ok.setStyleName(ValoTheme.BUTTON_PRIMARY);
         ok.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         ok.addClickListener(e -> ApplyChanges(user));
+        add.setReadOnly(true);
+        view.setReadOnly(true);
+        confirm.setReadOnly(true);
+        admin.setReadOnly(true);
         //cancel.addClickListener(e -> editCustomer(customer));
         setVisible(false);
     }

@@ -49,7 +49,9 @@ public class AdminWindowView extends VerticalLayout {
         save.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         save.addClickListener(e -> editUser(user));
         delete.addClickListener(e -> userRepository.delete(user));
-       // addUser.addClickListener(e -> addNewUser());
+        firstName.setReadOnly(true);
+        lastName.setReadOnly(true);
+        // addUser.addClickListener(e -> addNewUser());
         //cancel.addClickListener(e -> editCustomer(customer));
         setVisible(false);
     }
