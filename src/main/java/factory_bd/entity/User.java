@@ -25,7 +25,7 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.contact = contact;
-        //this.userRole=role;
+        this.userRole=role;
         passwordHash="55555";
     }
 

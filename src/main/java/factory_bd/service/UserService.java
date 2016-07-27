@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @SpringComponent
 public class UserService {
-    private String passwordChecker;
     private final UserRepository repository;
     @Autowired
     public UserService(UserRepository repository){
@@ -27,6 +26,7 @@ public class UserService {
         return false;
     }
     public User getValidUser(String email, String password){
+        String passwordChecker;
         for (User user:repository.findByEmail(email)){
             passwordChecker=user.getPasswordHash();
             if(passwordChecker.equals(password)) {
@@ -38,8 +38,9 @@ public class UserService {
         }
         return null;
     }
-    public String hashPassword(String password){
-        this.passwordChecker = DigestUtils.md5Hex(password);
+    private String hashPassword(String password){
+        String passwordChecker;
+        passwordChecker = DigestUtils.md5Hex(password);
         return passwordChecker;
     }
     public boolean ifDefaultPassword(String email,String password){
@@ -62,6 +63,7 @@ public class UserService {
      * @param newPassword - new password
      */
     public void changePassword(String email, String oldPassword, String newPassword) {
+        String passwordChecker;
         for (User user:repository.findByEmail(email)){
             passwordChecker=user.getPasswordHash();
             if(passwordChecker.equals(oldPassword)) {
@@ -85,17 +87,22 @@ public class UserService {
     }
     public void changeUserEmail(User user, String email){
         user.setEmail(email);
+        repository.save(user);
     }
     public void changeUserFirstName(User user, String firstName){
         user.setFirstName(firstName);
+        repository.save(user);
     }
     public void changeUserLastName(User user, String lastName){
         user.setFirstName(lastName);
+        repository.save(user);
     }
     public void changeUserPhone(User user, String contact){
         user.setContact(contact);
+        repository.save(user);
     }
     public boolean checkPassword(String email, String password){
+        String passwordChecker;
         for (User user:repository.findByEmail(email)){
             passwordChecker=user.getPasswordHash();
             if(passwordChecker.equals(password)) {

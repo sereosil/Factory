@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
  * Created by Валерий on 25.07.2016.
  */
 @RunWith(MockitoJUnitRunner.class)
-public class companyServiceTest {
+public class CompanyServiceTest {
 
     @Mock
     CompanyRepository companyRepository;

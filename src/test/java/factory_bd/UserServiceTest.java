@@ -70,8 +70,13 @@ public class UserServiceTest {
     }
 
     @Test
-    public void passwordChangeTest() throws Exception {
-
+    public void changeUserFirstNameTest() throws Exception {
+        String firstName = "VALEEEEEERA";
+        String firstNameTest;
+        UserService userService = new UserService(repository);
+        userService.changeUserFirstName(user,firstName);
+        firstNameTest=user.getFirstName();
+        assertEquals(firstName,firstNameTest);
     }
 
 }

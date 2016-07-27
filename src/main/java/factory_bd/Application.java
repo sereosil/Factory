@@ -1,7 +1,8 @@
-package factory_bd.service;
+package factory_bd;
 
 import factory_bd.entity.*;
 import factory_bd.repository.*;
+import factory_bd.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -193,7 +194,13 @@ public class Application {
                 log.info(person.toString());
             }
             log.info("");
-
+            log.info("------------------------------");
+            String firstName = "VALEEEEEERA";
+            String firstNameTest;
+            UserService userService = new UserService(repository);
+            userService.changeUserFirstName(user,firstName);
+            firstNameTest=repository.getOne(1).getFirstName();
+            log.info(firstNameTest);
         };
     }
 }
