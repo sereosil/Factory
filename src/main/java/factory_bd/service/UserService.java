@@ -73,6 +73,22 @@ public class UserService {
             }
         }
     }
+    public boolean checkViewPermission(User user){
+        if(user.getUserRole().isView()) return true;
+        return false;
+    }
+    public boolean checkAddPermission(User user){
+        if(user.getUserRole().isAdd()) return true;
+        return false;
+    }
+    public boolean checkConfirmPermission(User user){
+        if(user.getUserRole().isConfirm()) return true;
+        return false;
+    }
+    public boolean checkAdminPermission(User user){
+        if(user.getUserRole().isAdmin()) return true;
+        return false;
+    }
     public void addUser(String firstName, String lastName, String contact, UserRole role, String email){
         User user = new User(firstName, lastName, contact, role, email);
         repository.save(user);

@@ -54,7 +54,7 @@ public class LoginScreenView extends VerticalLayout{
                     newPassword.setVisible(true);
                     confirmPassword.setVisible(true);
                     userService.changePassword(email.getValue(),password.getValue(),newPassword.getValue());
-                    //редирект
+                    getUI().getPage().setLocation("first tab");
                 }
             }
         }
