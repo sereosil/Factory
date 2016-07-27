@@ -40,10 +40,6 @@ public class CompanyService {
         companyRepository.delete(companyToRemove);
     }
 
-    public void getFreeInstance(){
-
-    }
-
     public void changeCompanyAdress(Company company,String newAdress) {
         company.setCompanyAdress(newAdress);
         companyRepository.save(company);

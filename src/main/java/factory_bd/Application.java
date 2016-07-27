@@ -40,10 +40,15 @@ public class Application {
             roleRepository.save(new UserRole(true,true,true,false));
             roleRepository.save(new UserRole(false,true,false,true));
 
+<<<<<<< HEAD
+            repository.save(ivan=new User("Иван", "Иванов","88005553535",role,"sdf"));
+            requestRepository.save(new Request(new Date(), new Date(delta+5000000000000000L),ivan));
+=======
             repository.save(ivan=new User("Иван", "Иванов","88005553535",role,"qwe@mail.ru"));
             repository.save(new User("Иван1", "Иванов2","88005553535",role,"dread@mail.ru"));
             repository.save(new User("Иван3", "Иванов4","88005553535",role,"vasily@mail.ru"));
             //requestRepository.save(new Request(new Date(), new Date(delta+5000000000000000L),ivan));
+>>>>>>> a3d3481ca79a6cf45b300ce8cef6d9788b5597dd
             // repository.save(new User("Иван", "Васильевич","88001488228",new UserRole(true,false,true,false)));
             // repository.save(new User("Василий", "Петров","12345678900",new UserRole(false,false,false,false)));
             // repository.save(new User("Петр", "Сидоров","12",new UserRole(true,true,true,false)));
@@ -119,6 +124,11 @@ public class Application {
 
             companyRepository.save(itmo);
 
+<<<<<<< HEAD
+            //CompanyService serv = new CompanyService(companyRepository);
+            //serv.changeCompanyAdress(1,"2222");
+=======
+>>>>>>> a3d3481ca79a6cf45b300ce8cef6d9788b5597dd
 
             Person testPerson = new Person("Yarik", "Schehvatow", companyRepository.getOne(1), "1234");
             //Person testPerson1 = new Person("qwer", "qwer", "SPbGTI", "1234");
