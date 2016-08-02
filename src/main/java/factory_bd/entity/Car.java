@@ -4,9 +4,7 @@ package factory_bd.entity;
  * Created by Валерий on 20.07.2016.
  */
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Car {
@@ -20,6 +18,16 @@ public class Car {
 
     private String carRegistrationNumber;
 
+    @ManyToOne(cascade = {CascadeType.ALL})
+    private Company company;
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
     public String getCarRegistrationNumber() {
         return carRegistrationNumber;
     }
@@ -30,6 +38,7 @@ public class Car {
     public Integer getId() {
         return id;
     }
+
     public String getCarModel() {
         return carModel;
     }
@@ -45,8 +54,8 @@ public class Car {
     public void setCarColor(String carColor) {
         this.carColor = carColor;
     }
-    public Car()
-    {
+
+    private Car() {
 
     }
     public Car(String carColor, String carRegistrationNumber, String carModel) {

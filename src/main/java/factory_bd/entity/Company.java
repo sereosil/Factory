@@ -89,17 +89,13 @@ public class Company {
 
     }
 
-    public Company(String companyName) {
-        this.companyName = companyName;
-    }
 
-    public Company(Integer Id, String companyName, String companyAdress, String phoneNumber) {
-        this.Id = Id;
+    public Company(String companyName, String companyAdress, String phoneNumber)
+    {
         this.companyName = companyName;
         this.companyAdress = companyAdress;
         this.phoneNumber = phoneNumber;
     }
-
     @Override
     public String toString() {
         return "Company{" +
