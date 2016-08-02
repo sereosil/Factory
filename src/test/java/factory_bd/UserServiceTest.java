@@ -54,13 +54,13 @@ public class UserServiceTest {
         assertEquals(b,user);
     }
 
-    @Test
+    /*@Test
     public void hashPasswordTest() throws Exception {
         UserService userService = new UserService(repository);
        forHashTest=userService.hashPassword(forHashTest);
         forHashTest2=userService.hashPassword(forHashTest2);
         assertEquals(forHashTest,forHashTest2);
-    }
+    }*/
 
     @Test
     public void ifDefaultPasswordTest() throws Exception {
@@ -70,8 +70,13 @@ public class UserServiceTest {
     }
 
     @Test
-    public void passwordChangeTest() throws Exception {
-
+    public void changeUserFirstNameTest() throws Exception {
+        String firstName = "VALEEEEEERA";
+        String firstNameTest;
+        UserService userService = new UserService(repository);
+        userService.changeUserFirstName(user,firstName);
+        firstNameTest=user.getFirstName();
+        assertEquals(firstName,firstNameTest);
     }
 
 }
