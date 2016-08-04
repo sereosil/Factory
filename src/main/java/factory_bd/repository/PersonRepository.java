@@ -13,6 +13,8 @@ import java.util.List;
 @Repository
 public interface PersonRepository extends JpaRepository<Person,Integer>{
 
-    List<Person> findByCompanyName (Company companyName);
-    //List<Person> findByCompany(Company company);
+    List<Person> findByCompanyName (String companyName);
+    List<Person> findByFirstNameStartsWithIgnoreCase (String firstName);
+    List<Person> findByFirstNameStartsWithIgnoreCaseAndCompany (String firstName, Company company);
+    List<Person> findByCompany(Company company);
 }

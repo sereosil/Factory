@@ -2,7 +2,9 @@ package factory_bd;
 
 import factory_bd.entity.*;
 import factory_bd.repository.*;
+import factory_bd.service.CompanyService;
 import factory_bd.service.UserService;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -24,7 +26,7 @@ public class Application {
     @Bean
     public CommandLineRunner loadData(UserRepository repository,
                                       UserRoleRepository roleRepository,
-                                      RequestRepository requestRepository/**/,
+                                      RequestRepository requestRepository,
                                       PersonRepository personRepository,
                                       CarRepository carRepository,
                                       CompanyRepository companyRepository) {
@@ -39,17 +41,11 @@ public class Application {
             roleRepository.save(new UserRole(false,false,false,false));
             roleRepository.save(new UserRole(true,true,true,false));
             roleRepository.save(new UserRole(false,true,false,true));
-
-<<<<<<< HEAD
-            repository.save(ivan=new User("Иван", "Иванов","88005553535",role,"sdf"));
+            String pass="5555";
+            pass= DigestUtils.md5Hex(pass);
+            repository.save(ivan=new User("Иван", "Иванов","88005553535",role,"dfdf",pass,true));
             requestRepository.save(new Request(new Date(), new Date(delta+5000000000000000L),ivan));
-=======
-            repository.save(ivan=new User("Иван", "Иванов","88005553535",role,"qwe@mail.ru"));
-            repository.save(new User("Иван1", "Иванов2","88005553535",role,"dread@mail.ru"));
-            repository.save(new User("Иван3", "Иванов4","88005553535",role,"vasily@mail.ru"));
-            //requestRepository.save(new Request(new Date(), new Date(delta+5000000000000000L),ivan));
->>>>>>> a3d3481ca79a6cf45b300ce8cef6d9788b5597dd
-            // repository.save(new User("Иван", "Васильевич","88001488228",new UserRole(true,false,true,false)));
+            // repository.save(new User("Иван", "Васильевич","88001488228",new Us!erRole(true,false,true,false)));
             // repository.save(new User("Василий", "Петров","12345678900",new UserRole(false,false,false,false)));
             // repository.save(new User("Петр", "Сидоров","12",new UserRole(true,true,true,false)));
             // repository.save(new User("Сидор", "Васильев","22",new UserRole(false,true,false,true)));
@@ -120,27 +116,22 @@ public class Application {
             * Из другого проекта
             * */
             //компании
-            Company itmo = new Company("ITMO");
+            Company itmo = new Company("ITMO","123","123");
+            Company gti = new Company("GTI","234","345");
 
             companyRepository.save(itmo);
+            companyRepository.save(gti);
 
-<<<<<<< HEAD
-            //CompanyService serv = new CompanyService(companyRepository);
-            //serv.changeCompanyAdress(1,"2222");
-=======
->>>>>>> a3d3481ca79a6cf45b300ce8cef6d9788b5597dd
+            CompanyService serv = new CompanyService(companyRepository);
+            serv.changeCompanyAdress(itmo,"2222");
+            serv.changeCompanyPhoneNumber(itmo,"880005553535");
 
-            Person testPerson = new Person("Yarik", "Schehvatow", companyRepository.getOne(1), "1234");
-            //Person testPerson1 = new Person("qwer", "qwer", "SPbGTI", "1234");
-           
-            //companyRepository.save(new Company("qwer", testPerson1));
-            //сохраним персон
+            Person testPerson = new Person("Yarik", "Schehvatow", itmo.getCompanyName(), "1234");
+            Person testPerson1 = new Person("qwer", "qwer", gti.getCompanyName(), "1234");
 
-            personRepository.save(new Person("Yarik", "Schehvatow", itmo, "1234"));
-            /*personRepository.save(new Person("Valerii", "Koval", "SPbGTI", "2345"));
-            personRepository.save(new Person("Dasha", "Lathisheva", "SPbGTI", "8966"));
-            personRepository.save(new Person("Gorge", "Mayster", "ITMO", "8898"));*/
-            //сохраним автомобили
+            personRepository.save(testPerson);
+            personRepository.save(testPerson1);
+
             carRepository.save(new Car("Red", "889", "Toyota"));
             carRepository.save(new Car("Pink", "336", "Nissan"));
             carRepository.save(new Car("Black", "986", "Mercedes"));
@@ -193,7 +184,7 @@ public class Application {
 
             log.info("Find persons by companyName");
             log.info("---------------------------------");
-            for (Person person : personRepository.findByCompanyName(itmo)) {
+            for (Person person : personRepository.findByCompanyName("ITMO")) {
                 log.info(person.toString());
             }
             log.info("");
@@ -204,13 +195,7 @@ public class Application {
                 log.info(person.toString());
             }
             log.info("");
-            log.info("------------------------------");
-            String firstName = "VALEEEEEERA";
-            String firstNameTest;
-            UserService userService = new UserService(repository);
-            userService.changeUserFirstName(user,firstName);
-            firstNameTest=repository.getOne(1).getFirstName();
-            log.info(firstNameTest);
+
         };
     }
 }

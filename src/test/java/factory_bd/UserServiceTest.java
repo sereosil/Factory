@@ -28,12 +28,12 @@ public class UserServiceTest {
     String forHashTest="12345";
     String forHashTest2="54321";
     UserRole role=new UserRole(true,false,true,false);;
-    User user=new User("Иван", "Иванов","88005553535",role,"qwe@mail.ru");
+    User user=new User("Иван", "Иванов","88005553535",role,"qwe@mail.ru","5555",true);
     private User s;
 
     @Before
     public void setUp() throws Exception {
-        s = new User("Иван1", "Иванов2", "88005553535", role, "dread@mail.ru");
+        s = new User("Иван1", "Иванов2", "88005553535", role, "dread@mail.ru","5555",true);
     }
     @Before
     public void prepareMock(){
@@ -65,7 +65,7 @@ public class UserServiceTest {
     @Test
     public void ifDefaultPasswordTest() throws Exception {
         UserService userService = new UserService(repository);
-        boolean b = userService.ifDefaultPassword("qwe@mail.ru","5555");
+        boolean b = userService.ifNeedToChangePassword("qwe@mail.ru");
         assertTrue(b);
     }
 

@@ -12,8 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @SpringComponent
 public class CompanyService {
-
-    private CompanyRepository companyRepository ;
+    private final CompanyRepository companyRepository ;
 
     private Company company;
 
@@ -22,6 +21,7 @@ public class CompanyService {
         this.companyRepository = companyRepository;
 
     }
+    @Deprecated
     public long getCountOfCompanies(){
         return companyRepository.count();
     }
@@ -44,8 +44,9 @@ public class CompanyService {
         company.setCompanyAdress(newAdress);
         companyRepository.save(company);
     }
-    public  void changeCompanyPhoneNumber(String newCompanyPhoneNumber){
+    public  void changeCompanyPhoneNumber(Company company,String newCompanyPhoneNumber){
         company.setPhoneNumber(newCompanyPhoneNumber);
+        companyRepository.save(company);
     }
 
     /**

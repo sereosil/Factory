@@ -30,7 +30,7 @@ public class CompanyServiceTest {
     @Before
     public void setUp() {
 
-       c = new Company(1,"qwer","123","234");
+        c = new Company("qwer","123","234");
         when(companyRepository.findByCompanyNameStartsWithIgnoreCase("qwer")).thenReturn(Arrays.asList(new Company []{c}));
     }
     @Test
@@ -46,6 +46,7 @@ public class CompanyServiceTest {
         when(companyRepository.findAll()).thenReturn(Arrays.asList(new Company []{c}));*/
 
     }
+
 
 
 }

@@ -17,16 +17,26 @@ public class User {
     private String lastName;
     private String email;
     private String passwordHash;
+    private boolean needToChangePassword;
     protected User(){
     }
 
-    public User(String firstName, String lastName, String contact,UserRole role, String email) {
+    public User(String firstName, String lastName, String contact,UserRole role, String email,String passwordHash,boolean needToChangePassword) {
         this.email=email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.contact = contact;
         this.userRole=role;
-        passwordHash="55555";
+        this.passwordHash=passwordHash;
+        this.needToChangePassword=needToChangePassword;
+    }
+
+    public boolean isNeedToChangePassword() {
+        return needToChangePassword;
+    }
+
+    public void setNeedToChangePassword(boolean needToChangePassword) {
+        this.needToChangePassword = needToChangePassword;
     }
 
     public void setId(Integer id) {
