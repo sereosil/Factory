@@ -39,6 +39,7 @@ public class UserSettingsView extends VerticalLayout implements View {
     CheckBox add = new CheckBox("Add");
     CheckBox confirm = new CheckBox("Confirm");
     CheckBox admin = new CheckBox("Admin");
+    Label annotation = new Label("Change password");
     PasswordField oldPassword =new PasswordField("Old Password");
     PasswordField newPassword =new PasswordField("New Password");
     PasswordField confirmPassword =new PasswordField("Confirm Password");
@@ -51,13 +52,12 @@ public class UserSettingsView extends VerticalLayout implements View {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         userService = new UserService(userRepository);
-        VerticalLayout userRoleLayout = new VerticalLayout(view,add,confirm,admin);
-        HorizontalLayout layout = new HorizontalLayout(firstName,lastName,email,contact,userRoleLayout,oldPassword,newPassword,confirmPassword,actions);
-        addComponents(layout);
         setSpacing(true);
+        setMargin(true);
+        setVisible(true);
 
     }
-    public UserSettingsView() {
+  /*  public UserSettingsView() {
         this.userRepository = null;
         this.roleRepository = null;
         userService = new UserService(userRepository);
@@ -67,16 +67,28 @@ public class UserSettingsView extends VerticalLayout implements View {
         setSpacing(true);
 
     }
-
+*/
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         this.user = (User) getUI().getSession().getAttribute(SESSION_USER_KEY);
+        init();
     }
     public void init(){
-        VerticalLayout userRoleLayout = new VerticalLayout(view,add,confirm,admin);
-        HorizontalLayout layout = new HorizontalLayout(firstName,lastName,email,contact,userRoleLayout,oldPassword,newPassword,confirmPassword,actions);
+        firstName.setValue(user.getFirstName());
+        lastName.setValue(user.getLastName());
+        email.setValue(user.getEmail());
+        contact.setValue(user.getContact());
+        view.setValue(user.getUserRole().isView());
+        add.setValue(user.getUserRole().isAdd());
+        confirm.setValue(user.getUserRole().isConfirm());
+        admin.setValue(user.getUserRole().isAdmin());
+        HorizontalLayout userRoleLayout = new HorizontalLayout(view,add,confirm,admin);
+        userRoleLayout.setMargin(true);
+        userRoleLayout.setSpacing(true);
+        VerticalLayout layout = new VerticalLayout(firstName,lastName,email,contact,userRoleLayout,annotation,oldPassword,newPassword,confirmPassword,actions);
         addComponents(layout);
         setSpacing(true);
+        setMargin(true);
         actions.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
         ok.setStyleName(ValoTheme.BUTTON_PRIMARY);
         ok.setClickShortcut(ShortcutAction.KeyCode.ENTER);
@@ -86,7 +98,7 @@ public class UserSettingsView extends VerticalLayout implements View {
         confirm.setReadOnly(true);
         admin.setReadOnly(true);
         //cancel.addClickListener(e -> editCustomer(customer));
-        setVisible(false);
+        setVisible(true);
     }
 
     public interface ChangeHandler {
@@ -99,7 +111,7 @@ public class UserSettingsView extends VerticalLayout implements View {
         userService.changeUserFirstName(user,firstName.getValue());
         userService.changeUserLastName(user,lastName.getValue());
         userService.changeUserPhone(user,contact.getValue());
-        BeanFieldGroup.bindFieldsUnbuffered(user,this);
+        //BeanFieldGroup.bindFieldsUnbuffered(user,this);
         setVisible(true);
     }
     public void setChangeHandler(UserSettingsView.ChangeHandler h){

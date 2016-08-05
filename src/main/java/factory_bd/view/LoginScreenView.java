@@ -96,7 +96,7 @@ public class LoginScreenView extends VerticalLayout implements View{
                 }
             }
         }
-        BeanFieldGroup.bindFieldsUnbuffered(userRepository,this);
+        //BeanFieldGroup.bindFieldsUnbuffered(userRepository,this);
         setVisible(true);
 
     }

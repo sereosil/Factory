@@ -109,7 +109,7 @@ public class UserService {
         repository.save(user);
     }
     public void changeUserLastName(User user, String lastName){
-        user.setFirstName(lastName);
+        user.setLastName(lastName);
         repository.save(user);
     }
     public void changeUserPhone(User user, String contact){
