@@ -16,6 +16,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import factory_bd.entity.Company;
 import factory_bd.repository.CompanyRepository;
 import factory_bd.service.CompanyService;
+import factory_bd.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
@@ -34,12 +35,14 @@ public class CompanyView extends VerticalLayout implements View  {
     TextField companyAdress = new TextField("Company adress");
     TextField phoneNumber = new TextField("Company phone");
     TextField filterCompany;
-
+    //MaskedTextField phoneNumber = new MaskedTextField("Company phone","##########");
     Label searchLabel;
 
     Button save = new Button("Save", FontAwesome.SAVE);
     Button cancel = new Button("Cancel");
     Button delete = new Button("Delete", FontAwesome.TRASH_O);
+
+
     Button addNewCompanyButton;
     Grid companyGrid;
 
@@ -56,18 +59,24 @@ public class CompanyView extends VerticalLayout implements View  {
         this.searchLabel = new Label("Search:");
 
     }
-    
+
+    public HorizontalLayout companyActionButtonsLayout = new HorizontalLayout(save, delete, cancel);
+    public  VerticalLayout companyLowerVerticalLayout = new VerticalLayout( companyName, companyAdress, phoneNumber,companyActionButtonsLayout);
 
     public void init(){
+
+        //HorizontalLayout companyActionButtonsLayout = new HorizontalLayout(save, delete, cancel);
+
+        //VerticalLayout companyLowerVerticalLayout = new VerticalLayout( companyName, companyAdress, phoneNumber,companyActionButtonsLayout);
+        companyLowerVerticalLayout.setSpacing(true);
+
         HorizontalLayout companyUpperHorizontalLayout = new HorizontalLayout(searchLabel, filterCompany, addNewCompanyButton);
         companyUpperHorizontalLayout.setSpacing(true);
 
         VerticalLayout companyMiddleVerticalLayout = new VerticalLayout(companyGrid);
 
-        HorizontalLayout companyActionButtonsLayout = new HorizontalLayout(save, delete, cancel);
         companyActionButtonsLayout.setSpacing(true);
 
-        VerticalLayout companyLowerVerticalLayout = new VerticalLayout( companyName, companyAdress, phoneNumber,companyActionButtonsLayout);
         companyLowerVerticalLayout.setVisible(false);
 
         VerticalLayout companyFinalVerticalLayout = new VerticalLayout(companyUpperHorizontalLayout, companyMiddleVerticalLayout, companyLowerVerticalLayout);
@@ -80,20 +89,38 @@ public class CompanyView extends VerticalLayout implements View  {
         companyGrid.setHeight(300, Sizeable.Unit.PIXELS);
         companyGrid.setColumns("id","companyName","companyAdress","phoneNumber");
 
+        filterCompany.setWidth("250");
         filterCompany.setInputPrompt("Filter by name of company");
         filterCompany.addTextChangeListener( e-> fillCompanyGrid(e.getText()));
 
         addComponent(companyFinalVerticalLayout);
-        addNewCompanyButton.addClickListener(e -> editCompany(new Company("","","")));
 
-        save.setStyleName(ValoTheme.BUTTON_PRIMARY);
-        save.setClickShortcut(ShortcutAction.KeyCode.ENTER);
+        addNewCompanyButton.addClickListener(e -> {
+            editCompany(new Company("","",""));
+            companyLowerVerticalLayout.setVisible(true);
+        });
+
+
+
+        save.setStyleName(ValoTheme.BUTTON_FRIENDLY);
+        //save.setClickShortcut(ShortcutAction.KeyCode.ENTER);
+        delete.setStyleName(ValoTheme.BUTTON_DANGER);
+        phoneNumber.setIcon(FontAwesome.PHONE);
 
         CompanyService companyService = new CompanyService(companyRepository);
 
-        save.addClickListener(e -> companyService.addCompany(company));
-        delete.addClickListener(e -> companyService.deleteCompany(company));
-        cancel.addClickListener(e -> editCompany(company));
+        save.addClickListener(e -> {
+            companyService.addCompany(company);
+            //companyLowerVerticalLayout.setVisible(false);
+        });
+        delete.addClickListener(e -> {
+            companyService.deleteCompany(company);
+            companyLowerVerticalLayout.setVisible(false);
+        });
+        cancel.addClickListener(e -> {
+            editCompany(company);
+            companyLowerVerticalLayout.setVisible(false);
+        });
 
         companyGrid.addSelectionListener(e -> {
             if (e.getSelected().isEmpty()) {
@@ -106,15 +133,12 @@ public class CompanyView extends VerticalLayout implements View  {
         });
 
 
-
         fillCompanyGrid(null);
 
     }
 
     @Override
-    public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-
-    }
+    public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {init();}
 
     public interface ChangeHandler {
 
@@ -155,6 +179,4 @@ public class CompanyView extends VerticalLayout implements View  {
         save.addClickListener(e -> h.onChange());
         delete.addClickListener(e -> h.onChange());
     }
-
-
 }

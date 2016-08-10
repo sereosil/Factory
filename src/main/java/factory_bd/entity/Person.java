@@ -9,6 +9,7 @@ import javax.persistence.*;
 public class Person {
     @Id
     @GeneratedValue
+
     private Integer id;
 
     private String firstName;
@@ -17,7 +18,7 @@ public class Person {
 
     private String passportIdentification;
 
-    @ManyToOne(cascade = {CascadeType.ALL})
+    @ManyToOne//(cascade = {CascadeType.ALL})
     private Company company;
 
     public Company getCompany() {
@@ -30,7 +31,7 @@ public class Person {
     private String companyName;
 
     public String getCompanyName() {
-        return companyName;
+        return company.getCompanyName();
     }
 
     public void setCompanyName(String companyName) {
@@ -73,21 +74,18 @@ public class Person {
 
     }
 
-    public Person(String firstName, String lastName, String companyName, String passportIdentification) {
+    public Person(String firstName, String lastName, Company company, String passportIdentification) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.companyName = companyName;
+       // this.companyName = companyName;
+        this.company = company;
         this.passportIdentification = passportIdentification;
     }
 
     @Override
     public String toString() {
-        return "Person{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                /*", company='" + company + '\'' +*/
-                ", passportIdentification='" + passportIdentification + '\'' +
-                '}';
+        return "First Name: " + firstName + "; " +
+                "Last Name: " + lastName + "; "+
+                "Passport number: " + passportIdentification + ".";
     }
 }

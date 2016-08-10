@@ -16,7 +16,7 @@ public class Company {
     private Integer Id;
 
     //By specifying the above options you tell hibernate to save them to the database when saving their parent.
-    @ManyToOne(cascade = {CascadeType.ALL})
+    @ManyToOne//(cascade = {CascadeType.ALL})
     private Person person;//FactoryUser
 
     private Date additionDate;
@@ -98,11 +98,8 @@ public class Company {
     }
     @Override
     public String toString() {
-        return "Company{" +
-                "Id=" + Id +
-                ", companyName='" + companyName + '\'' +
-                ", companyAdress='" + companyAdress + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                '}';
+        return "Name: " + companyName + "; " +
+                "Adress: " + companyAdress + "; " +
+                "Phone: " + phoneNumber + ".";
     }
 }

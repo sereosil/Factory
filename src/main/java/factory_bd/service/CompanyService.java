@@ -1,7 +1,10 @@
 package factory_bd.service;
 
 
+import com.vaadin.data.fieldgroup.BeanFieldGroup;
+import com.vaadin.server.Sizeable;
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.ui.ListSelect;
 import factory_bd.entity.Company;
 import factory_bd.entity.Person;
 import factory_bd.repository.CompanyRepository;
@@ -50,11 +53,14 @@ public class CompanyService {
         companyRepository.save(company);
     }
 
-    /**
-     * TODO: 26.07.2016 how to remove person from company
-     * */
-    public void removePersonFromCompany(String compName, Person person){
+    public void fillCompanyListInRequest(ListSelect listSelect){
+        for (Company company : companyRepository.findAll()) {
+            listSelect.addItem(company);
+        }
 
     }
+
+
+
 
 }

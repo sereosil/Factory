@@ -1,5 +1,7 @@
 package factory_bd.service;
 
+import com.vaadin.ui.ListSelect;
+import factory_bd.entity.Company;
 import factory_bd.entity.Person;
 import factory_bd.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,5 +25,13 @@ public class PersonService {
 
     public void deletePerson(Person person){
         personRepository.delete(person);
+    }
+
+    public void fillPersonListInRequest(ListSelect listSelect, Company company){
+        listSelect.removeAllItems();
+        for (Person person : personRepository.findByCompany(company)) {
+            listSelect.addItem(person);
+        }
+
     }
 }

@@ -18,8 +18,18 @@ public class Car {
 
     private String carRegistrationNumber;
 
-    @ManyToOne(cascade = {CascadeType.ALL})
+    @ManyToOne//(cascade = {CascadeType.ALL})
     private Company company;
+
+    private String companyName;
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
 
     public Company getCompany() {
         return company;
@@ -58,19 +68,18 @@ public class Car {
     private Car() {
 
     }
-    public Car(String carColor, String carRegistrationNumber, String carModel) {
+    public Car(String carColor, String carRegistrationNumber, String carModel, Company company) {
         this.carColor = carColor;
         this.carRegistrationNumber = carRegistrationNumber;
         this.carModel = carModel;
+        this.company = company;
+        //this.companyName = companyName;
     }
 
     @Override
     public String toString() {
-        return "Car{" +
-                "id=" + id +
-                ", carRegistrationNumber='" + carRegistrationNumber + '\'' +
-                ", carModel='" + carModel + '\'' +
-                ", carColor='" + carColor + '\'' +
-                '}';
+        return "Car reg. №: " + carRegistrationNumber + "; " +
+                "Model: " + carModel + "; " +
+                "Color: " + carColor + ".";
     }
 }

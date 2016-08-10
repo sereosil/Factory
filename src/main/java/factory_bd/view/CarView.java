@@ -1,13 +1,20 @@
 package factory_bd.view;
 
+import com.vaadin.data.fieldgroup.BeanFieldGroup;
+import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 import factory_bd.entity.Car;
 import factory_bd.entity.Company;
 import factory_bd.repository.CarRepository;
+import factory_bd.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
+//import com.vaadin.ui.MaskedTextField;
 
 /**
  * Created by Валерий on 01.08.2016.
@@ -15,13 +22,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class CarView extends VerticalLayout implements View{
 
     private final CarRepository carRepository;
+
     private Car car;
-    private Company selectedCompany;
+    public Company selectedCompany;
 
     TextField carModel = new TextField("Car model");
     TextField carColor = new TextField("Color of car");
     TextField carRegistrationNumber = new TextField("Registration");
     TextField filterCar;
+
 
     Label searchLabel;
 
@@ -37,21 +46,127 @@ public class CarView extends VerticalLayout implements View{
     public CarView(CarRepository carRepository) {
         this.carRepository = carRepository;
         this.addNewCarButton = new Button("New car", FontAwesome.PLUS);
-        this.filterCar = new TextField();
+        this.filterCar = new TextField( );
         this.carGrid = new Grid();
         this.searchLabel = new Label("Search:");
     }
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {init();}
 
     public void init(){
         carGrid.setHeight(300,Unit.PIXELS);
         carGrid.setColumns("id","carModel","carColor","carRegistrationNumber");
+        filterCar.setInputPrompt("Filter by car model");
 
+        CarService carService = new CarService(carRepository);
 
+        HorizontalLayout carUpperHorizontalLayout = new HorizontalLayout(searchLabel,filterCar,addNewCarButton);
+        carUpperHorizontalLayout.setSpacing(true);
+
+        VerticalLayout carMiddleVerticalLayout = new VerticalLayout(carGrid);
+
+        HorizontalLayout carActionButtonsLayout = new HorizontalLayout(save,delete,cancel);
+        carActionButtonsLayout.setSpacing(true);
+
+        VerticalLayout carLowerVerticalLayout = new VerticalLayout(carModel,carColor,carRegistrationNumber, carActionButtonsLayout);
+        carLowerVerticalLayout.setSpacing(true);
+        carLowerVerticalLayout.setVisible(false);
+
+        VerticalLayout carFinalVerticalLayout = new VerticalLayout(carUpperHorizontalLayout,carMiddleVerticalLayout,carLowerVerticalLayout);
+
+        carFinalVerticalLayout.setVisible(true);
+        carFinalVerticalLayout.setSpacing(true);
+        carFinalVerticalLayout.setMargin(true);
+
+        addComponent(carFinalVerticalLayout);
+
+        carGrid.addSelectionListener( e->{
+            if(e.getSelected().isEmpty()){
+                carLowerVerticalLayout.setVisible(false);
+            }
+            else{
+                carLowerVerticalLayout.setVisible(true);
+                this.editCar((Car) carGrid.getSelectedRow());
+            }
+
+        });
+
+        addNewCarButton.addClickListener(e -> {
+            editCar(new Car("","","",selectedCompany));
+            carLowerVerticalLayout.setVisible(true);
+        });
+        filterCar.addTextChangeListener(e -> fillCarGridByCarModel(e.getText(),selectedCompany));
+
+        save.addClickListener(e->{
+            carService.addCar(car);
+            carLowerVerticalLayout.setVisible(false);
+
+        });
+        delete.addClickListener(e->{
+            carService.deleteCar(car);
+            carLowerVerticalLayout.setVisible(false);
+        });
+        cancel.addClickListener(e->{
+            editCar(car);
+            carLowerVerticalLayout.setVisible(false);
+        });
+
+        save.setStyleName(ValoTheme.BUTTON_FRIENDLY);
+        //save.setClickShortcut(ShortcutAction.KeyCode.ENTER);
+        delete.setStyleName(ValoTheme.BUTTON_DANGER);
     }
 
+    public interface ChangeHandler {
 
-    @Override
-    public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
+        void onChange();
+    }
 
+    public  void fillCarGridByCarModel (String text, Company selectedCompany){
+        if(StringUtils.isEmpty(text)){
+            carGrid.setContainerDataSource(new BeanItemContainer(Car.class,
+                    carRepository.findByCompanyName(selectedCompany.getCompanyName())));
+        }
+        else {
+            carGrid.setContainerDataSource(new BeanItemContainer(Car.class,
+                    carRepository.findByCarModelStartsWithIgnoreCase(text)));
+        }
+    }
+
+    public void fillCarGridBySelectedCompany(Company selectedCompany){
+        if (selectedCompany == null){
+            carGrid.setContainerDataSource(new BeanItemContainer(Car.class,
+                    carRepository.findByCompany(selectedCompany)));
+        }
+        else {
+            carGrid.setContainerDataSource(new BeanItemContainer(Car.class,
+                    carRepository.findByCompany(selectedCompany)));
+        }
+    }
+
+    public final void editCar(Car c){
+        final boolean persisted = c.getId() != null;
+
+        if (persisted){
+            car = carRepository.findOne(c.getId());
+        }
+        else {
+            car = c;
+        }
+        cancel.setVisible(persisted);
+
+        BeanFieldGroup.bindFieldsUnbuffered(car,this);
+
+        setVisible(true);
+
+        save.focus();
+
+        carModel.selectAll();
+    }
+
+    public void setChangeHandler(CarView.ChangeHandler h) {
+
+        //fillPersonGrid(filterPerson.getValue(),selectedCompany);
+        save.addClickListener(e -> h.onChange());
+        delete.addClickListener(e -> h.onChange());
     }
 }

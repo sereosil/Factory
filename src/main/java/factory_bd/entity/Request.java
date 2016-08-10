@@ -1,5 +1,7 @@
 package factory_bd.entity;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -12,10 +14,12 @@ public class Request {
     @Id
     @GeneratedValue
     private Integer id;
-    @OneToMany(fetch = FetchType.EAGER)
+
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Person> persons; // fAnnotation
 
-    @OneToMany(fetch = FetchType.EAGER)
+    //@OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Car> cars; //JPA Annotation
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -27,19 +31,34 @@ public class Request {
     @ManyToOne(fetch = FetchType.EAGER)
     private User approvedBy;
 
+    private boolean accepted;
+
     @Enumerated
     private RequestState requestState = RequestState.undefined;
     private String description;
     private Date dateFrom;
     private Date dateTo;
 
-    protected Request(){}
+    public Request(){}
+
 
     public Request(Date dateFrom, Date dateTo, User createdBy) {
         //this.company = company;
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
         this.createdBy = createdBy;
+    }
+
+    public boolean isAccepted() {
+        return accepted;
+    }
+
+    public void setAccepted(boolean accepted) {
+        this.accepted = accepted;
+    }
+
+    public Request(Company company) {
+        this.company = company;
     }
 
     public void setId(Integer id) {
@@ -131,7 +150,7 @@ public class Request {
                 ", approvedBy=" + approvedBy +
                 ", description='" + description + '\'' +
                 ", dateFrom=" + dateFrom +
-                ", dateTo=" + dateTo +
+                ", dateTo=" + dateTo + ", acepted=" + accepted +
                 '}';
     }
 }

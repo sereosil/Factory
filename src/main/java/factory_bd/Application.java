@@ -43,7 +43,7 @@ public class Application {
             roleRepository.save(new UserRole(false,true,false,true));
 
             repository.save(ivan=new User("Иван", "Иванов","88005553535",role,"dfdf"));
-            requestRepository.save(new Request(new Date(), new Date(delta+5000000000000000L),ivan));
+            //requestRepository.save(new Request(new Date(), new Date(delta+5000000000000000L),ivan));
             // repository.save(new User("Иван", "Васильевич","88001488228",new UserRole(true,false,true,false)));
             // repository.save(new User("Василий", "Петров","12345678900",new UserRole(false,false,false,false)));
             // repository.save(new User("Петр", "Сидоров","12",new UserRole(true,true,true,false)));
@@ -116,27 +116,31 @@ public class Application {
             * */
             //компании
             Company itmo = new Company("ITMO","123","123");
-            Company gti = new Company("GTI","234","345");
+            Company gti = new Company("GTI","234","987456363");
+
+
+
+            CompanyService serv = new CompanyService(companyRepository);
+            serv.changeCompanyAdress(itmo,"4959");
+            serv.changeCompanyPhoneNumber(itmo,"7896541236");
+
+            Person testPerson = new Person("Yarik", "Schehvatow", itmo, "566696");
+            Person testPerson1 = new Person("Valerii", "Koval", itmo, "896669");
+            Person testPerson2 = new Person("George", "Mayster", gti, "987635");
 
             companyRepository.save(itmo);
             companyRepository.save(gti);
-
-            CompanyService serv = new CompanyService(companyRepository);
-            serv.changeCompanyAdress(itmo,"880033663366");
-            serv.changeCompanyPhoneNumber(itmo,"880005553535");
-
-            Person testPerson = new Person("Yarik", "Schehvatow", gti.getCompanyName(), "566696");
-            Person testPerson1 = new Person("Valerii", "Koval", gti.getCompanyName(), "896669");
-            Person testPerson2 = new Person("George", "Mayster", itmo.getCompanyName(), "987635");
-
 
             personRepository.save(testPerson);
             personRepository.save(testPerson1);
             personRepository.save(testPerson2);
 
-            carRepository.save(new Car("Red", "889", "Toyota"));
-            carRepository.save(new Car("Pink", "336", "Nissan"));
-            carRepository.save(new Car("Black", "986", "Mercedes"));
+
+
+            carRepository.save(new Car("Red", "889", "Toyota",gti));
+            carRepository.save(new Car("Pink", "336", "Nissan",gti));
+            carRepository.save(new Car("Black", "986", "Mercedes",itmo));
+
 
              /*
           * Поиск в carRepository

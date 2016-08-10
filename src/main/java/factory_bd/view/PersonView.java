@@ -53,13 +53,17 @@ public class PersonView extends VerticalLayout implements View{
         this.searchLabel = new Label("Search:");
 
     }
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {init();}
 
     public void init(){
         personGrid.setHeight(300,Unit.PIXELS);
         personGrid.setColumns("id","firstName","lastName","passportIdentification");
 
+
         filterPerson.setInputPrompt("Filter by last name");
         filterPerson.addTextChangeListener( e-> fillPersonGridByLastName(e.getText(),selectedCompany));
+
 
         HorizontalLayout personUpperHorizontalLayout = new HorizontalLayout(searchLabel,filterPerson,addNewPersonButton);
         personUpperHorizontalLayout.setSpacing(true);
@@ -70,6 +74,8 @@ public class PersonView extends VerticalLayout implements View{
         personActionButtonsLayout.setSpacing(true);
 
         VerticalLayout personLowerVerticalLayout = new VerticalLayout(firstName,lastName,passportIdentification,personActionButtonsLayout);
+        personLowerVerticalLayout.setSpacing(true);
+        personLowerVerticalLayout.setVisible(false);
 
         VerticalLayout personFinalVerticalLayout = new VerticalLayout(personUpperHorizontalLayout,
                 personMiddleVerticalLayout,personLowerVerticalLayout);
@@ -91,21 +97,33 @@ public class PersonView extends VerticalLayout implements View{
             }
         });
 
-        addComponent(personFinalVerticalLayout);
-        addNewPersonButton.addClickListener(e -> editPerson(new Person("","",selectedCompany.getCompanyName(),"")));
 
-        save.setStyleName(ValoTheme.BUTTON_PRIMARY);
-        save.setClickShortcut(ShortcutAction.KeyCode.ENTER);
+        addNewPersonButton.addClickListener(e -> {
+            editPerson(new Person("","",selectedCompany,""));
+            personLowerVerticalLayout.setVisible(true);
+
+        });
+
+        save.setStyleName(ValoTheme.BUTTON_FRIENDLY);
+       // save.setClickShortcut(ShortcutAction.KeyCode.ENTER);
+        delete.setStyleName(ValoTheme.BUTTON_DANGER);
 
         PersonService personService = new PersonService(personRepository);
 
-        save.addClickListener(e->personService.addPeson(person));
-        delete.addClickListener(e->personService.deletePerson(person));
-        cancel.addClickListener(e->editPerson(person));
+        save.addClickListener(e->{
+            personService.addPeson(person);
+            personLowerVerticalLayout.setVisible(false);
+        });
+        delete.addClickListener(e->{
+            personService.deletePerson(person);
+            personLowerVerticalLayout.setVisible(false);
+        });
+        cancel.addClickListener(e->{
+            editPerson(person);
+            personLowerVerticalLayout.setVisible(false);
+        });
 
         //fillPersonGrid(null,null);
-
-
     }
 
     public interface ChangeHandler {
@@ -113,12 +131,8 @@ public class PersonView extends VerticalLayout implements View{
         void onChange();
     }
 
-    @Override
-    public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-    }
-
-
-   public void fillPersonGrid(String text, Company selectedCompany){
+    //region maybe needed after
+  /* public void fillPersonGrid(String text, Company selectedCompany){
         if(StringUtils.isEmpty(text)){
             personGrid.setContainerDataSource(new BeanItemContainer(Person.class, personRepository.findAll()));
         }
@@ -127,27 +141,29 @@ public class PersonView extends VerticalLayout implements View{
                     //personRepository.findByFirstNameStartsWithIgnoreCaseAndCompany(text,selectedCompany)));
                     personRepository.findByCompany(selectedCompany)));
         }
-    }
+    }*/
+    //endregion
 
-   public void fillPersonGridBySelectedCompany(Company selectedCompany){
-        if (selectedCompany == null){
-            personGrid.setContainerDataSource(new BeanItemContainer(Person.class, personRepository.findByCompanyName(selectedCompany.getCompanyName())));
-        }
-        else {
-            personGrid.setContainerDataSource(new BeanItemContainer(Person.class,
-                    personRepository.findByCompanyName(selectedCompany.getCompanyName())));
-        }
-    }
     public  void fillPersonGridByLastName(String text, Company selectedCompany){
         if(StringUtils.isEmpty(text)){
-            personGrid.setContainerDataSource(new BeanItemContainer(Person.class,personRepository.findByCompanyName(selectedCompany.getCompanyName())));
+            personGrid.setContainerDataSource(new BeanItemContainer(Person.class,
+                    personRepository.findByCompanyName(selectedCompany.getCompanyName())));
         }
         else {
             personGrid.setContainerDataSource(new BeanItemContainer(Person.class,
                     personRepository.findByLastNameStartsWithIgnoreCase(text)));
         }
     }
-
+    public void fillPersonGridBySelectedCompany(Company selectedCompany){
+        if (selectedCompany == null){
+            personGrid.setContainerDataSource(new BeanItemContainer(Person.class,
+                    personRepository.findByCompany(selectedCompany)));
+        }
+        else {
+            personGrid.setContainerDataSource(new BeanItemContainer(Person.class,
+                    personRepository.findByCompany(selectedCompany)));
+        }
+    }
 
     public final void editPerson(Person p){
         final boolean persisted = p.getId() != null;
@@ -169,12 +185,11 @@ public class PersonView extends VerticalLayout implements View{
         firstName.selectAll();
 
     }
-    public void setChangeHandler(CompanyView.ChangeHandler h) {
-
-        //fillPersonGrid(filterPerson.getValue(),selectedCompany);
+    public void setChangeHandler(PersonView.ChangeHandler h) {
         save.addClickListener(e -> h.onChange());
         delete.addClickListener(e -> h.onChange());
     }
+
 
 
 }

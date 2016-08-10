@@ -21,4 +21,5 @@ public interface RequestRepository extends JpaRepository<Request,Integer> {
     List<Request> findByDescription(String description);
     List<Request> findByPersons(Person persons);
     List<Request> findByCars(Car cars);
+    List<Request> findByAccepted(boolean condition);
 }

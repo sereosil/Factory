@@ -1,7 +1,10 @@
 package factory_bd.service;
 
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.ui.ListSelect;
 import factory_bd.entity.Car;
+import factory_bd.entity.Company;
+import factory_bd.entity.Person;
 import factory_bd.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,6 +22,7 @@ public class CarService {
         this.carRepository = carRepository;
     }
 
+    @Deprecated
     public boolean doRepositoryHaveCar(String carRegistrationNumber){
         for (Car car:carRepository.findByCarModelStartsWithIgnoreCase(carRegistrationNumber)){
             return true;
@@ -39,5 +43,13 @@ public class CarService {
     public void changeCarRegistrationNumber(Car car, String regNubmer){
         car.setCarRegistrationNumber(regNubmer);
         carRepository.save(car);
+    }
+
+    public void fillCarListInRequest(ListSelect listSelect, Company company){
+        listSelect.removeAllItems();
+        for (Car car : carRepository.findByCompany(company)) {
+            listSelect.addItem(car);
+        }
+
     }
 }
