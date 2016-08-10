@@ -15,8 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @SpringComponent
 public class CompanyService {
-
-    private CompanyRepository companyRepository ;
+    private final CompanyRepository companyRepository ;
 
     private Company company;
 

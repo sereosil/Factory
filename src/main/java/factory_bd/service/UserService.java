@@ -4,8 +4,11 @@ import com.vaadin.spring.annotation.SpringComponent;
 import factory_bd.entity.User;
 import factory_bd.entity.UserRole;
 import factory_bd.repository.UserRepository;
+import factory_bd.repository.UserRoleRepository;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * Manages all users from factory in system
@@ -15,9 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 @SpringComponent
 public class UserService {
     private final UserRepository repository;
+    private final UserRoleRepository roleRepository;
     @Autowired
-    public UserService(UserRepository repository){
+    public UserService(UserRepository repository,UserRoleRepository roleRepository){
         this.repository=repository;
+        this.roleRepository = roleRepository;
     }
     public boolean haveUser(String email){
         for(User user:repository.findByEmail(email)){
@@ -29,10 +34,8 @@ public class UserService {
         String passwordChecker;
         for (User user:repository.findByEmail(email)){
             passwordChecker=user.getPasswordHash();
+            password = hashPassword(password);
             if(passwordChecker.equals(password)) {
-                passwordChecker = hashPassword(password);
-                user.setPasswordHash(passwordChecker);
-                repository.save(user);
                 return user;
             }
         }
@@ -43,18 +46,16 @@ public class UserService {
         passwordChecker = DigestUtils.md5Hex(password);
         return passwordChecker;
     }
-    public boolean ifDefaultPassword(String email,String password){
-        boolean b = checkPassword(email, password);
-        if(b) {
-            for (User user : repository.findByEmail(email)) {
-                if (password.equals("55555")) {
-                    return true;
-                }
-            }
+    public boolean ifNeedToChangePassword(String email){
+        for (User user:repository.findByEmail(email)) {
+            if (user.isNeedToChangePassword())
+                return true;
         }
-            return false;
+                return false;
     }
-
+    public void setRole(UserRole role){
+        roleRepository.save(role);
+    }
     /**
      * Update all users with email obtained from parameters
      * @throws RuntimeException if no user with such email
@@ -62,14 +63,19 @@ public class UserService {
      * @param oldPassword - old password
      * @param newPassword - new password
      */
-    public void changePassword(String email, String oldPassword, String newPassword) {
+    public void changePassword(String email, String oldPassword, String newPassword,String confirmPassword) {
         String passwordChecker;
-        for (User user:repository.findByEmail(email)){
-            passwordChecker=user.getPasswordHash();
-            if(passwordChecker.equals(oldPassword)) {
-                passwordChecker = hashPassword(newPassword);
-                user.setPasswordHash(passwordChecker);
-                repository.save(user);
+        List<User> usersByEmail = repository.findByEmail(email);
+        if(newPassword.equals(confirmPassword)) {
+            for (User user : usersByEmail) {
+                passwordChecker = user.getPasswordHash();
+                oldPassword = hashPassword(oldPassword);
+                if (passwordChecker.equals(oldPassword)) {
+                    user.setNeedToChangePassword(false);
+                    passwordChecker = hashPassword(newPassword);
+                    user.setPasswordHash(passwordChecker);
+                    repository.save(user);
+                }
             }
         }
     }
@@ -89,8 +95,8 @@ public class UserService {
         if(user.getUserRole().isAdmin()) return true;
         return false;
     }
-    public void addUser(String firstName, String lastName, String contact, UserRole role, String email){
-        User user = new User(firstName, lastName, contact, role, email);
+    public void addUser(User user){
+        //User user = new User(firstName, lastName, contact, role, email,password);
         repository.save(user);
     }
     public void changeUserRole(User user,UserRole role){
@@ -110,7 +116,7 @@ public class UserService {
         repository.save(user);
     }
     public void changeUserLastName(User user, String lastName){
-        user.setFirstName(lastName);
+        user.setLastName(lastName);
         repository.save(user);
     }
     public void changeUserPhone(User user, String contact){
@@ -119,8 +125,10 @@ public class UserService {
     }
     public boolean checkPassword(String email, String password){
         String passwordChecker;
-        for (User user:repository.findByEmail(email)){
+        List<User> usersByEmail = repository.findByEmail(email);
+        for (User user: usersByEmail){
             passwordChecker=user.getPasswordHash();
+            password=hashPassword(password);
             if(passwordChecker.equals(password)) {
                 return true;
             }
