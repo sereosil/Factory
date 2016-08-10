@@ -28,12 +28,12 @@ public class UserServiceTest {
     String forHashTest="12345";
     String forHashTest2="54321";
     UserRole role=new UserRole(true,false,true,false);;
-    User user=new User("Иван", "Иванов","88005553535",role,"qwe@mail.ru","5555",true);
+    User user=new User("Иван", "Иванов","88005553535",role,"qwe@mail.ru","5555");
     private User s;
 
     @Before
     public void setUp() throws Exception {
-        s = new User("Иван1", "Иванов2", "88005553535", role, "dread@mail.ru","5555",true);
+        s = new User("Иван1", "Иванов2", "88005553535", role, "dread@mail.ru","5555");
     }
     @Before
     public void prepareMock(){
@@ -42,14 +42,14 @@ public class UserServiceTest {
     }
     @Test
     public void haveUserTest() throws Exception {
-        UserService userService = new UserService(repository);
+        UserService userService = new UserService(repository,roleRepository);
         boolean b = userService.haveUser("qwe@mail.ru");
         assertTrue(b);
     }
 
     @Test
     public void getValidUserTest() throws Exception {
-        UserService userService = new UserService(repository);
+        UserService userService = new UserService(repository,roleRepository);
         User b = userService.getValidUser("qwe@mail.ru","55555");
         assertEquals(b,user);
     }
@@ -64,7 +64,7 @@ public class UserServiceTest {
 
     @Test
     public void ifDefaultPasswordTest() throws Exception {
-        UserService userService = new UserService(repository);
+        UserService userService = new UserService(repository,roleRepository);
         boolean b = userService.ifNeedToChangePassword("qwe@mail.ru");
         assertTrue(b);
     }
@@ -73,7 +73,7 @@ public class UserServiceTest {
     public void changeUserFirstNameTest() throws Exception {
         String firstName = "VALEEEEEERA";
         String firstNameTest;
-        UserService userService = new UserService(repository);
+        UserService userService = new UserService(repository,roleRepository);
         userService.changeUserFirstName(user,firstName);
         firstNameTest=user.getFirstName();
         assertEquals(firstName,firstNameTest);

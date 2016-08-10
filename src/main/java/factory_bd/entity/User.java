@@ -1,5 +1,7 @@
 package factory_bd.entity;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import javax.persistence.*;
 
 /**
@@ -17,18 +19,24 @@ public class User {
     private String lastName;
     private String email;
     private String passwordHash;
-    private boolean needToChangePassword;
+    private boolean needToChangePassword=true;
     protected User(){
     }
 
-    public User(String firstName, String lastName, String contact,UserRole role, String email,String passwordHash,boolean needToChangePassword) {
+    public User(String firstName, String lastName, String contact,UserRole role, String email,String passwordHash) {
         this.email=email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.contact = contact;
         this.userRole=role;
         this.passwordHash=passwordHash;
-        this.needToChangePassword=needToChangePassword;
+    }
+
+    public User(String lastName, String firstName, String email, String passwordHash) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.email = email;
+        this.passwordHash = passwordHash;
     }
 
     public boolean isNeedToChangePassword() {

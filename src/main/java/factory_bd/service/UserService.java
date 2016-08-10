@@ -4,6 +4,7 @@ import com.vaadin.spring.annotation.SpringComponent;
 import factory_bd.entity.User;
 import factory_bd.entity.UserRole;
 import factory_bd.repository.UserRepository;
+import factory_bd.repository.UserRoleRepository;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,9 +18,11 @@ import java.util.List;
 @SpringComponent
 public class UserService {
     private final UserRepository repository;
+    private final UserRoleRepository roleRepository;
     @Autowired
-    public UserService(UserRepository repository){
+    public UserService(UserRepository repository,UserRoleRepository roleRepository){
         this.repository=repository;
+        this.roleRepository = roleRepository;
     }
     public boolean haveUser(String email){
         for(User user:repository.findByEmail(email)){
@@ -50,7 +53,9 @@ public class UserService {
         }
                 return false;
     }
-
+    public void setRole(UserRole role){
+        roleRepository.save(role);
+    }
     /**
      * Update all users with email obtained from parameters
      * @throws RuntimeException if no user with such email
@@ -58,17 +63,19 @@ public class UserService {
      * @param oldPassword - old password
      * @param newPassword - new password
      */
-    public void changePassword(String email, String oldPassword, String newPassword) {
+    public void changePassword(String email, String oldPassword, String newPassword,String confirmPassword) {
         String passwordChecker;
         List<User> usersByEmail = repository.findByEmail(email);
-        for (User user: usersByEmail){
-            passwordChecker=user.getPasswordHash();
-            oldPassword=hashPassword(oldPassword);
-            if(passwordChecker.equals(oldPassword)) {
-                user.setNeedToChangePassword(false);
-                passwordChecker = hashPassword(newPassword);
-                user.setPasswordHash(passwordChecker);
-                repository.save(user);
+        if(newPassword.equals(confirmPassword)) {
+            for (User user : usersByEmail) {
+                passwordChecker = user.getPasswordHash();
+                oldPassword = hashPassword(oldPassword);
+                if (passwordChecker.equals(oldPassword)) {
+                    user.setNeedToChangePassword(false);
+                    passwordChecker = hashPassword(newPassword);
+                    user.setPasswordHash(passwordChecker);
+                    repository.save(user);
+                }
             }
         }
     }
@@ -88,8 +95,8 @@ public class UserService {
         if(user.getUserRole().isAdmin()) return true;
         return false;
     }
-    public void addUser(String firstName, String lastName, String contact, UserRole role, String email,String password){
-        User user = new User(firstName, lastName, contact, role, email,password,true);
+    public void addUser(User user){
+        //User user = new User(firstName, lastName, contact, role, email,password);
         repository.save(user);
     }
     public void changeUserRole(User user,UserRole role){

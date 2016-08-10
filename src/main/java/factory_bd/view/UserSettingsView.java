@@ -40,6 +40,7 @@ public class UserSettingsView extends VerticalLayout implements View {
     CheckBox confirm = new CheckBox("Confirm");
     CheckBox admin = new CheckBox("Admin");
     Label annotation = new Label("Change password");
+    Label wrongPass = new Label("You typed a wrong password or new password didn't match with conform password");
     PasswordField oldPassword =new PasswordField("Old Password");
     PasswordField newPassword =new PasswordField("New Password");
     PasswordField confirmPassword =new PasswordField("Confirm Password");
@@ -51,7 +52,7 @@ public class UserSettingsView extends VerticalLayout implements View {
     public UserSettingsView(UserRepository userRepository, UserRoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        userService = new UserService(userRepository);
+        userService = new UserService(userRepository,roleRepository);
         setSpacing(true);
         setMargin(true);
         setVisible(true);
@@ -85,7 +86,7 @@ public class UserSettingsView extends VerticalLayout implements View {
         HorizontalLayout userRoleLayout = new HorizontalLayout(view,add,confirm,admin);
         userRoleLayout.setMargin(true);
         userRoleLayout.setSpacing(true);
-        VerticalLayout layout = new VerticalLayout(firstName,lastName,email,contact,userRoleLayout,annotation,oldPassword,newPassword,confirmPassword,actions);
+        VerticalLayout layout = new VerticalLayout(firstName,lastName,email,contact,userRoleLayout,annotation,wrongPass,oldPassword,newPassword,confirmPassword,actions);
         addComponents(layout);
         setSpacing(true);
         setMargin(true);
@@ -97,6 +98,7 @@ public class UserSettingsView extends VerticalLayout implements View {
         view.setReadOnly(true);
         confirm.setReadOnly(true);
         admin.setReadOnly(true);
+        wrongPass.setVisible(false);
         //cancel.addClickListener(e -> editCustomer(customer));
         setVisible(true);
     }
@@ -107,10 +109,12 @@ public class UserSettingsView extends VerticalLayout implements View {
     }
     public final void applyChanges(User user){
         userService.changeUserEmail(user,email.getValue());
-        userService.changePassword(email.getValue(),oldPassword.getValue(),newPassword.getValue());
         userService.changeUserFirstName(user,firstName.getValue());
         userService.changeUserLastName(user,lastName.getValue());
         userService.changeUserPhone(user,contact.getValue());
+        userService.changePassword(email.getValue(),oldPassword.getValue(),newPassword.getValue(),confirmPassword.getValue());
+
+        getUI().getNavigator().navigateTo(AdminWindowView.VIEW_NAME);
         //BeanFieldGroup.bindFieldsUnbuffered(user,this);
         setVisible(true);
     }

@@ -9,6 +9,7 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import factory_bd.entity.User;
 import factory_bd.repository.UserRepository;
+import factory_bd.repository.UserRoleRepository;
 import factory_bd.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.vaadin.spring.annotation.SpringComponent;
@@ -23,6 +24,7 @@ import com.vaadin.ui.themes.ValoTheme;
 @UIScope
 public class LoginScreenView extends VerticalLayout implements View{
     private final UserRepository userRepository;
+    private final UserRoleRepository roleRepository;
     private User user;
     private UserService userService;
     public final static String SESSION_USER_KEY = "SES_UKEY";
@@ -31,16 +33,19 @@ public class LoginScreenView extends VerticalLayout implements View{
     PasswordField password =new PasswordField("Password");
     PasswordField newPassword =new PasswordField("New password");
     PasswordField confirmPassword =new PasswordField("Confirm password");
+    Label askToChangePass = new Label("You need to change password");
+    Label wrongPassOrLogin = new Label("Wrong password or login");
     Button ok = new Button("Login");
     Button change = new Button("Set changes");
    // Button cancel = new Button("Cancel");
     CssLayout actions = new CssLayout(ok,change);
    // CssLayout test = new CssLayout(email,password);
     @Autowired
-    public LoginScreenView(UserRepository userRepository){
+    public LoginScreenView(UserRepository userRepository,UserRoleRepository userRoleRepository){
         this.userRepository = userRepository;
-        userService = new UserService(userRepository);
-        VerticalLayout loginScreenLayout = new VerticalLayout(email,password,newPassword,confirmPassword,ok,change);
+        this.roleRepository=userRoleRepository;
+        userService = new UserService(userRepository,roleRepository);
+        VerticalLayout loginScreenLayout = new VerticalLayout(wrongPassOrLogin,email,password,askToChangePass,newPassword,confirmPassword,ok,change);
         addComponent(loginScreenLayout);
         setSpacing(true);
         loginScreenLayout.setSpacing(true);
@@ -55,6 +60,8 @@ public class LoginScreenView extends VerticalLayout implements View{
         newPassword.setVisible(false);
         confirmPassword.setVisible(false);
         change.setVisible(false);
+        askToChangePass.setVisible(false);
+        wrongPassOrLogin.setVisible(false);
         setSizeFull();
     }
     //@Override
@@ -77,16 +84,25 @@ public class LoginScreenView extends VerticalLayout implements View{
         void onChange();
     }
     public final void loginUser(){
-        if(!userService.haveUser(email.getValue()))
-        return;
-
+        wrongPassOrLogin.setVisible(false);
+        if(!userService.haveUser(email.getValue())) {
+            wrongPassOrLogin.setVisible(true);
+            return;
+        }
         {
             if(userService.checkPassword(email.getValue(),password.getValue())){
                 if(userService.ifNeedToChangePassword(email.getValue())){
                     newPassword.setVisible(true);
                     confirmPassword.setVisible(true);
                     change.setVisible(true);
-                    change.addClickListener(e->userService.changePassword(email.getValue(),password.getValue(),newPassword.getValue()));
+                    askToChangePass.setVisible(true);
+                    change.addClickListener(e->{
+                        userService.changePassword(email.getValue(),password.getValue(),newPassword.getValue(),confirmPassword.getValue());
+                        newPassword.setVisible(false);
+                        confirmPassword.setVisible(false);
+                        change.setVisible(false);
+                        askToChangePass.setVisible(false);
+                    });
                 }
                 else {
                   //  getUI().getPage().setLocation("http://google.com");
@@ -95,6 +111,8 @@ public class LoginScreenView extends VerticalLayout implements View{
                     getUI().getNavigator().navigateTo(UserSettingsView.VIEW_NAME);
                 }
             }
+            else
+                wrongPassOrLogin.setVisible(true);
         }
         //BeanFieldGroup.bindFieldsUnbuffered(userRepository,this);
         setVisible(true);

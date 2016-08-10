@@ -43,7 +43,7 @@ public class Application {
             roleRepository.save(new UserRole(false,true,false,true));
             String pass="5555";
             pass= DigestUtils.md5Hex(pass);
-            repository.save(ivan=new User("Иван", "Иванов","88005553535",role,"dfdf",pass,true));
+            repository.save(ivan=new User("Иван", "Иванов","88005553535",role,"dfdf",pass));
             requestRepository.save(new Request(new Date(), new Date(delta+5000000000000000L),ivan));
             // repository.save(new User("Иван", "Васильевич","88001488228",new Us!erRole(true,false,true,false)));
             // repository.save(new User("Василий", "Петров","12345678900",new UserRole(false,false,false,false)));
