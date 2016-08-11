@@ -28,6 +28,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import static factory_bd.view.LoginScreenView.SESSION_USER_KEY;
 
@@ -39,8 +41,8 @@ public class RequestView extends VerticalLayout implements View {
 
     public static final String VIEW_NAME = "REQUEST_VIEW";
 
-    java.util.List<Person> personsListTest = new ArrayList<Person>();
-    java.util.List<Car> carListTest = new ArrayList<Car>();
+    Set<Person> personsListTest = new HashSet<>();
+    Set<Car> carListTest = new HashSet<>();
 
     CompanyRepository companyRepository;
     PersonRepository personRepository;
@@ -77,9 +79,12 @@ public class RequestView extends VerticalLayout implements View {
         this.carList.isMultiSelect();
 
     }
+    public void setUser(User user) {
+        this.user = user;
+    }
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-        this.user = (User) getUI().getSession().getAttribute(SESSION_USER_KEY);
+        //this.user = (User) getUI().getSession().getAttribute(SESSION_USER_KEY);
         init();
     }
 
@@ -128,23 +133,26 @@ public class RequestView extends VerticalLayout implements View {
 
         addComponent(finalLoyout);
 
+        personList.setMultiSelect(true);
+        carList.setMultiSelect(true);
+
         companyList.addValueChangeListener(e -> {
             personService.fillPersonListInRequest(personList, (Company) e.getProperty().getValue());
             carService.fillCarListInRequest(carList, (Company) e.getProperty().getValue());
             company = (Company) e.getProperty().getValue();
 
-            personsListTest.clear();
-            carListTest.clear();
+
         });
 
-       personList.addValueChangeListener(e -> {
-               person = (Person) e.getProperty().getValue();
-               personsListTest.add(person);
-       });
+        personList.addValueChangeListener(e -> {
+//person = (Person) e.getProperty().getValue();
+            personsListTest = (Set<Person>) e.getProperty().getValue();
+//e.getProperty().getValue().getClass();
+
+        });
 
         carList.addValueChangeListener( e->{
-            car = (Car) e.getProperty().getValue();
-            carListTest.add(car);
+            carListTest = (Set<Car>) e.getProperty().getValue();
         });
 
         confirmChoiseButton.addClickListener( e->{
@@ -153,20 +161,20 @@ public class RequestView extends VerticalLayout implements View {
 
                 requestService.createNewRequest(request,company);
                 requestService.setCompanyToRequest(request,company);
-                requestService.setPersonsList(request,personsListTest);
-                requestService.setCarList(request,carListTest);
+                requestService.setPersonsList(request,new ArrayList<>(personsListTest));
+                requestService.setCarList(request,new ArrayList<>(carListTest));
                 requestService.setDateFrom(request,dateFrom.getValue());
                 requestService.setDateTo(request,dateTo.getValue());
                 requestService.setDescription(request,description.getValue());
 
-                requestService.setApprovedBy(request,user);
+                requestService.setCreatedBy(request,user);
 
                 requestService.addRequest(request);
 
-                personsListTest.clear();
+                /*personsListTest.clear();
 
                 carListTest.clear();
-                description.clear();
+                description.clear();*/
 
                 Notification.show("Запрос успешно добавлен!",
                         requestService.getRequest(request).toString(),

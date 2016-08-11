@@ -110,12 +110,10 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", contact='" + contact + '\'' +
-                ", userRole=" + userRole +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                '}';
+        return "User: " +
+                "id: " + id +
+                ", Телефон: '" + contact + '\'' +
+                ", Имя: '" + firstName + '\'' +
+                ", Фамилия: '" + lastName + '\'';
     }
 }

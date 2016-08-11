@@ -32,23 +32,26 @@ public class Application {
         return (args) -> {
             //добавить немного  кастомеров
             UserRole role;
+            UserRole role1;
+            UserRole role2;
+            UserRole role3;
             User ivan;
             Date date = new Date();
             long delta = date.getTime();
             roleRepository.save(new UserRole(false, false, true, false));
             roleRepository.save(role = new UserRole(true, false, true, false));
-            roleRepository.save(new UserRole(false, false, false, false));
-            roleRepository.save(new UserRole(true, true, true, false));
-            roleRepository.save(new UserRole(false, true, false, true));
+            roleRepository.save(role1 = new UserRole(true, true, true, true));
+            roleRepository.save(role2 = new UserRole(true, true, true, false));
+            roleRepository.save(role3 = new UserRole(false, true, false, true));
 
             String pass="5555";
             pass= DigestUtils.md5Hex(pass);
             repository.save(ivan=new User("Иван", "Иванов","88005553535",role,"dfdf",pass));
 
-            // repository.save(new User("Иван", "Васильевич","88001488228",new UserRole(true,false,true,false)));
-            // repository.save(new User("Василий", "Петров","12345678900",new UserRole(false,false,false,false)));
-            // repository.save(new User("Петр", "Сидоров","12",new UserRole(true,true,true,false)));
-            // repository.save(new User("Сидор", "Васильев","22",new UserRole(false,true,false,true)));
+             repository.save(new User("Иван", "Васильевич","88001478268",role,"test@mail.ru",pass));
+             repository.save(new User("Василий", "Петров","12345678900",role1,"superuser@mail.ru",pass));
+             repository.save(new User("Петр", "Сидоров","12",role2,"user1@mail.ru",pass));
+             repository.save(new User("Сидор", "Васильев","22",role3,"user2@mail.ru",pass));
             // выборка всех кастомеров
             log.info("Кастомеры найденые через findAll(): ");
             log.info("____________________________________");

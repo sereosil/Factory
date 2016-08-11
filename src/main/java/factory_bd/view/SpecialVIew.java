@@ -5,14 +5,12 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.TabSheet;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import factory_bd.entity.Company;
 import factory_bd.entity.User;
 import factory_bd.repository.*;
+import factory_bd.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static factory_bd.view.LoginScreenView.SESSION_USER_KEY;
@@ -23,7 +21,7 @@ import static factory_bd.view.LoginScreenView.SESSION_USER_KEY;
 @SpringView(name = SpecialView.VIEW_NAME)//ВЕЗДЕ!!!!!!!
 @SpringComponent
 @UIScope
-public class SpecialView  extends VerticalLayout implements View {
+class SpecialView  extends VerticalLayout implements View {
     public static final String VIEW_NAME ="SPECIAL_VIEW" ;
     private User user;
     private final CompanyRepository companyRepo;
@@ -40,10 +38,13 @@ public class SpecialView  extends VerticalLayout implements View {
     private final RequestView requestView;
     private final RequestVerifyView requestVerifyView;
     private final SecurityView securityView;
-
+    private final AdminWindowView adminWindowView;
+    private final UserSettingsView userSettingsView;
+    private final UserService userService;
  /*   private final AdminWindowView adminWindowView;
     private final UserSettingsView userSettingsView;
 */
+    Button logOut = new Button("Выйти");
     private TabSheet tabSheet = new TabSheet();
 
     private Company selectedCompany;
@@ -64,19 +65,15 @@ public class SpecialView  extends VerticalLayout implements View {
         this.requestVerifyView = new RequestVerifyView(requestRepo);
         this.securityView = new SecurityView(requestRepo,companyRepo);
         this.requestView = new RequestView(carRepo, companyRepo, personRepo, requestRepo);
-
+        this.adminWindowView=new AdminWindowView(userRepository,userRoleRepository);
+        this.userSettingsView = new UserSettingsView(userRepository,userRoleRepository);
+        this.userService = new UserService(userRepository,userRoleRepository);
       /*  this.adminWindowView = new AdminWindowView(userRepository,userRoleRepository);
         this.userSettingsView = new UserSettingsView(userRepository,userRoleRepository);*/
 
 
-        this.companyView.init();
-        this.personView.init();
-        this.carView.init();
-        this.requestView.init();
-        this.requestVerifyView.init();
-        this.securityView.init();
-       /* this.adminWindowView.init();
-        this.userSettingsView.init();*/
+
+
     }
 
     public void init(){
@@ -98,24 +95,46 @@ public class SpecialView  extends VerticalLayout implements View {
         tabSheet.setHeight(500f, Unit.PERCENTAGE);
         tabSheet.addStyleName(ValoTheme.TABSHEET_FRAMED);
         tabSheet.addStyleName(ValoTheme.TABSHEET_PADDED_TABBAR);
-        tabSheet.addTab(securityView,"Охрана");
-        tabSheet.addTab(requestVerifyView,"Подтверждение запросов");
-        tabSheet.addTab(requestView,"Создание запроса");
-        tabSheet.addTab(mainWindowLayout, "Редактирование БД");
+        this.userSettingsView.init();
+        tabSheet.addTab(userSettingsView,"Настройки");
+        if(userService.checkAdminPermission(user)) {
+            this.adminWindowView.init();
+            tabSheet.addTab(adminWindowView,"Редактирование пользователей");
+        }
+        if(userService.checkAddPermission(user)){
+            this.companyView.init();
+            this.personView.init();
+            this.carView.init();
+            this.requestView.init();
+
+            tabSheet.addTab(requestView,"Создание запроса");
+            tabSheet.addTab(mainWindowLayout, "Редактирование БД");
+
+        }
+        if(userService.checkConfirmPermission(user)){
+            this.requestVerifyView.init();
+            tabSheet.addTab(requestVerifyView,"Подтверждение запросов");
+        }
+        if(userService.checkViewPermission(user)){
+            this.securityView.init();
+            tabSheet.addTab(securityView,"Охрана");
+        }
+
+
         /*tabSheet.addTab(adminWindowView, "Администратор");
         tabSheet.addTab(userSettingsView, "Роли пользователей");*/
 
         tabSheet.addSelectedTabChangeListener( e -> {
-            Notification.show("Tab changed",
-                    "вв",
-                    Notification.Type.TRAY_NOTIFICATION.TRAY_NOTIFICATION);
             requestVerifyView.update();
             securityView.update();
             requestView.update();
 
         });
-        addComponent(tabSheet);
-
+        addComponents(logOut,tabSheet);
+        logOut.addClickListener(e->{
+            getUI().getSession().setAttribute(SESSION_USER_KEY, null);
+            getUI().getNavigator().navigateTo(LoginScreenView.VIEW_NAME);
+        });
         companyView.companyGrid.addItemClickListener(e->{
 
             Company clickedCompany = (Company) e.getItemId();
@@ -164,6 +183,13 @@ public class SpecialView  extends VerticalLayout implements View {
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         this.user = (User) getUI().getSession().getAttribute(SESSION_USER_KEY);
+        personView.setUser(user);
+        carView.setUser(user);
+        requestVerifyView.setUser(user);
+        securityView.setUser(user);
+        requestView.setUser(user);
+        adminWindowView.setUser(user);
+        userSettingsView.setUser(user);
         init();
     }
 }

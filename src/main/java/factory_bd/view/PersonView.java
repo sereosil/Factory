@@ -60,9 +60,12 @@ public class PersonView extends VerticalLayout implements View{
         this.searchLabel = new Label("Поиск:");
 
     }
+    public void setUser(User user) {
+        this.user = user;
+    }
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-        this.user = (User) getUI().getSession().getAttribute(SESSION_USER_KEY);
+       // this.user = (User) getUI().getSession().getAttribute(SESSION_USER_KEY);
         init();
     }
 

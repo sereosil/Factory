@@ -39,39 +39,43 @@ public class AdminWindowView extends VerticalLayout implements View {
     private User userNew;
     private UserRole userRole;
     private UserService userService;
-    private final TextField firstName = new TextField("First Name");
-    private final TextField lastName = new TextField("Last Name");
-    private final TextField email = new TextField("Email");
-    private final PasswordField password = new PasswordField("Password");
-    private final TextField contact = new TextField("Contact");
-    private final CheckBox view = new CheckBox("View");
-    private final CheckBox add = new CheckBox("Add");
-    private final CheckBox confirm = new CheckBox("Confirm");
-    private final CheckBox admin = new CheckBox("Admin");
+    private final TextField firstName = new TextField("Имя");
+    private final TextField lastName = new TextField("Фамилия");
+    private final TextField email = new TextField("E-mail");
+    private final PasswordField password = new PasswordField("Пароль");
+    private final TextField contact = new TextField("Телефон");
+    private final CheckBox view = new CheckBox("Просмотр");
+    private final CheckBox add = new CheckBox("Добавление");
+    private final CheckBox confirm = new CheckBox("Подтверждение");
+    private final CheckBox admin = new CheckBox("Администратор");
     //private final CheckBox changePasswordCheck = new CheckBox("Need to change password?");
     private final Grid grid = new Grid();
     private final Button addNewBtn;
     private final TextField filter;
     // Кнопки
-    Button save = new Button("Save", FontAwesome.SAVE);
+    Button save = new Button("Сохранить", FontAwesome.SAVE);
     Button addBtn = new Button("Save", FontAwesome.PLUS);
    // Button cancel = new Button("Cancel");
-    Button delete = new Button("Delete",FontAwesome.TRASH_O);
+    Button delete = new Button("Удалить",FontAwesome.TRASH_O);
    // Button addUser = new Button("Add User",FontAwesome.PLUS);
     CssLayout buttons = new CssLayout(save,delete);
     @Autowired
     public AdminWindowView(UserRepository userRepository, UserRoleRepository roleRepository){
         this.userRepository=userRepository;
         this.roleRepository=roleRepository;
-        this.addNewBtn = new Button("New user", FontAwesome.PLUS);
+        this.addNewBtn = new Button("Добавить пользователя", FontAwesome.PLUS);
         this.filter = new TextField();
         userService=new UserService(userRepository,roleRepository);
         setVisible(true);
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-        this.user = (User) getUI().getSession().getAttribute(SESSION_USER_KEY);
+        //this.user = (User) getUI().getSession().getAttribute(SESSION_USER_KEY);
         init();
     }
     public void init() {
@@ -90,6 +94,9 @@ public class AdminWindowView extends VerticalLayout implements View {
         userRoleChange.setVisible(false);
         grid.setHeight(300, Unit.PIXELS);
         grid.setColumns("id", "firstName", "lastName");
+        grid.getColumn("id").setHeaderCaption("ID");
+        grid.getColumn("firstName").setHeaderCaption("Имя");
+        grid.getColumn("lastName").setHeaderCaption("Фамилия");
         buttons.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
         save.setStyleName(ValoTheme.BUTTON_PRIMARY);
         save.setClickShortcut(ShortcutAction.KeyCode.ENTER);
@@ -116,16 +123,17 @@ public class AdminWindowView extends VerticalLayout implements View {
         grid.addSelectionListener(e -> {
             if (e.getSelected().isEmpty()) {
                changeUser.setVisible(false);
+                userRoleChange.setVisible(false);
 
             } else {
-                changeUser.setVisible(true);
+                //changeUser.setVisible(true);
                 userRoleChange.setVisible(true);
 
                 //changeUser.setVisible(true);
                 this.editUser((User) grid.getSelectedRow());
             }
         });
-        filter.setInputPrompt("Filter by last name");
+        filter.setInputPrompt("Отфильтровать по фамилии");
         filter.addTextChangeListener( e-> listUsers(e.getText()));
         addNewBtn.addClickListener(e -> {
             userRoleChange.setVisible(true);

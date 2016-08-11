@@ -29,11 +29,11 @@ public class RequestVerifyView extends VerticalLayout implements View {
     public static final String VIEW_NAME ="REQUEST_VERIFY_VIEW" ;
     private User user;
     RequestRepository requestRepository;
+
     ListSelect requestList = new ListSelect("Выбирите запрос на подтверженние или отказ");
 
     Button acceptButton;
     Button refuseButton;
-
     Request request;
 
     @Autowired
@@ -58,6 +58,7 @@ public class RequestVerifyView extends VerticalLayout implements View {
 
     public void init(){
         RequestVerifyService requestVerifyService = new RequestVerifyService(requestRepository);
+        RequestService requestService= new RequestService(requestRepository);
         requestVerifyService.fillRequestList(requestList);
 
         HorizontalLayout buttonLayout = new HorizontalLayout(acceptButton, refuseButton);
@@ -79,10 +80,11 @@ public class RequestVerifyView extends VerticalLayout implements View {
 
         acceptButton.addClickListener( e-> {
             requestVerifyService.setRequestCondition(request,true);
+
+            requestService.setApprovedBy(request,user);
             requestList.removeItem(request);
             //isEmptyCheck();
         });
-
         refuseButton.addClickListener( e->{
             requestVerifyService.setRequestCondition(request,false);
             requestVerifyService.removeRequest(request);
@@ -91,10 +93,12 @@ public class RequestVerifyView extends VerticalLayout implements View {
         });
 
     }
-
+    public void setUser(User user) {
+        this.user = user;
+    }
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-        this.user = (User) getUI().getSession().getAttribute(SESSION_USER_KEY);
+        //this.user = (User) getUI().getSession().getAttribute(SESSION_USER_KEY);
         init();
     }
 }

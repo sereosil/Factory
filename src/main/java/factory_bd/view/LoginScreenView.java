@@ -77,7 +77,7 @@ public class LoginScreenView extends VerticalLayout implements View{
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
         this.user = (User) getUI().getSession().getAttribute(SESSION_USER_KEY);
         if(user!=null){
-            getUI().getNavigator().navigateTo(UserSettingsView.VIEW_NAME);
+            getUI().getNavigator().navigateTo(SpecialView.VIEW_NAME);
         }
     }
 
@@ -98,12 +98,14 @@ public class LoginScreenView extends VerticalLayout implements View{
                     confirmPassword.setVisible(true);
                     change.setVisible(true);
                     askToChangePass.setVisible(true);
+                    ok.setVisible(false);
                     change.addClickListener(e->{
                         userService.changePassword(email.getValue(),password.getValue(),newPassword.getValue(),confirmPassword.getValue());
                         newPassword.setVisible(false);
                         confirmPassword.setVisible(false);
                         change.setVisible(false);
                         askToChangePass.setVisible(false);
+                        ok.setVisible(true);
                     });
                 }
                 else {

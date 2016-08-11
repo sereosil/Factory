@@ -66,8 +66,13 @@ public class RequestService {
     public void setApprovedBy(Request request, User user )
     {
         request.setApprovedBy(user);
+        requestRepository.save(request);
     }
+    public void setCreatedBy(Request request, User user )
+    {
+        request.setCreatedBy(user);
 
+    }
     public void fillRequestGrid(Grid grid)
     {
         grid.setContainerDataSource( new BeanItemContainer(Request.class,requestRepository.findByAccepted(true)));

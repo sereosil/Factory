@@ -42,7 +42,6 @@ public class CompanyView extends VerticalLayout implements View  {
     Button cancel = new Button("Отмена");
     Button delete = new Button("Удалить", FontAwesome.TRASH_O);
 
-
     Button addNewCompanyButton;
     Grid companyGrid;
 
