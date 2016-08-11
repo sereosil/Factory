@@ -57,7 +57,7 @@ public class PersonView extends VerticalLayout implements View{
         this.addNewPersonButton = new Button("Новый сотрудник", FontAwesome.PLUS);
         this.filterPerson = new TextField();
         this.personGrid = new Grid();
-        this.searchLabel = new Label("ПОиск:");
+        this.searchLabel = new Label("Поиск:");
 
     }
     @Override
@@ -69,6 +69,11 @@ public class PersonView extends VerticalLayout implements View{
     public void init(){
         personGrid.setHeight(300,Unit.PIXELS);
         personGrid.setColumns("id","firstName","lastName","passportIdentification");
+
+        personGrid.getColumn("id").setHeaderCaption("ID");
+        personGrid.getColumn("firstName").setHeaderCaption("Имя");
+        personGrid.getColumn("lastName").setHeaderCaption("Фамилия");
+        personGrid.getColumn("passportIdentification").setHeaderCaption("Паспорт");
 
 
         filterPerson.setInputPrompt("Filter by last name");

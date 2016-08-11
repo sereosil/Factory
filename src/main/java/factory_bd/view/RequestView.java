@@ -73,6 +73,8 @@ public class RequestView extends VerticalLayout implements View {
         this.companyRepository = companyRepository;
         this.personRepository = personRepository;
         this.requestRepository = requestRepository;
+        this.personList.isMultiSelect();
+        this.carList.isMultiSelect();
 
     }
     @Override
@@ -136,8 +138,8 @@ public class RequestView extends VerticalLayout implements View {
         });
 
        personList.addValueChangeListener(e -> {
-           person = (Person) e.getProperty().getValue();
-           personsListTest.add(person);
+               person = (Person) e.getProperty().getValue();
+               personsListTest.add(person);
        });
 
         carList.addValueChangeListener( e->{

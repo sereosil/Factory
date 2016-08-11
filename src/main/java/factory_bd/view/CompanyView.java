@@ -47,7 +47,8 @@ public class CompanyView extends VerticalLayout implements View  {
     Grid companyGrid;
 
     @Autowired
-    public CompanyView(CompanyRepository companyRepository, PersonRepository personRepo, CarRepository carRepo, RequestRepository requestRepo){
+    public CompanyView(CompanyRepository companyRepository, PersonRepository personRepository,
+                       CarRepository carRepository, RequestRepository requestRepository){
         this.companyRepository = companyRepository;
 
         this.addNewCompanyButton = new Button("Новая компания", FontAwesome.PLUS);
@@ -61,7 +62,8 @@ public class CompanyView extends VerticalLayout implements View  {
     }
 
     public HorizontalLayout companyActionButtonsLayout = new HorizontalLayout(save, delete, cancel);
-    public  VerticalLayout companyLowerVerticalLayout = new VerticalLayout( companyName, companyAdress, phoneNumber,companyActionButtonsLayout);
+    public  VerticalLayout companyLowerVerticalLayout = new VerticalLayout( companyName, companyAdress,
+            phoneNumber,companyActionButtonsLayout);
 
     public void init(){
 
@@ -88,6 +90,10 @@ public class CompanyView extends VerticalLayout implements View  {
 
         companyGrid.setHeight(300, Sizeable.Unit.PIXELS);
         companyGrid.setColumns("id","companyName","companyAdress","phoneNumber");
+        companyGrid.getColumn("id").setHeaderCaption("ID");
+        companyGrid.getColumn("companyName").setHeaderCaption("Название");
+        companyGrid.getColumn("companyAdress").setHeaderCaption("Адрес");
+        companyGrid.getColumn("phoneNumber").setHeaderCaption("Телефон");
 
         filterCompany.setWidth("250");
         filterCompany.setInputPrompt("Отфильтровать по имени");
@@ -99,8 +105,6 @@ public class CompanyView extends VerticalLayout implements View  {
             editCompany(new Company("","",""));
             companyLowerVerticalLayout.setVisible(true);
         });
-
-
 
         save.setStyleName(ValoTheme.BUTTON_FRIENDLY);
         //save.setClickShortcut(ShortcutAction.KeyCode.ENTER);
@@ -131,7 +135,6 @@ public class CompanyView extends VerticalLayout implements View  {
                 this.editCompany((Company) companyGrid.getSelectedRow());
             }
         });
-
 
         fillCompanyGrid(null);
 
@@ -175,7 +178,6 @@ public class CompanyView extends VerticalLayout implements View  {
 
     }
     public void setChangeHandler(ChangeHandler h) {
-
         save.addClickListener(e -> h.onChange());
         delete.addClickListener(e -> h.onChange());
     }

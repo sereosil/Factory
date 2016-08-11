@@ -70,6 +70,11 @@ public class CarView extends VerticalLayout implements View{
     public void init(){
         carGrid.setHeight(300,Unit.PIXELS);
         carGrid.setColumns("id","carModel","carColor","carRegistrationNumber");
+        carGrid.getColumn("id").setHeaderCaption("ID");
+        carGrid.getColumn("carModel").setHeaderCaption("Марка/модель");
+        carGrid.getColumn("carColor").setHeaderCaption("Цвет");
+        carGrid.getColumn("carRegistrationNumber").setHeaderCaption("Рег.№");
+
         filterCar.setInputPrompt("Фильтр по марке/модели");
 
         CarService carService = new CarService(carRepository);

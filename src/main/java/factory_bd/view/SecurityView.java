@@ -29,7 +29,7 @@ public class SecurityView extends VerticalLayout implements View {
     private User user;
     RequestRepository requestRepository;
     CompanyRepository companyRepository;
-    //ListSelect requestList = new ListSelect("Выберите запрос чтобы подтвердить или отвергнуть");
+
     TextField filterRequest;
     Label searchLabel;
     Grid securityGrid;
@@ -58,6 +58,13 @@ public class SecurityView extends VerticalLayout implements View {
         securityGrid.setWidth(600f, Unit.PIXELS);
         securityGrid.setSizeFull();
         securityGrid.setColumns("id","company","persons","cars","dateFrom","dateTo","approvedBy");
+        securityGrid.getColumn("id").setHeaderCaption("ID");
+        securityGrid.getColumn("company").setHeaderCaption("Компания");
+        securityGrid.getColumn("persons").setHeaderCaption("Сотрудники");
+        securityGrid.getColumn("cars").setHeaderCaption("Автомобили");
+        securityGrid.getColumn("dateFrom").setHeaderCaption("От");
+        securityGrid.getColumn("dateTo").setHeaderCaption("До");
+        securityGrid.getColumn("approvedBy").setHeaderCaption("Подтвержено");
 
         filterRequest.addTextChangeListener( e-> fillSecurityGridByFindedCompany(e.getText()));
 
