@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Factory.iml" filepath="$PROJECT_DIR$/Factory.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gs-crud-with-vaadin.iml" filepath="$PROJECT_DIR$/gs-crud-with-vaadin.iml" />
     </modules>
   </component>
 </project>

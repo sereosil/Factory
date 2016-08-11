@@ -28,7 +28,7 @@ import static factory_bd.view.LoginScreenView.SESSION_USER_KEY;
 /**
  * Created by sereo_000 on 27.07.2016.
  */
-@SpringView(name = AdminWindowView.VIEW_NAME)
+@SpringView(name = AdminWindowView.VIEW_NAME)//ВЕЗДЕ!!!!!!!
 @SpringComponent
 @UIScope
 public class AdminWindowView extends VerticalLayout implements View {

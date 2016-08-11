@@ -143,14 +143,13 @@ public class Request {
 
     @Override
     public String toString() {
-        return "Request{" +
+        return "Запрос:" +
                 "id=" + id +
-                ", company=" + company +
-                ", createdBy=" + createdBy +
-                ", approvedBy=" + approvedBy +
-                ", description='" + description + '\'' +
-                ", dateFrom=" + dateFrom +
-                ", dateTo=" + dateTo + ", acepted=" + accepted +
-                '}';
+                ", компания=" + company +
+                ", создан=" + createdBy +
+                ", подтвержден=" + approvedBy +
+                ", описание='" + description + '\'' +
+                ", начало=" + dateFrom +
+                ", конец=" + dateTo + ", acepted=" + accepted;
     }
 }

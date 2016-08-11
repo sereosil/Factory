@@ -11,12 +11,10 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.server.FontIcon;
 import com.vaadin.server.Sizeable;
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
-import factory_bd.entity.Car;
-import factory_bd.entity.Company;
-import factory_bd.entity.Person;
-import factory_bd.entity.Request;
+import factory_bd.entity.*;
 import factory_bd.repository.CarRepository;
 import factory_bd.repository.CompanyRepository;
 import factory_bd.repository.PersonRepository;
@@ -31,10 +29,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static factory_bd.view.LoginScreenView.SESSION_USER_KEY;
+
+@SpringView(name = RequestView.VIEW_NAME)
 @SpringComponent
 @UIScope
-
 public class RequestView extends VerticalLayout implements View {
+    private User user;
+
+    public static final String VIEW_NAME = "REQUEST_VIEW";
 
     java.util.List<Person> personsListTest = new ArrayList<Person>();
     java.util.List<Car> carListTest = new ArrayList<Car>();
@@ -49,17 +52,17 @@ public class RequestView extends VerticalLayout implements View {
     Person person;
     Car car;
 
-    ListSelect companyList = new ListSelect("Select company");
-    ListSelect personList = new ListSelect("Select person");
-    ListSelect carList = new ListSelect("Select car");
+    ListSelect companyList = new ListSelect("Выбирите компанию");
+    ListSelect personList = new ListSelect("Выбирите сотрудника");
+    ListSelect carList = new ListSelect("Выбирите автомобильar");
 
 
-    PopupDateField dateFrom = new PopupDateField("Date from");
-    PopupDateField dateTo = new PopupDateField("Date to");
+    PopupDateField dateFrom = new PopupDateField("Начало");
+    PopupDateField dateTo = new PopupDateField("Конец");
 
-    TextArea description = new TextArea("Description");
+    TextArea description = new TextArea("Описание");
 
-    Button confirmChoiseButton = new Button("Add request", FontAwesome.ARCHIVE);
+    Button confirmChoiseButton = new Button("Добавить запрос", FontAwesome.ARCHIVE);
 
     private  RequestView(){
 
@@ -72,12 +75,25 @@ public class RequestView extends VerticalLayout implements View {
         this.requestRepository = requestRepository;
 
     }
-
+    @Override
+    public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
+        this.user = (User) getUI().getSession().getAttribute(SESSION_USER_KEY);
+        init();
+    }
 
     public void listVisualStyleEdit(ListSelect listSelect){
         listSelect.setNullSelectionAllowed(false);
         listSelect.setImmediate(true);
         listSelect.setWidth(600.0f, Unit.PIXELS);
+    }
+
+
+    public void update(){
+        companyList.removeAllItems();
+        carList.removeAllItems();
+        personList.removeAllItems();
+        CompanyService companyService = new CompanyService(companyRepository);
+        companyService.fillCompanyListInRequest(companyList);
     }
 
     public void init(){
@@ -140,6 +156,9 @@ public class RequestView extends VerticalLayout implements View {
                 requestService.setDateFrom(request,dateFrom.getValue());
                 requestService.setDateTo(request,dateTo.getValue());
                 requestService.setDescription(request,description.getValue());
+
+                requestService.setApprovedBy(request,user);
+
                 requestService.addRequest(request);
 
                 personsListTest.clear();
@@ -147,7 +166,7 @@ public class RequestView extends VerticalLayout implements View {
                 carListTest.clear();
                 description.clear();
 
-                Notification.show("Request successfully added!",
+                Notification.show("Запрос успешно добавлен!",
                         requestService.getRequest(request).toString(),
                         Notification.Type.TRAY_NOTIFICATION.TRAY_NOTIFICATION);
             }
@@ -167,8 +186,5 @@ public class RequestView extends VerticalLayout implements View {
 
     }
 
-    @Override
-    public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
 
-    }
 }

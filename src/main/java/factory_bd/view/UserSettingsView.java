@@ -31,24 +31,24 @@ public class UserSettingsView extends VerticalLayout implements View {
     private User user;
     private UserRole userRole;
     private UserService userService;
-    TextField firstName = new TextField("First Name");
-    TextField lastName = new TextField("Last Name");
+    TextField firstName = new TextField("Имя");
+    TextField lastName = new TextField("Фамилия");
     TextField email = new TextField("Email");
-    TextField contact = new TextField("Phone number");
-    CheckBox view = new CheckBox("View");
-    CheckBox add = new CheckBox("Add");
-    CheckBox confirm = new CheckBox("Confirm");
-    CheckBox admin = new CheckBox("Admin");
-    Label annotation = new Label("Change password");
+    TextField contact = new TextField("Телефон");
+    CheckBox view = new CheckBox("Просмотр");
+    CheckBox add = new CheckBox("Добавление");
+    CheckBox confirm = new CheckBox("Подтверждение");
+    CheckBox admin = new CheckBox("Администратор");
+    Label annotation = new Label("Сменить пароль");
     Label wrongPass = new Label("You typed a wrong password or new password didn't match with conform password");
-    PasswordField oldPassword =new PasswordField("Old Password");
-    PasswordField newPassword =new PasswordField("New Password");
-    PasswordField confirmPassword =new PasswordField("Confirm Password");
-    Button ok = new Button("Apply");
+    PasswordField oldPassword =new PasswordField("Старый пароль");
+    PasswordField newPassword =new PasswordField("Новый пароль");
+    PasswordField confirmPassword =new PasswordField("Подтвердить пароль");
+    Button ok = new Button("Применить");
     // Button cancel = new Button("Cancel");
     CssLayout actions = new CssLayout(ok);
-    @Autowired
 
+    @Autowired
     public UserSettingsView(UserRepository userRepository, UserRoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;

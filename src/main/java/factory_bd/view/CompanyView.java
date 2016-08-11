@@ -2,61 +2,61 @@ package factory_bd.view;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Sizeable;
-import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
 import factory_bd.entity.Company;
+import factory_bd.repository.CarRepository;
 import factory_bd.repository.CompanyRepository;
+import factory_bd.repository.PersonRepository;
+import factory_bd.repository.RequestRepository;
 import factory_bd.service.CompanyService;
-import factory_bd.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
 /**
  * Created by Валерий on 25.07.2016.
  */
+@SpringView (name = CompanyView.VIEW_NAME)
 @SpringComponent
 @UIScope
 public class CompanyView extends VerticalLayout implements View  {
-
+    public static final String VIEW_NAME ="COMPANY_VIEW" ;
     private final CompanyRepository companyRepository;
-
     private Company company;
 
-    TextField companyName = new TextField("Company name");
-    TextField companyAdress = new TextField("Company adress");
-    TextField phoneNumber = new TextField("Company phone");
+    TextField companyName = new TextField("Название компании");
+    TextField companyAdress = new TextField("Адрес");
+    TextField phoneNumber = new TextField("Телефон");
     TextField filterCompany;
-    //MaskedTextField phoneNumber = new MaskedTextField("Company phone","##########");
     Label searchLabel;
 
-    Button save = new Button("Save", FontAwesome.SAVE);
-    Button cancel = new Button("Cancel");
-    Button delete = new Button("Delete", FontAwesome.TRASH_O);
+    Button save = new Button("Сохриеть", FontAwesome.SAVE);
+    Button cancel = new Button("Отмена");
+    Button delete = new Button("Удалить", FontAwesome.TRASH_O);
 
 
     Button addNewCompanyButton;
     Grid companyGrid;
 
     @Autowired
-    public CompanyView(CompanyRepository companyRepository){
+    public CompanyView(CompanyRepository companyRepository, PersonRepository personRepo, CarRepository carRepo, RequestRepository requestRepo){
         this.companyRepository = companyRepository;
 
-        this.addNewCompanyButton = new Button("New company", FontAwesome.PLUS);
+        this.addNewCompanyButton = new Button("Новая компания", FontAwesome.PLUS);
 
         this.filterCompany = new TextField();
 
         this.companyGrid = new Grid();
 
-        this.searchLabel = new Label("Search:");
+        this.searchLabel = new Label("Поиск:");
 
     }
 
@@ -90,7 +90,7 @@ public class CompanyView extends VerticalLayout implements View  {
         companyGrid.setColumns("id","companyName","companyAdress","phoneNumber");
 
         filterCompany.setWidth("250");
-        filterCompany.setInputPrompt("Filter by name of company");
+        filterCompany.setInputPrompt("Отфильтровать по имени");
         filterCompany.addTextChangeListener( e-> fillCompanyGrid(e.getText()));
 
         addComponent(companyFinalVerticalLayout);

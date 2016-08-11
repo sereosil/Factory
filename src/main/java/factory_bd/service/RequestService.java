@@ -4,10 +4,7 @@ import com.vaadin.data.util.BeanContainer;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.ListSelect;
-import factory_bd.entity.Car;
-import factory_bd.entity.Company;
-import factory_bd.entity.Person;
-import factory_bd.entity.Request;
+import factory_bd.entity.*;
 import factory_bd.repository.RequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -66,15 +63,10 @@ public class RequestService {
         request.setDescription(description);
     }
 
-   /* public void fillRequestList(ListSelect requestList){
-        for (Request request:requestRepository.findAll()){
-            requestList.addItem(request);
-        }
-    }*/
-
-    /*public void setRequestCondition(Request request, boolean condition){
-        request.setAccepted(condition);
-    }*/
+    public void setApprovedBy(Request request, User user )
+    {
+        request.setApprovedBy(user);
+    }
 
     public void fillRequestGrid(Grid grid)
     {

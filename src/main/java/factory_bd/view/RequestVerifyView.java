@@ -4,25 +4,32 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.ListSelect;
 import com.vaadin.ui.VerticalLayout;
 import factory_bd.entity.Request;
+import factory_bd.entity.User;
 import factory_bd.repository.RequestRepository;
 import factory_bd.service.RequestService;
 import factory_bd.service.RequestVerifyService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static factory_bd.view.LoginScreenView.SESSION_USER_KEY;
+
 /**
  * Created by Валерий on 09.08.2016.
  */
+@SpringView (name = RequestVerifyView.VIEW_NAME)
 @SpringComponent
 @UIScope
 public class RequestVerifyView extends VerticalLayout implements View {
+    public static final String VIEW_NAME ="REQUEST_VERIFY_VIEW" ;
+    private User user;
     RequestRepository requestRepository;
-    ListSelect requestList = new ListSelect("Select request to accept or refuse");
+    ListSelect requestList = new ListSelect("Выбирите запрос на подтверженние или отказ");
 
     Button acceptButton;
     Button refuseButton;
@@ -33,13 +40,23 @@ public class RequestVerifyView extends VerticalLayout implements View {
     public RequestVerifyView(RequestRepository requestRepository) {
         this.requestRepository = requestRepository;
 
-        acceptButton = new Button("Accept", FontAwesome.CHECK);
-        refuseButton = new Button("Refuse",FontAwesome.TRASH_O);
+        acceptButton = new Button("Подтвердить", FontAwesome.CHECK);
+        refuseButton = new Button("Отказать",FontAwesome.TRASH_O);
+    }
+    public void update(){
+        requestList.removeAllItems();
+        RequestVerifyService requestVerifyService = new RequestVerifyService(requestRepository);
+        //requestVerifyService.fillRequestList(requestList);
+        requestVerifyService.fillRequestByFalse(requestList);
+    }
+
+    public void isEmptyCheck(){
+        if (requestList.isEmpty() == true){
+            requestList.addItem("Запросов больше нет");
+        }
     }
 
     public void init(){
-       /* RequestService requestService = new RequestService(requestRepository);
-        requestService.fillRequestList(requestList);*/
         RequestVerifyService requestVerifyService = new RequestVerifyService(requestRepository);
         requestVerifyService.fillRequestList(requestList);
 
@@ -61,18 +78,23 @@ public class RequestVerifyView extends VerticalLayout implements View {
         });
 
         acceptButton.addClickListener( e-> {
-            //requestService.setRequestCondition(request,true);
             requestVerifyService.setRequestCondition(request,true);
+            requestList.removeItem(request);
+            //isEmptyCheck();
+        });
 
-        });
         refuseButton.addClickListener( e->{
-            //requestService.setRequestCondition(request,false);
             requestVerifyService.setRequestCondition(request,false);
+            requestVerifyService.removeRequest(request);
+            requestList.removeItem(request);
+            //isEmptyCheck();
         });
+
     }
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-
+        this.user = (User) getUI().getSession().getAttribute(SESSION_USER_KEY);
+        init();
     }
 }

@@ -30,13 +30,13 @@ public class LoginScreenView extends VerticalLayout implements View{
     public final static String SESSION_USER_KEY = "SES_UKEY";
     public final static String VIEW_NAME = "";
     TextField email =new TextField("Email");
-    PasswordField password =new PasswordField("Password");
-    PasswordField newPassword =new PasswordField("New password");
-    PasswordField confirmPassword =new PasswordField("Confirm password");
-    Label askToChangePass = new Label("You need to change password");
-    Label wrongPassOrLogin = new Label("Wrong password or login");
-    Button ok = new Button("Login");
-    Button change = new Button("Set changes");
+    PasswordField password =new PasswordField("Пароль");
+    PasswordField newPassword =new PasswordField("Новый пароль");
+    PasswordField confirmPassword =new PasswordField("Подтвердить пароль");
+    Label askToChangePass = new Label("Необходимо сменить пароль");
+    Label wrongPassOrLogin = new Label("Неверный пароль или логин");
+    Button ok = new Button("Логин");
+    Button change = new Button("Сохранить изменения");
    // Button cancel = new Button("Cancel");
     CssLayout actions = new CssLayout(ok,change);
    // CssLayout test = new CssLayout(email,password);
@@ -75,8 +75,10 @@ public class LoginScreenView extends VerticalLayout implements View{
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-       // new Navigator(this, this);
-      // getUI().getNavigator().addView(UserSettingsView.NAME, UserSettingsView.class);
+        this.user = (User) getUI().getSession().getAttribute(SESSION_USER_KEY);
+        if(user!=null){
+            getUI().getNavigator().navigateTo(UserSettingsView.VIEW_NAME);
+        }
     }
 
     public interface ChangeHandler {
@@ -108,7 +110,8 @@ public class LoginScreenView extends VerticalLayout implements View{
                   //  getUI().getPage().setLocation("http://google.com");
                     user = userService.getValidUser(email.getValue(),password.getValue());
                     getUI().getSession().setAttribute(SESSION_USER_KEY, user);
-                    getUI().getNavigator().navigateTo(UserSettingsView.VIEW_NAME);
+                    //getUI().getNavigator().navigateTo(UserSettingsView.VIEW_NAME);
+                    getUI().getNavigator().navigateTo(SpecialView.VIEW_NAME);
                 }
             }
             else

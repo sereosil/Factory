@@ -23,10 +23,12 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="Factory" />
+        <module name="gs-crud-with-vaadin" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="Factory" target="1.8" />
+      <module name="gs-crud-with-vaadin" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

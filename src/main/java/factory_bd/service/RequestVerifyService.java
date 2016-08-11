@@ -18,8 +18,16 @@ public class RequestVerifyService {
             requestList.addItem(request);
         }
     }
+    public void fillRequestByFalse(ListSelect requestList){
+        for (Request request:requestRepository.findByAccepted(false)){
+            requestList.addItem(request);
+        }
+    }
     public void setRequestCondition(Request request, boolean condition){
         request.setAccepted(condition);
         requestRepository.save(request);
+    }
+    public void removeRequest(Request request){
+        requestRepository.delete(request);
     }
 }

@@ -7,39 +7,46 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 
 import com.vaadin.ui.themes.ValoTheme;
 import factory_bd.entity.Company;
 import factory_bd.entity.Person;
+import factory_bd.entity.User;
 import factory_bd.repository.PersonRepository;
 import factory_bd.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
+import static factory_bd.view.LoginScreenView.SESSION_USER_KEY;
+
 /**
  * Created by Валерий on 27.07.2016.
  */
+@SpringView (name = PersonView.VIEW_NAME)
 @SpringComponent
 @UIScope
 public class PersonView extends VerticalLayout implements View{
+    public static final String VIEW_NAME = "PERSON_VIEW";
 
+    private User user;
     private final PersonRepository personRepository;
 
     private Person person;
     public   Company selectedCompany;
 
-    TextField firstName = new TextField("First name");
-    TextField lastName = new TextField("Last name");
-    TextField passportIdentification = new TextField("Pasport");
+    TextField firstName = new TextField("Имя");
+    TextField lastName = new TextField("Фамилия");
+    TextField passportIdentification = new TextField("Номер паспорта");
     TextField filterPerson;
 
     Label searchLabel;
 
-    Button save = new Button("Save", FontAwesome.SAVE);
-    Button cancel = new Button("Cancel");
-    Button delete = new Button("Delete", FontAwesome.TRASH_O);
+    Button save = new Button("Сохранить", FontAwesome.SAVE);
+    Button cancel = new Button("Отмена");
+    Button delete = new Button("Удалить", FontAwesome.TRASH_O);
     Button addNewPersonButton;
 
     Grid personGrid;
@@ -47,14 +54,17 @@ public class PersonView extends VerticalLayout implements View{
     @Autowired
     public PersonView(PersonRepository personRepository) {
         this.personRepository = personRepository;
-        this.addNewPersonButton = new Button("New person", FontAwesome.PLUS);
+        this.addNewPersonButton = new Button("Новый сотрудник", FontAwesome.PLUS);
         this.filterPerson = new TextField();
         this.personGrid = new Grid();
-        this.searchLabel = new Label("Search:");
+        this.searchLabel = new Label("ПОиск:");
 
     }
     @Override
-    public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {init();}
+    public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
+        this.user = (User) getUI().getSession().getAttribute(SESSION_USER_KEY);
+        init();
+    }
 
     public void init(){
         personGrid.setHeight(300,Unit.PIXELS);

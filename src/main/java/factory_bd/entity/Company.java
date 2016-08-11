@@ -98,8 +98,8 @@ public class Company {
     }
     @Override
     public String toString() {
-        return "Name: " + companyName + "; " +
-                "Adress: " + companyAdress + "; " +
-                "Phone: " + phoneNumber + ".";
+        return "Название: " + companyName + "; " +
+                "Адрес: " + companyAdress + "; " +
+                "Телефон: " + phoneNumber ;
     }
 }
