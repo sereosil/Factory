@@ -1,6 +1,8 @@
 package factory_bd.service;
 
+import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.ListSelect;
 import factory_bd.entity.Car;
 import factory_bd.entity.Company;
@@ -51,5 +53,9 @@ public class CarService {
             listSelect.addItem(car);
         }
 
+    }
+    public void fillCarGrid(Grid grid, Company company)
+    {
+        grid.setContainerDataSource( new BeanItemContainer(Car.class,carRepository.findByCompany(company)));
     }
 }

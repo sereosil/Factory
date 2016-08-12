@@ -38,7 +38,7 @@ public class CompanyView extends VerticalLayout implements View  {
     TextField filterCompany;
     Label searchLabel;
 
-    Button save = new Button("Сохриеть", FontAwesome.SAVE);
+    Button save = new Button("Сохранить", FontAwesome.SAVE);
     Button cancel = new Button("Отмена");
     Button delete = new Button("Удалить", FontAwesome.TRASH_O);
 
@@ -58,6 +58,11 @@ public class CompanyView extends VerticalLayout implements View  {
 
         this.searchLabel = new Label("Поиск:");
 
+    }
+
+    public void update(){
+        CompanyService companyService = new CompanyService(companyRepository);
+        companyService.fillCompanyGrid(companyGrid);
     }
 
     public HorizontalLayout companyActionButtonsLayout = new HorizontalLayout(save, delete, cancel);
@@ -95,7 +100,7 @@ public class CompanyView extends VerticalLayout implements View  {
         companyGrid.getColumn("phoneNumber").setHeaderCaption("Телефон");
 
         filterCompany.setWidth("250");
-        filterCompany.setInputPrompt("Отфильтровать по имени");
+        filterCompany.setInputPrompt("Поиск по названию компании");
         filterCompany.addTextChangeListener( e-> fillCompanyGrid(e.getText()));
 
         addComponent(companyFinalVerticalLayout);

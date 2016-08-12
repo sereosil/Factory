@@ -50,11 +50,17 @@ public class SecurityView extends VerticalLayout implements View {
     }
 
     public void init(){
+        filterRequest.setInputPrompt("Поиск по имени компании");
+        filterRequest.setWidth("250");
+
         HorizontalLayout searchLayout = new HorizontalLayout(searchLabel,filterRequest);
+        searchLayout.setSpacing(true);
+
         VerticalLayout mainLayout = new VerticalLayout(searchLayout,securityGrid);
         mainLayout.setSpacing(true);
         mainLayout.setMargin(true);
         mainLayout.setVisible(true);
+
         securityGrid.setWidth(600f, Unit.PIXELS);
         securityGrid.setSizeFull();
         securityGrid.setColumns("id","company","persons","cars","dateFrom","dateTo","approvedBy");

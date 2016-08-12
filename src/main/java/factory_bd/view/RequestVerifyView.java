@@ -6,10 +6,7 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.ListSelect;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import factory_bd.entity.Request;
 import factory_bd.entity.User;
 import factory_bd.repository.RequestRepository;
@@ -30,7 +27,7 @@ public class RequestVerifyView extends VerticalLayout implements View {
     private User user;
     RequestRepository requestRepository;
 
-    ListSelect requestList = new ListSelect("Выбирите запрос на подтверженние или отказ");
+    ListSelect requestList = new ListSelect("Выберите запрос на подтверженние или отказ");
 
     Button acceptButton;
     Button refuseButton;
@@ -51,12 +48,15 @@ public class RequestVerifyView extends VerticalLayout implements View {
     }
 
     public void isEmptyCheck(){
-        if (requestList.isEmpty() == true){
+        if (requestList.isEmpty()){
             requestList.addItem("Запросов больше нет");
         }
     }
 
     public void init(){
+        //requestList.setWidth("700");
+
+
         RequestVerifyService requestVerifyService = new RequestVerifyService(requestRepository);
         RequestService requestService= new RequestService(requestRepository);
         requestVerifyService.fillRequestList(requestList);
@@ -72,24 +72,67 @@ public class RequestVerifyView extends VerticalLayout implements View {
 
 
         requestList.setRows((int) requestRepository.count());
+        requestList.setNullSelectionAllowed(false);
         addComponent(finalLayout);
 
         requestList.addValueChangeListener( e -> {
             request = (Request)e.getProperty().getValue();
+            isEmptyCheck();
         });
 
         acceptButton.addClickListener( e-> {
-            requestVerifyService.setRequestCondition(request,true);
 
-            requestService.setApprovedBy(request,user);
-            requestList.removeItem(request);
-            //isEmptyCheck();
+            final Window window = new Window("Внимание!");
+            window.setWidth(300.0f, Unit.PIXELS);
+            window.setPosition(400,150);
+            Button ok = new Button("Да");
+            Button no = new Button("Нет");
+            HorizontalLayout buttons = new HorizontalLayout(ok,no);
+            buttons.setSpacing(true);
+            Label areSure = new Label("Вы уверены, что хотите подтвердить заявку?");
+            final FormLayout content = new FormLayout(areSure,buttons);
+
+            window.setContent(content);
+            UI.getCurrent().addWindow(window);
+            ok.addClickListener(u->{
+                if(request != null){
+                    requestVerifyService.setRequestCondition(request,true);
+                    requestService.setApprovedBy(request,user);
+                    requestList.removeItem(request);
+                }
+                window.close();
+            });
+
+            no.addClickListener(u->{
+                window.close();
+            });
+
+
         });
         refuseButton.addClickListener( e->{
-            requestVerifyService.setRequestCondition(request,false);
-            requestVerifyService.removeRequest(request);
-            requestList.removeItem(request);
-            //isEmptyCheck();
+            final Window window = new Window("Внимание!");
+            window.setWidth(300.0f, Unit.PIXELS);
+            window.setPosition(400,150);
+            Button ok = new Button("Да");
+            Button no = new Button("Нет");
+            HorizontalLayout buttons = new HorizontalLayout(ok,no);
+            buttons.setSpacing(true);
+            Label areSure = new Label("Вы уверены, что хотите удалить пользователя?");
+            final FormLayout content = new FormLayout(areSure,buttons);
+
+            window.setContent(content);
+            UI.getCurrent().addWindow(window);
+            ok.addClickListener(u->{
+                if (request != null) {
+                    requestVerifyService.setRequestCondition(request,false);
+                    requestVerifyService.removeRequest(request);
+                    requestList.removeItem(request);
+                }
+                window.close();
+            });
+            no.addClickListener(u->{
+                window.close();
+            });
         });
 
     }

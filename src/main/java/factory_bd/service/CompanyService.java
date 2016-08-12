@@ -2,11 +2,14 @@ package factory_bd.service;
 
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
+import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.server.Sizeable;
 import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.ListSelect;
 import factory_bd.entity.Company;
 import factory_bd.entity.Person;
+import factory_bd.entity.Request;
 import factory_bd.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -58,8 +61,8 @@ public class CompanyService {
         }
 
     }
-
-
-
-
+    public void fillCompanyGrid(Grid grid)
+    {
+        grid.setContainerDataSource( new BeanItemContainer(Request.class,companyRepository.findAll()));
+    }
 }

@@ -1,5 +1,7 @@
 package factory_bd.service;
 
+import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.ListSelect;
 import factory_bd.entity.Company;
 import factory_bd.entity.Person;
@@ -33,5 +35,9 @@ public class PersonService {
             listSelect.addItem(person);
         }
 
+    }
+    public void fillPersonGrid(Grid grid, Company company)
+    {
+        grid.setContainerDataSource( new BeanItemContainer(Person.class,personRepository.findByCompany(company)));
     }
 }

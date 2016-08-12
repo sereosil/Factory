@@ -150,6 +150,6 @@ public class Request {
                 ", подтвержден=" + approvedBy +
                 ", описание='" + description + '\'' +
                 ", начало=" + dateFrom +
-                ", конец=" + dateTo + ", acepted=" + accepted;
+                ", конец=" + dateTo + ", acepted=" + accepted + "***" + getPersons();
     }
 }

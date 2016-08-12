@@ -76,6 +76,8 @@ public class Application {
             personRepository.save(new Person("Yarik", "Schehvatow", gti, "1234"));
             personRepository.save(new Person("Valerii", "Koval", gti, "2345"));
             personRepository.save(new Person("Gohsa", "Mayster", itmo, "sdasd"));
+            personRepository.save(new Person("sfsdf", "Mayster", itmo, "sdasd"));
+            personRepository.save(new Person("sdfsdf", "Mayster", itmo, "sdasd"));
             /*personRepository.save(new Person("Dasha", "Lathisheva", "SPbGTI", "8966"));
             personRepository.save(new Person("Gorge", "Mayster", "ITMO", "8898"));*/
             //сохраним автомобили

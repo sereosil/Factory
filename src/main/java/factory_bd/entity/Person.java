@@ -86,6 +86,6 @@ public class Person {
     public String toString() {
         return "Имя: " + firstName + "; " +
                 "Фамилия: " + lastName + "; "+
-                "№ паспорта: " + passportIdentification + ".";
+                "№ паспорта: " + passportIdentification + "\n";
     }
 }

@@ -69,6 +69,12 @@ public class CarView extends VerticalLayout implements View{
       //  this.user = (User) getUI().getSession().getAttribute(SESSION_USER_KEY);
         init();
     }
+    public void update(){
+
+
+        CarService carService = new CarService(carRepository);
+        carService.fillCarGrid(carGrid,selectedCompany);
+    }
 
     public void init(){
         carGrid.setHeight(300,Unit.PIXELS);
@@ -78,7 +84,7 @@ public class CarView extends VerticalLayout implements View{
         carGrid.getColumn("carColor").setHeaderCaption("Цвет");
         carGrid.getColumn("carRegistrationNumber").setHeaderCaption("Рег.№");
 
-        filterCar.setInputPrompt("Фильтр по марке/модели");
+        filterCar.setInputPrompt("Поиск по марке/модели");
 
         CarService carService = new CarService(carRepository);
 

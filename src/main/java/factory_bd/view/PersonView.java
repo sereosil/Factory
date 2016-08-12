@@ -69,6 +69,12 @@ public class PersonView extends VerticalLayout implements View{
         init();
     }
 
+
+    public void update(){
+        PersonService personService = new PersonService(personRepository);
+        personService.fillPersonGrid(personGrid,selectedCompany);
+    }
+
     public void init(){
         personGrid.setHeight(300,Unit.PIXELS);
         personGrid.setColumns("id","firstName","lastName","passportIdentification");
@@ -79,7 +85,7 @@ public class PersonView extends VerticalLayout implements View{
         personGrid.getColumn("passportIdentification").setHeaderCaption("Паспорт");
 
 
-        filterPerson.setInputPrompt("Filter by last name");
+        filterPerson.setInputPrompt("Поиск по фамилии");
         filterPerson.addTextChangeListener( e-> fillPersonGridByLastName(e.getText(),selectedCompany));
 
 
