@@ -40,10 +40,12 @@ public class UserSettingsView extends VerticalLayout implements View {
     CheckBox confirm = new CheckBox("Подтверждение");
     CheckBox admin = new CheckBox("Администратор");
     Label annotation = new Label("Сменить пароль");
-    Label wrongPass = new Label("You typed a wrong password or new password didn't match with conform password");
+    Label wrongPass = new Label("Вы ввели неверный пароль или новый пароль не совпадает с подтверждаемым");
     PasswordField oldPassword =new PasswordField("Старый пароль");
     PasswordField newPassword =new PasswordField("Новый пароль");
     PasswordField confirmPassword =new PasswordField("Подтвердить пароль");
+    Label newPasswordIsTooSmall = new Label("Новый пароль слишком короткий");
+    Label newPasswordWasSet = new Label("Новый пароль сохранен!");
     Button ok = new Button("Применить");
     // Button cancel = new Button("Cancel");
     CssLayout actions = new CssLayout(ok);
@@ -89,14 +91,37 @@ public class UserSettingsView extends VerticalLayout implements View {
         HorizontalLayout userRoleLayout = new HorizontalLayout(view,add,confirm,admin);
         userRoleLayout.setMargin(true);
         userRoleLayout.setSpacing(true);
-        VerticalLayout layout = new VerticalLayout(firstName,lastName,email,contact,userRoleLayout,annotation,wrongPass,oldPassword,newPassword,confirmPassword,actions);
+        VerticalLayout layout = new VerticalLayout(firstName,lastName,email,contact,userRoleLayout,annotation,wrongPass,newPasswordIsTooSmall,newPasswordWasSet,oldPassword,newPassword,confirmPassword,actions);
         addComponents(layout);
         setSpacing(true);
         setMargin(true);
+        newPasswordIsTooSmall.setVisible(false);
+        newPasswordWasSet.setVisible(false);
         actions.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
         ok.setStyleName(ValoTheme.BUTTON_PRIMARY);
         ok.setClickShortcut(ShortcutAction.KeyCode.ENTER);
-        ok.addClickListener(e -> applyChanges(user));
+        ok.addClickListener(e -> {
+            final Window window = new Window("");
+            window.setWidth(300.0f, Unit.PIXELS);
+            window.setPosition(400,150);
+            Button ok = new Button("Да");
+            Button no = new Button("Нет");
+            HorizontalLayout buttons = new HorizontalLayout(ok,no);
+            buttons.setSpacing(true);
+            Label areSure = new Label("Сохранить?");
+            final FormLayout content = new FormLayout(areSure,buttons);
+
+            window.setContent(content);
+            UI.getCurrent().addWindow(window);
+            ok.addClickListener(u->{
+                applyChanges(user);
+                window.close();
+            });
+            no.addClickListener(u->{
+                window.close();
+            });
+
+        });
         add.setReadOnly(true);
         view.setReadOnly(true);
         confirm.setReadOnly(true);
@@ -111,13 +136,29 @@ public class UserSettingsView extends VerticalLayout implements View {
         void onChange();
     }
     public final void applyChanges(User user){
+        newPasswordIsTooSmall.setVisible(false);
         userService.changeUserEmail(user,email.getValue());
         userService.changeUserFirstName(user,firstName.getValue());
         userService.changeUserLastName(user,lastName.getValue());
         userService.changeUserPhone(user,contact.getValue());
-        userService.changePassword(email.getValue(),oldPassword.getValue(),newPassword.getValue(),confirmPassword.getValue());
-
-        getUI().getNavigator().navigateTo(AdminWindowView.VIEW_NAME);
+        String checkPasswordLength;
+        checkPasswordLength=newPassword.toString();
+        if(!checkPasswordLength.isEmpty()){
+            if(checkPasswordLength.length()<=4){
+                newPasswordIsTooSmall.setVisible(true);
+                oldPassword.clear();
+                newPassword.clear();
+                confirmPassword.clear();
+                return;
+            }
+            userService.changePassword(email.getValue(),oldPassword.getValue(),newPassword.getValue(),confirmPassword.getValue());
+            newPasswordIsTooSmall.setVisible(false);
+            newPasswordWasSet.setVisible(true);
+            oldPassword.clear();
+            newPassword.clear();
+            confirmPassword.clear();
+        }
+        newPasswordIsTooSmall.setVisible(false);
         //BeanFieldGroup.bindFieldsUnbuffered(user,this);
         setVisible(true);
     }
