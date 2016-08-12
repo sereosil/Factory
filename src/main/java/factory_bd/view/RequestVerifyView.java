@@ -54,8 +54,6 @@ public class RequestVerifyView extends VerticalLayout implements View {
     }
 
     public void init(){
-        //requestList.setWidth("700");
-
 
         RequestVerifyService requestVerifyService = new RequestVerifyService(requestRepository);
         RequestService requestService= new RequestService(requestRepository);
@@ -76,8 +74,13 @@ public class RequestVerifyView extends VerticalLayout implements View {
         addComponent(finalLayout);
 
         requestList.addValueChangeListener( e -> {
-            request = (Request)e.getProperty().getValue();
-            isEmptyCheck();
+            try {
+                request = (Request)e.getProperty().getValue();
+                //isEmptyCheck();
+            }catch (Throwable t){
+
+            }
+
         });
 
         acceptButton.addClickListener( e-> {

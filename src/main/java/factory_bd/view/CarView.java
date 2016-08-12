@@ -93,7 +93,7 @@ public class CarView extends VerticalLayout implements View{
 
         VerticalLayout carMiddleVerticalLayout = new VerticalLayout(carGrid);
 
-        HorizontalLayout carActionButtonsLayout = new HorizontalLayout(save,delete,cancel);
+        HorizontalLayout carActionButtonsLayout = new HorizontalLayout(save,cancel);
         carActionButtonsLayout.setSpacing(true);
 
         VerticalLayout carLowerVerticalLayout = new VerticalLayout(carModel,carColor,carRegistrationNumber, carActionButtonsLayout);

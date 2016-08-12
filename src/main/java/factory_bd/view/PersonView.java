@@ -94,7 +94,7 @@ public class PersonView extends VerticalLayout implements View{
 
         VerticalLayout personMiddleVerticalLayout = new VerticalLayout(personGrid);
 
-        HorizontalLayout personActionButtonsLayout = new HorizontalLayout(save,delete,cancel);
+        HorizontalLayout personActionButtonsLayout = new HorizontalLayout(save,cancel);
         personActionButtonsLayout.setSpacing(true);
 
         VerticalLayout personLowerVerticalLayout = new VerticalLayout(firstName,lastName,passportIdentification,personActionButtonsLayout);

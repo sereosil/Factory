@@ -13,7 +13,6 @@ import factory_bd.repository.*;
 import factory_bd.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static com.vaadin.ui.Alignment.TOP_LEFT;
 import static factory_bd.view.LoginScreenView.SESSION_USER_KEY;
 
 /**
@@ -79,6 +78,7 @@ class SpecialView  extends VerticalLayout implements View {
         HorizontalLayout companyLayout = new HorizontalLayout(companyView);
         HorizontalLayout personLayout = new HorizontalLayout(personView);
         HorizontalLayout carLayout = new HorizontalLayout(carView);
+
         welcome = new Label("Здравствуйте, "+user.getFirstName()+" "+user.getLastName());
         HorizontalLayout buttonsLayout = new HorizontalLayout(welcome,settings,logOut);
         buttonsLayout.setSpacing(true);
@@ -86,7 +86,7 @@ class SpecialView  extends VerticalLayout implements View {
         //buttonsLayout.setComponentAlignment(welcome,Alignment.TOP_LEFT);
         buttonsLayout.setComponentAlignment(logOut,Alignment.TOP_RIGHT);
         buttonsLayout.setVisible(true);
-       // buttonsLayout.setComponentAlignment(logOut,Alignment.TOP_RIGHT);
+
         VerticalLayout layoutPersonsAndCars = new VerticalLayout(personLayout, carLayout);
         layoutPersonsAndCars.setSpacing(true);
         //layoutPersonsAndCars.setMargin(true);
@@ -102,30 +102,32 @@ class SpecialView  extends VerticalLayout implements View {
         tabSheet.setHeight(500f, Unit.PERCENTAGE);
         tabSheet.addStyleName(ValoTheme.TABSHEET_FRAMED);
         tabSheet.addStyleName(ValoTheme.TABSHEET_PADDED_TABBAR);
-        //this.userSettingsView.init();
-        //tabSheet.addTab(userSettingsView,"Настройки");
+        this.userSettingsView.init();
+        tabSheet.addTab(userSettingsView,"Настройки");
+        if(userService.checkAdminPermission(user)) {
+            this.adminWindowView.init();
+            tabSheet.addTab(adminWindowView,"Редактирование пользователей");
+        }
+
         if(userService.checkAddPermission(user)){
             this.companyView.init();
             this.personView.init();
             this.carView.init();
             this.requestView.init();
-            tabSheet.addTab(mainWindowLayout, "Редактирование БД");
-            tabSheet.addTab(requestView,"Создание запроса");
 
+            tabSheet.addTab(requestView,"Создание запроса");
+            tabSheet.addTab(mainWindowLayout, "Редактирование БД");
 
         }
         if(userService.checkConfirmPermission(user)){
             this.requestVerifyView.init();
             tabSheet.addTab(requestVerifyView,"Подтверждение запросов");
         }
-        if(userService.checkAdminPermission(user)) {
-            this.adminWindowView.init();
-            tabSheet.addTab(adminWindowView,"Редактирование пользователей");
-        }
         if(userService.checkViewPermission(user)){
             this.securityView.init();
             tabSheet.addTab(securityView,"Охрана");
         }
+
 
         /*tabSheet.addTab(adminWindowView, "Администратор");
         tabSheet.addTab(userSettingsView, "Роли пользователей");*/
@@ -142,16 +144,13 @@ class SpecialView  extends VerticalLayout implements View {
             carView.fillCarGridBySelectedCompany(selectedCompany);
 
         });
-
         addComponents(buttonsLayout,tabSheet);
 
         logOut.addClickListener(e->{
             getUI().getSession().setAttribute(SESSION_USER_KEY, null);
             getUI().getNavigator().navigateTo(LoginScreenView.VIEW_NAME);
         });
-        settings.addClickListener(e->{
-            getUI().getNavigator().navigateTo(UserSettingsView.VIEW_NAME);
-        });
+
         companyView.companyGrid.addItemClickListener(e->{
 
             Company clickedCompany = (Company) e.getItemId();
