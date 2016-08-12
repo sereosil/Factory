@@ -48,7 +48,7 @@ public class RequestVerifyView extends VerticalLayout implements View {
     }
 
     public void isEmptyCheck(){
-        if (requestList.isEmpty()){
+        if (requestList.isEmpty() == true){
             requestList.addItem("Запросов больше нет");
         }
     }

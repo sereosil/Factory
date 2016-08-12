@@ -46,8 +46,8 @@ public class CompanyView extends VerticalLayout implements View  {
     Grid companyGrid;
 
     @Autowired
-    public CompanyView(CompanyRepository companyRepository, PersonRepository personRepository,
-                       CarRepository carRepository, RequestRepository requestRepository){
+    public CompanyView(CompanyRepository companyRepository/*, PersonRepository personRepository,
+                       CarRepository carRepository, RequestRepository requestRepository*/){
         this.companyRepository = companyRepository;
 
         this.addNewCompanyButton = new Button("Новая компания", FontAwesome.PLUS);
@@ -58,6 +58,8 @@ public class CompanyView extends VerticalLayout implements View  {
 
         this.searchLabel = new Label("Поиск:");
 
+
+
     }
 
     public void update(){
@@ -65,7 +67,7 @@ public class CompanyView extends VerticalLayout implements View  {
         companyService.fillCompanyGrid(companyGrid);
     }
 
-    public HorizontalLayout companyActionButtonsLayout = new HorizontalLayout(save, delete, cancel);
+    public HorizontalLayout companyActionButtonsLayout = new HorizontalLayout(save, cancel);
     public  VerticalLayout companyLowerVerticalLayout = new VerticalLayout( companyName, companyAdress,
             phoneNumber,companyActionButtonsLayout);
 
@@ -159,6 +161,9 @@ public class CompanyView extends VerticalLayout implements View  {
             companyGrid.setContainerDataSource(new BeanItemContainer(Company.class,
                     companyRepository.findByCompanyNameStartsWithIgnoreCase(text)));
         }
+    }
+    public void fillCompanyridByAll(){
+        companyGrid.setContainerDataSource(new BeanItemContainer(Company.class, companyRepository.findAll()));
     }
 
     public final void editCompany(Company c){

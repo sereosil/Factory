@@ -59,7 +59,7 @@ class SpecialView  extends VerticalLayout implements View {
         this.requestRepo = requestRepo;
 
 
-        this.companyView = new CompanyView(companyRepo, personRepo, carRepo, requestRepo);
+        this.companyView = new CompanyView(companyRepo);//, personRepo, carRepo, requestRepo);
         this.personView = new PersonView(personRepo);
         this.carView = new CarView(carRepo);
         this.requestVerifyView = new RequestVerifyView(requestRepo);
@@ -68,12 +68,8 @@ class SpecialView  extends VerticalLayout implements View {
         this.adminWindowView=new AdminWindowView(userRepository,userRoleRepository);
         this.userSettingsView = new UserSettingsView(userRepository,userRoleRepository);
         this.userService = new UserService(userRepository,userRoleRepository);
-      /*  this.adminWindowView = new AdminWindowView(userRepository,userRoleRepository);
+      /* this.adminWindowView = new AdminWindowView(userRepository,userRoleRepository);
         this.userSettingsView = new UserSettingsView(userRepository,userRoleRepository);*/
-
-
-
-
     }
 
     public void init(){
@@ -81,10 +77,11 @@ class SpecialView  extends VerticalLayout implements View {
         HorizontalLayout personLayout = new HorizontalLayout(personView);
         HorizontalLayout carLayout = new HorizontalLayout(carView);
 
-      /*  HorizontalLayout requestLayout = new HorizontalLayout(requestView);
-        requestLayout.setVisible(true);*/
+        VerticalLayout layoutPersonsAndCars = new VerticalLayout(personLayout, carLayout);
+        layoutPersonsAndCars.setSpacing(true);
+        //layoutPersonsAndCars.setMargin(true);
 
-        HorizontalLayout mainWindowLayout = new HorizontalLayout(companyLayout,personLayout,carLayout);
+        HorizontalLayout mainWindowLayout = new HorizontalLayout(companyLayout, layoutPersonsAndCars);
         mainWindowLayout.setMargin(true);
         mainWindowLayout.setSpacing(true);
         mainWindowLayout.setVisible(true);
@@ -101,6 +98,7 @@ class SpecialView  extends VerticalLayout implements View {
             this.adminWindowView.init();
             tabSheet.addTab(adminWindowView,"Редактирование пользователей");
         }
+
         if(userService.checkAddPermission(user)){
             this.companyView.init();
             this.personView.init();
@@ -128,13 +126,21 @@ class SpecialView  extends VerticalLayout implements View {
             requestVerifyView.update();
             securityView.update();
             requestView.update();
+            carView.update();
+            personView.update();
+
+            companyView.fillCompanyridByAll();
+            personView.fillPersonGridBySelectedCompany(selectedCompany);
+            carView.fillCarGridBySelectedCompany(selectedCompany);
 
         });
         addComponents(logOut,tabSheet);
+
         logOut.addClickListener(e->{
             getUI().getSession().setAttribute(SESSION_USER_KEY, null);
             getUI().getNavigator().navigateTo(LoginScreenView.VIEW_NAME);
         });
+
         companyView.companyGrid.addItemClickListener(e->{
 
             Company clickedCompany = (Company) e.getItemId();

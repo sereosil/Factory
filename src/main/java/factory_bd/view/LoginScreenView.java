@@ -31,7 +31,7 @@ public class LoginScreenView extends VerticalLayout implements View{
     public final static String VIEW_NAME = "";
     TextField email =new TextField("Email");
     PasswordField password =new PasswordField("Пароль");
-    PasswordField newPassword =new PasswordField("Новый пароль");
+    PasswordField newPassword =new PasswordField("Новый пароль (не менее 5 символов)");
     PasswordField confirmPassword =new PasswordField("Подтвердить пароль");
     Label askToChangePass = new Label("Необходимо сменить пароль");
     Label wrongPassOrLogin = new Label("Неверный пароль или логин");

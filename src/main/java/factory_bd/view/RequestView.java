@@ -138,6 +138,7 @@ public class RequestView extends VerticalLayout implements View {
         carList.setMultiSelect(true);
 
         companyList.addValueChangeListener(e -> {
+
             personService.fillPersonListInRequest(personList, (Company) e.getProperty().getValue());
             carService.fillCarListInRequest(carList, (Company) e.getProperty().getValue());
             company = (Company) e.getProperty().getValue();
@@ -169,7 +170,7 @@ public class RequestView extends VerticalLayout implements View {
             Button no = new Button("Нет");
             HorizontalLayout buttons = new HorizontalLayout(ok, no);
             buttons.setSpacing(true);
-            Label areSure = new Label("Вы уверены, что хотите подтвердить заявку?");
+            Label areSure = new Label("Вы уверены, что хотите добавить заявку?");
             final FormLayout content = new FormLayout(areSure, buttons);
 
             window.setContent(content);
