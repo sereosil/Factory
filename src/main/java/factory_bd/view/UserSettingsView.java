@@ -47,8 +47,9 @@ public class UserSettingsView extends VerticalLayout implements View {
     Label newPasswordIsTooSmall = new Label("Новый пароль слишком короткий");
     Label newPasswordWasSet = new Label("Новый пароль сохранен!");
     Button ok = new Button("Применить");
+    Button back = new Button("Назад");
     // Button cancel = new Button("Cancel");
-    CssLayout actions = new CssLayout(ok);
+
 
     @Autowired
     public UserSettingsView(UserRepository userRepository, UserRoleRepository roleRepository) {
@@ -76,7 +77,7 @@ public class UserSettingsView extends VerticalLayout implements View {
   }
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-        //this.user = (User) getUI().getSession().getAttribute(SESSION_USER_KEY);
+        this.user = (User) getUI().getSession().getAttribute(SESSION_USER_KEY);
         init();
     }
     public void init(){
@@ -88,6 +89,9 @@ public class UserSettingsView extends VerticalLayout implements View {
         add.setValue(user.getUserRole().isAdd());
         confirm.setValue(user.getUserRole().isConfirm());
         admin.setValue(user.getUserRole().isAdmin());
+        HorizontalLayout actions = new HorizontalLayout(ok,back);
+        actions.setMargin(true);
+        actions.setSpacing(true);
         HorizontalLayout userRoleLayout = new HorizontalLayout(view,add,confirm,admin);
         userRoleLayout.setMargin(true);
         userRoleLayout.setSpacing(true);
@@ -122,6 +126,7 @@ public class UserSettingsView extends VerticalLayout implements View {
             });
 
         });
+        back.addClickListener(e->getUI().getNavigator().navigateTo(SpecialView.VIEW_NAME));
         add.setReadOnly(true);
         view.setReadOnly(true);
         confirm.setReadOnly(true);
@@ -141,10 +146,10 @@ public class UserSettingsView extends VerticalLayout implements View {
         userService.changeUserFirstName(user,firstName.getValue());
         userService.changeUserLastName(user,lastName.getValue());
         userService.changeUserPhone(user,contact.getValue());
-        String checkPasswordLength;
-        checkPasswordLength=newPassword.toString();
-        if(!checkPasswordLength.isEmpty()){
-            if(checkPasswordLength.length()<=4){
+        //String checkPasswordLength;
+        //checkPasswordLength=newPassword.toString();
+        if(!newPassword.getValue().isEmpty()){
+            if(newPassword.getValue().length()<=4){
                 newPasswordIsTooSmall.setVisible(true);
                 oldPassword.clear();
                 newPassword.clear();

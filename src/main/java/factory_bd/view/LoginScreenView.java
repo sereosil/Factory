@@ -105,16 +105,17 @@ public class LoginScreenView extends VerticalLayout implements View{
                     ok.setVisible(false);
                     newPasswordIsTooSmall.setVisible(false);
                     change.addClickListener(e->{
-                        String checkPasswordLength;
-                        checkPasswordLength=newPassword.toString();
-                        if(checkPasswordLength.length()<=4) {
+                        //String checkPasswordLength;
+                        newPassword.getValue().length();
+                       // checkPasswordLength=newPassword.toString();
+                        if(newPassword.getValue().length()<=4) {
                             newPasswordIsTooSmall.setVisible(true);
-                            newPassword.setVisible(false);
-                            confirmPassword.setVisible(false);
-                            change.setVisible(false);
+                           // newPassword.setVisible(false);
+                           // confirmPassword.setVisible(false);
+                            //change.setVisible(false);
                             askToChangePass.setVisible(false);
-                            ok.setVisible(true);
-                            password.clear();
+                            //ok.setVisible(true);
+                           // password.clear();
                             newPassword.clear();
                             confirmPassword.clear();
                             return;

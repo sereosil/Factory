@@ -125,9 +125,9 @@ public class AdminWindowView extends VerticalLayout implements View {
                     userNew.setLastName(lastName.getValue());
                     userNew.setContact(contact.getValue());
                     userNew.setEmail(email.getValue());
-                    String checkPasswordLength;
-                    checkPasswordLength=password.toString();
-                    if (checkPasswordLength.length() <= 4) {
+                   // String checkPasswordLength;
+                   // checkPasswordLength=password.toString();
+                    if (password.getValue().length() <= 4) {
                         newPasswordIsTooSmall.setVisible(true);
                         password.clear();
                         window.close();
