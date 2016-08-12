@@ -48,6 +48,7 @@ public class AdminWindowView extends VerticalLayout implements View {
     private final CheckBox add = new CheckBox("Добавление");
     private final CheckBox confirm = new CheckBox("Подтверждение");
     private final CheckBox admin = new CheckBox("Администратор");
+    Label newPasswordIsTooSmall = new Label("Пароль слишком короткий");
     //private final CheckBox changePasswordCheck = new CheckBox("Need to change password?");
     private final Grid grid = new Grid();
     private final Button addNewBtn;
@@ -81,7 +82,7 @@ public class AdminWindowView extends VerticalLayout implements View {
     public void init() {
         HorizontalLayout actions = new HorizontalLayout(filter, addNewBtn);
         HorizontalLayout userRoleChange = new HorizontalLayout(view,add,confirm,admin,buttons);
-        VerticalLayout changeUser = new VerticalLayout(firstName,lastName,contact,userRoleChange,email,password);
+        VerticalLayout changeUser = new VerticalLayout(firstName,lastName,contact,userRoleChange,email,newPasswordIsTooSmall,password);
         addComponents(actions,grid,changeUser,userRoleChange);
         setSpacing(true);
         actions.setSpacing(true);
@@ -92,6 +93,7 @@ public class AdminWindowView extends VerticalLayout implements View {
         userRoleChange.setSpacing(true);
         changeUser.setVisible(false);
         userRoleChange.setVisible(false);
+        newPasswordIsTooSmall.setVisible(false);
         grid.setHeight(300, Unit.PIXELS);
         grid.setColumns("id", "firstName", "lastName");
         grid.getColumn("id").setHeaderCaption("ID");
@@ -101,24 +103,74 @@ public class AdminWindowView extends VerticalLayout implements View {
         save.setStyleName(ValoTheme.BUTTON_PRIMARY);
         save.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         save.addClickListener(e -> {
-            UserRole userRole = new UserRole(admin.getValue(), view.getValue(),add.getValue(),confirm.getValue());
-            userService.setRole(userRole);
-            userNew.setUserRole(userRole);
-            if(!password.getValue().isEmpty()) {
-                userNew.setFirstName(firstName.getValue());
-                userNew.setLastName(lastName.getValue());
-                userNew.setContact(contact.getValue());
-                userNew.setEmail(email.getValue());
-                userNew.setPasswordHash(DigestUtils.md5Hex(password.getValue()));
-            }
-            userService.addUser(userNew);
+            final Window window = new Window("");
+            window.setWidth(300.0f, Unit.PIXELS);
+            window.setPosition(400,150);
+            Button ok = new Button("Да");
+            Button no = new Button("Нет");
+            HorizontalLayout buttons = new HorizontalLayout(ok,no);
+            buttons.setSpacing(true);
+            Label areSure = new Label("Сохранить?");
+            final FormLayout content = new FormLayout(areSure,buttons);
 
-            listUsers(null);
+            window.setContent(content);
+            UI.getCurrent().addWindow(window);
+            ok.addClickListener(u->{
+                UserRole userRole = new UserRole(admin.getValue(), view.getValue(),add.getValue(),confirm.getValue());
+                userService.setRole(userRole);
+                userNew.setUserRole(userRole);
+                newPasswordIsTooSmall.setVisible(false);
+                if(!password.getValue().isEmpty()) {
+                    userNew.setFirstName(firstName.getValue());
+                    userNew.setLastName(lastName.getValue());
+                    userNew.setContact(contact.getValue());
+                    userNew.setEmail(email.getValue());
+                    String checkPasswordLength;
+                    checkPasswordLength=password.toString();
+                    if (checkPasswordLength.length() <= 4) {
+                        newPasswordIsTooSmall.setVisible(true);
+                        password.clear();
+                        window.close();
+                        return;
+                        }
+
+                    userNew.setPasswordHash(DigestUtils.md5Hex(password.getValue()));
+                }
+                newPasswordIsTooSmall.setVisible(false);
+                userService.addUser(userNew);
+                changeUser.setVisible(false);
+                userRoleChange.setVisible(false);
+                listUsers(null);
+                window.close();
+            });
+            no.addClickListener(u->{
+                window.close();
+            });
+
         });
        // addBtn.addClickListener(e -> editUser(new User("","")));
         delete.addClickListener(e -> {
-            userService.deleteUser(userNew);
-            listUsers(null);
+            final Window window = new Window("");
+            window.setWidth(450.0f, Unit.PIXELS);
+            window.setPosition(400,150);
+            Button ok = new Button("Да");
+            Button no = new Button("Нет");
+            HorizontalLayout buttons = new HorizontalLayout(ok,no);
+            buttons.setSpacing(true);
+            Label areSure = new Label("Вы уверены, что хотите удалить пользователя?");
+            final FormLayout content = new FormLayout(areSure,buttons);
+
+            window.setContent(content);
+            UI.getCurrent().addWindow(window);
+            ok.addClickListener(u->{
+                userService.deleteUser(userNew);
+                listUsers(null);
+                window.close();
+            });
+            no.addClickListener(u->{
+                window.close();
+            });
+
         });
         grid.addSelectionListener(e -> {
             if (e.getSelected().isEmpty()) {
@@ -139,6 +191,8 @@ public class AdminWindowView extends VerticalLayout implements View {
             userRoleChange.setVisible(true);
             changeUser.setVisible(true);
             editUser(new User("","","",userRole,"",""));
+            //userRoleChange.setVisible(false);
+            //changeUser.setVisible(false);
         });
 
         listUsers(null);

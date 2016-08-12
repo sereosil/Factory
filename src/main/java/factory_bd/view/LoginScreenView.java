@@ -35,6 +35,7 @@ public class LoginScreenView extends VerticalLayout implements View{
     PasswordField confirmPassword =new PasswordField("Подтвердить пароль");
     Label askToChangePass = new Label("Необходимо сменить пароль");
     Label wrongPassOrLogin = new Label("Неверный пароль или логин");
+    Label newPasswordIsTooSmall = new Label("Новый пароль слишком короткий");
     Button ok = new Button("Логин");
     Button change = new Button("Сохранить изменения");
    // Button cancel = new Button("Cancel");
@@ -45,7 +46,7 @@ public class LoginScreenView extends VerticalLayout implements View{
         this.userRepository = userRepository;
         this.roleRepository=userRoleRepository;
         userService = new UserService(userRepository,roleRepository);
-        VerticalLayout loginScreenLayout = new VerticalLayout(wrongPassOrLogin,email,password,askToChangePass,newPassword,confirmPassword,ok,change);
+        VerticalLayout loginScreenLayout = new VerticalLayout(wrongPassOrLogin,email,password,askToChangePass,newPasswordIsTooSmall,newPassword,confirmPassword,ok,change);
         addComponent(loginScreenLayout);
         setSpacing(true);
         loginScreenLayout.setSpacing(true);
@@ -59,9 +60,12 @@ public class LoginScreenView extends VerticalLayout implements View{
         setVisible(true);
         newPassword.setVisible(false);
         confirmPassword.setVisible(false);
+        newPassword.setImmediate(true);
+        newPassword.setMaxLength(15);
         change.setVisible(false);
         askToChangePass.setVisible(false);
         wrongPassOrLogin.setVisible(false);
+        newPasswordIsTooSmall.setVisible(false);
         setSizeFull();
     }
     //@Override
@@ -99,14 +103,34 @@ public class LoginScreenView extends VerticalLayout implements View{
                     change.setVisible(true);
                     askToChangePass.setVisible(true);
                     ok.setVisible(false);
+                    newPasswordIsTooSmall.setVisible(false);
                     change.addClickListener(e->{
+                        String checkPasswordLength;
+                        checkPasswordLength=newPassword.toString();
+                        if(checkPasswordLength.length()<=4) {
+                            newPasswordIsTooSmall.setVisible(true);
+                            newPassword.setVisible(false);
+                            confirmPassword.setVisible(false);
+                            change.setVisible(false);
+                            askToChangePass.setVisible(false);
+                            ok.setVisible(true);
+                            password.clear();
+                            newPassword.clear();
+                            confirmPassword.clear();
+                            return;
+                        }
                         userService.changePassword(email.getValue(),password.getValue(),newPassword.getValue(),confirmPassword.getValue());
                         newPassword.setVisible(false);
                         confirmPassword.setVisible(false);
                         change.setVisible(false);
                         askToChangePass.setVisible(false);
                         ok.setVisible(true);
+                        newPasswordIsTooSmall.setVisible(false);
+                        password.clear();
                     });
+
+                    newPassword.clear();
+                    confirmPassword.clear();
                 }
                 else {
                   //  getUI().getPage().setLocation("http://google.com");
