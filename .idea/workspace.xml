@@ -7,21 +7,6 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/factory_bd/entity/Request.class" afterPath="$PROJECT_DIR$/target/classes/factory_bd/entity/Request.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/factory_bd/entity/User.class" afterPath="$PROJECT_DIR$/target/classes/factory_bd/entity/User.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/factory_bd/Application.java" afterPath="$PROJECT_DIR$/src/main/java/factory_bd/Application.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/factory_bd/entity/Car.java" afterPath="$PROJECT_DIR$/src/main/java/factory_bd/entity/Car.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/factory_bd/entity/Person.java" afterPath="$PROJECT_DIR$/src/main/java/factory_bd/entity/Person.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/factory_bd/entity/Request.java" afterPath="$PROJECT_DIR$/src/main/java/factory_bd/entity/Request.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/factory_bd/entity/User.java" afterPath="$PROJECT_DIR$/src/main/java/factory_bd/entity/User.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/factory_bd/repository/CarRepository.java" afterPath="$PROJECT_DIR$/src/main/java/factory_bd/repository/CarRepository.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/factory_bd/service/CompanyService.java" afterPath="$PROJECT_DIR$/src/main/java/factory_bd/service/CompanyService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/factory_bd/service/RequestService.java" afterPath="$PROJECT_DIR$/src/main/java/factory_bd/service/RequestService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/factory_bd/view/CarView.java" afterPath="$PROJECT_DIR$/src/main/java/factory_bd/view/CarView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/factory_bd/view/CompanyView.java" afterPath="$PROJECT_DIR$/src/main/java/factory_bd/view/CompanyView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/factory_bd/view/PersonView.java" afterPath="$PROJECT_DIR$/src/main/java/factory_bd/view/PersonView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/factory_bd/view/RequestVerifyView.java" afterPath="$PROJECT_DIR$/src/main/java/factory_bd/view/RequestVerifyView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/factory_bd/view/RequestView.java" afterPath="$PROJECT_DIR$/src/main/java/factory_bd/view/RequestView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/factory_bd/view/SecurityView.java" afterPath="$PROJECT_DIR$/src/main/java/factory_bd/view/SecurityView.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/factory_bd/view/SpecialVIew.java" afterPath="$PROJECT_DIR$/src/main/java/factory_bd/view/SpecialVIew.java" />
     </list>
     <ignored path="Factory.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -955,7 +940,14 @@
       <option name="project" value="LOCAL" />
       <updated>1470997611379</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Мои изменения с пятницы">
+      <created>1471240437156</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1471240437156</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1005,7 +997,8 @@
     <MESSAGE value="Исправлены вчерашние замечания" />
     <MESSAGE value="Исправлено то что вчера нам нашла та девушка" />
     <MESSAGE value="Сохриеть" />
-    <option name="LAST_COMMIT_MESSAGE" value="Сохриеть" />
+    <MESSAGE value="Мои изменения с пятницы" />
+    <option name="LAST_COMMIT_MESSAGE" value="Мои изменения с пятницы" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1203,6 +1196,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="430">
           <caret line="112" column="14" selection-start-line="112" selection-start-column="14" selection-end-line="112" selection-end-column="14" />
+          <folding />
         </state>
       </provider>
     </entry>
