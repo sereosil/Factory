@@ -2,7 +2,6 @@ package factory_bd.view;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
@@ -14,13 +13,15 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import factory_bd.entity.Company;
 import factory_bd.entity.Person;
+import factory_bd.entity.Request;
 import factory_bd.entity.User;
+import factory_bd.repository.CompanyRepository;
 import factory_bd.repository.PersonRepository;
+import factory_bd.repository.RequestRepository;
 import factory_bd.service.PersonService;
+import factory_bd.service.RequestVerifyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-
-import static factory_bd.view.LoginScreenView.SESSION_USER_KEY;
 
 /**
  * Created by Валерий on 27.07.2016.
@@ -33,10 +34,11 @@ public class PersonView extends VerticalLayout implements View{
 
     private User user;
     private final PersonRepository personRepository;
-
+    private final RequestRepository requestRepository;
+    private final CompanyRepository companyRepository;
     private Person person;
     public   Company selectedCompany;
-
+    RequestVerifyService requestVerifyService;
     TextField firstName = new TextField("Имя");
     TextField lastName = new TextField("Фамилия");
     TextField passportIdentification = new TextField("Номер паспорта");
@@ -52,8 +54,10 @@ public class PersonView extends VerticalLayout implements View{
     Grid personGrid;
 
     @Autowired
-    public PersonView(PersonRepository personRepository) {
+    public PersonView(PersonRepository personRepository, RequestRepository requestRepository, CompanyRepository companyRepository) {
         this.personRepository = personRepository;
+        this.requestRepository = requestRepository;
+        this.companyRepository = companyRepository;
         this.addNewPersonButton = new Button("Новый сотрудник", FontAwesome.PLUS);
         this.filterPerson = new TextField();
         this.personGrid = new Grid();
@@ -78,6 +82,7 @@ public class PersonView extends VerticalLayout implements View{
     public void init(){
         personGrid.setHeight(300,Unit.PIXELS);
         personGrid.setColumns("id","firstName","lastName","passportIdentification");
+        requestVerifyService = new RequestVerifyService(requestRepository);
 
         personGrid.getColumn("id").setHeaderCaption("ID");
         personGrid.getColumn("firstName").setHeaderCaption("Имя");
@@ -129,14 +134,36 @@ public class PersonView extends VerticalLayout implements View{
         });
 
         save.setStyleName(ValoTheme.BUTTON_FRIENDLY);
-       // save.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         delete.setStyleName(ValoTheme.BUTTON_DANGER);
 
         PersonService personService = new PersonService(personRepository);
 
         save.addClickListener(e->{
-            personService.addPeson(person);
-            personLowerVerticalLayout.setVisible(false);
+
+            final Window window = new Window("Внимание");
+            window.setWidth(300.0f, Unit.PIXELS);
+            window.setPosition(400,150);
+            Button ok = new Button("Да");
+            Button no = new Button("Нет");
+            HorizontalLayout buttons = new HorizontalLayout(ok,no);
+            buttons.setSpacing(true);
+            Label areSure = new Label("Вы уверены, что хотите изменить параметры выбранного сотрудника? В таком случае все предыдущие запросы связанные с ним аннулируются!");
+            final FormLayout content = new FormLayout(areSure,buttons);
+
+            window.setContent(content);
+            UI.getCurrent().addWindow(window);
+            ok.addClickListener(u->{
+
+                personService.addPeson(person);
+                testMehod(selectedCompany.getCompanyName());
+                personLowerVerticalLayout.setVisible(false);
+                window.close();
+
+            });
+            no.addClickListener(u->{
+                window.close();
+            });
+
         });
         delete.addClickListener(e->{
             personService.deletePerson(person);
@@ -146,8 +173,6 @@ public class PersonView extends VerticalLayout implements View{
             editPerson(person);
             personLowerVerticalLayout.setVisible(false);
         });
-
-        //fillPersonGrid(null,null);
     }
 
     public interface ChangeHandler {
@@ -155,18 +180,6 @@ public class PersonView extends VerticalLayout implements View{
         void onChange();
     }
 
-    //region maybe needed after
-  /* public void fillPersonGrid(String text, Company selectedCompany){
-        if(StringUtils.isEmpty(text)){
-            personGrid.setContainerDataSource(new BeanItemContainer(Person.class, personRepository.findAll()));
-        }
-        else {
-            personGrid.setContainerDataSource(new BeanItemContainer(Person.class,
-                    //personRepository.findByFirstNameStartsWithIgnoreCaseAndCompany(text,selectedCompany)));
-                    personRepository.findByCompany(selectedCompany)));
-        }
-    }*/
-    //endregion
 
     public  void fillPersonGridByLastName(String text, Company selectedCompany){
         if(StringUtils.isEmpty(text)){
@@ -187,6 +200,20 @@ public class PersonView extends VerticalLayout implements View{
             personGrid.setContainerDataSource(new BeanItemContainer(Person.class,
                     personRepository.findByCompany(selectedCompany)));
         }
+    }
+
+    public void testMehod(String text){
+        for(Company company:companyRepository.findByCompanyNameStartsWithIgnoreCase(selectedCompany.getCompanyName()))
+        {
+            for(Person person:personRepository.findByCompany(company))
+            {
+                for(Request request:requestRepository.findByPersons(person)){
+                    requestVerifyService.setRequestCondition(request,false);
+                }
+            }
+        }
+
+
     }
 
     public final void editPerson(Person p){

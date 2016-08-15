@@ -84,8 +84,8 @@ public class Person {
 
     @Override
     public String toString() {
-        return "Имя: " + firstName + "; " +
-                "Фамилия: " + lastName + "; "+
+        return firstName + "; " +
+                lastName + "; " +
                 "№ паспорта: " + passportIdentification + "\n";
     }
 }

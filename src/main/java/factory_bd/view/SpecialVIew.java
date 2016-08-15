@@ -41,9 +41,7 @@ class SpecialView  extends VerticalLayout implements View {
     private final AdminWindowView adminWindowView;
     private final UserSettingsView userSettingsView;
     private final UserService userService;
- /*   private final AdminWindowView adminWindowView;
-    private final UserSettingsView userSettingsView;
-*/
+
     Button logOut = new Button("Выйти");
     Button settings = new Button("Настройки");
     Label welcome;
@@ -61,17 +59,16 @@ class SpecialView  extends VerticalLayout implements View {
         this.requestRepo = requestRepo;
 
 
-        this.companyView = new CompanyView(companyRepo);//, personRepo, carRepo, requestRepo);
-        this.personView = new PersonView(personRepo);
-        this.carView = new CarView(carRepo);
+        this.companyView = new CompanyView(companyRepo,requestRepo);
+        this.personView = new PersonView(personRepo, requestRepo, companyRepo);
+        this.carView = new CarView(carRepo, requestRepo, companyRepo);
         this.requestVerifyView = new RequestVerifyView(requestRepo);
         this.securityView = new SecurityView(requestRepo,companyRepo);
         this.requestView = new RequestView(carRepo, companyRepo, personRepo, requestRepo);
         this.adminWindowView=new AdminWindowView(userRepository,userRoleRepository);
         this.userSettingsView = new UserSettingsView(userRepository,userRoleRepository);
         this.userService = new UserService(userRepository,userRoleRepository);
-      /* this.adminWindowView = new AdminWindowView(userRepository,userRoleRepository);
-        this.userSettingsView = new UserSettingsView(userRepository,userRoleRepository);*/
+
     }
 
     public void init(){
@@ -102,33 +99,32 @@ class SpecialView  extends VerticalLayout implements View {
         tabSheet.setHeight(500f, Unit.PERCENTAGE);
         tabSheet.addStyleName(ValoTheme.TABSHEET_FRAMED);
         tabSheet.addStyleName(ValoTheme.TABSHEET_PADDED_TABBAR);
-        this.userSettingsView.init();
-        tabSheet.addTab(userSettingsView,"Настройки");
-        if(userService.checkAdminPermission(user)) {
-            this.adminWindowView.init();
-            tabSheet.addTab(adminWindowView,"Редактирование пользователей");
-        }
-
+        //this.userSettingsView.init();
+        //tabSheet.addTab(userSettingsView,"Настройки");
         if(userService.checkAddPermission(user)){
             this.companyView.init();
             this.personView.init();
             this.carView.init();
             this.requestView.init();
-
+            tabSheet.addTab(mainWindowLayout, "Контрагенты");
             tabSheet.addTab(requestView,"Создание запроса");
-            tabSheet.addTab(mainWindowLayout, "Редактирование БД");
+
 
         }
         if(userService.checkConfirmPermission(user)){
             this.requestVerifyView.init();
             tabSheet.addTab(requestVerifyView,"Подтверждение запросов");
         }
+        if(userService.checkAdminPermission(user)) {
+            this.adminWindowView.init();
+            tabSheet.addTab(adminWindowView,"Редактирование пользователей");
+        }
         if(userService.checkViewPermission(user)){
             this.securityView.init();
             tabSheet.addTab(securityView,"Охрана");
         }
 
-
+        settings.addClickListener(e->getUI().getNavigator().navigateTo(UserSettingsView.VIEW_NAME));
         /*tabSheet.addTab(adminWindowView, "Администратор");
         tabSheet.addTab(userSettingsView, "Роли пользователей");*/
 
@@ -145,7 +141,7 @@ class SpecialView  extends VerticalLayout implements View {
 
         });
         addComponents(buttonsLayout,tabSheet);
-        settings.addClickListener(e->getUI().getNavigator().navigateTo(SpecialView.VIEW_NAME));
+        settings.addClickListener(e->getUI().getNavigator().navigateTo(UserSettingsView.VIEW_NAME));
         logOut.addClickListener(e->{
             getUI().getSession().setAttribute(SESSION_USER_KEY, null);
             getUI().getNavigator().navigateTo(LoginScreenView.VIEW_NAME);

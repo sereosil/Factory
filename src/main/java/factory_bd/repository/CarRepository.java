@@ -17,4 +17,5 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
     List<Car> findByCarModelStartsWithIgnoreCase(String carModel);
     List<Car> findByCompanyName (String companyName);
     List<Car> findByCompany (Company company);
+
 }

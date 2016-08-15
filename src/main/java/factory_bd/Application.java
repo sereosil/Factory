@@ -25,7 +25,7 @@ public class Application {
     @Bean
     public CommandLineRunner loadData(UserRepository repository,
                                       UserRoleRepository roleRepository,
-                                      RequestRepository requestRepository/**/,
+                                      RequestRepository requestRepository,
                                       PersonRepository personRepository,
                                       CarRepository carRepository,
                                       CompanyRepository companyRepository) {
@@ -88,7 +88,7 @@ public class Application {
              /*
           * Поиск в carRepository
           * */
-            log.info("Find all cars");
+            /*log.info("Find all cars");
             log.info("---------------------------------");
             for (Car car : carRepository.findAll()) {
                 log.info(car.toString());
@@ -116,9 +116,9 @@ public class Application {
             }
             log.info("");
 
-          /*
+          *//*
           * Поиск в companyRepository
-          * */
+          * *//*
             log.info("Find all company");
             log.info("---------------------------------");
             for (Company company : companyRepository.findAll()) {
@@ -126,7 +126,7 @@ public class Application {
             }
             log.info("");
 
-
+*/
           /*
           * Поиск в personRepository
           * */

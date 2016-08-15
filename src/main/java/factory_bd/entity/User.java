@@ -110,8 +110,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User: " +
-                "id: " + id +
+        return
                 ", Телефон: '" + contact + '\'' +
                 ", Имя: '" + firstName + '\'' +
                 ", Фамилия: '" + lastName + '\'';

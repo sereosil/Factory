@@ -41,7 +41,7 @@ public class RequestVerifyView extends VerticalLayout implements View {
         refuseButton = new Button("Отказать",FontAwesome.TRASH_O);
     }
     public void update(){
-        requestList.removeAllItems();
+       requestList.removeAllItems();
         RequestVerifyService requestVerifyService = new RequestVerifyService(requestRepository);
         //requestVerifyService.fillRequestList(requestList);
         requestVerifyService.fillRequestByFalse(requestList);
@@ -129,7 +129,7 @@ public class RequestVerifyView extends VerticalLayout implements View {
                 if (request != null) {
                     requestVerifyService.setRequestCondition(request,false);
                     requestVerifyService.removeRequest(request);
-                    requestList.removeItem(request);
+                    //requestList.removeItem(request);
                 }
                 window.close();
             });

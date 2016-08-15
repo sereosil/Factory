@@ -13,11 +13,13 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
 import factory_bd.entity.Company;
+import factory_bd.entity.Request;
 import factory_bd.repository.CarRepository;
 import factory_bd.repository.CompanyRepository;
 import factory_bd.repository.PersonRepository;
 import factory_bd.repository.RequestRepository;
 import factory_bd.service.CompanyService;
+import factory_bd.service.RequestVerifyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
@@ -30,6 +32,7 @@ import org.springframework.util.StringUtils;
 public class CompanyView extends VerticalLayout implements View  {
     public static final String VIEW_NAME ="COMPANY_VIEW" ;
     private final CompanyRepository companyRepository;
+    private final RequestRepository requestRepository;
     private Company company;
 
     TextField companyName = new TextField("Название компании");
@@ -37,7 +40,7 @@ public class CompanyView extends VerticalLayout implements View  {
     TextField phoneNumber = new TextField("Телефон");
     TextField filterCompany;
     Label searchLabel;
-
+    RequestVerifyService requestVerifyService;
     Button save = new Button("Сохранить", FontAwesome.SAVE);
     Button cancel = new Button("Отмена");
     Button delete = new Button("Удалить", FontAwesome.TRASH_O);
@@ -46,10 +49,9 @@ public class CompanyView extends VerticalLayout implements View  {
     Grid companyGrid;
 
     @Autowired
-    public CompanyView(CompanyRepository companyRepository/*, PersonRepository personRepository,
-                       CarRepository carRepository, RequestRepository requestRepository*/){
+    public CompanyView(CompanyRepository companyRepository,RequestRepository requestRepository){
         this.companyRepository = companyRepository;
-
+        this.requestRepository = requestRepository;
         this.addNewCompanyButton = new Button("Новая компания", FontAwesome.PLUS);
 
         this.filterCompany = new TextField();
@@ -58,10 +60,9 @@ public class CompanyView extends VerticalLayout implements View  {
 
         this.searchLabel = new Label("Поиск:");
 
-
-
     }
 
+    @Deprecated
     public void update(){
         CompanyService companyService = new CompanyService(companyRepository);
         companyService.fillCompanyGrid(companyGrid);
@@ -72,7 +73,7 @@ public class CompanyView extends VerticalLayout implements View  {
             phoneNumber,companyActionButtonsLayout);
 
     public void init(){
-
+        requestVerifyService =new RequestVerifyService(requestRepository);
         //HorizontalLayout companyActionButtonsLayout = new HorizontalLayout(save, delete, cancel);
 
         //VerticalLayout companyLowerVerticalLayout = new VerticalLayout( companyName, companyAdress, phoneNumber,companyActionButtonsLayout);
@@ -120,13 +121,34 @@ public class CompanyView extends VerticalLayout implements View  {
         CompanyService companyService = new CompanyService(companyRepository);
 
         save.addClickListener(e -> {
-            companyService.addCompany(company);
-            //companyLowerVerticalLayout.setVisible(false);
+            final Window window = new Window("Внимание");
+            window.setWidth(300.0f, Unit.PIXELS);
+            window.setPosition(400,150);
+            Button ok = new Button("Да");
+            Button no = new Button("Нет");
+            HorizontalLayout buttons = new HorizontalLayout(ok,no);
+            buttons.setSpacing(true);
+            Label areSure = new Label("Вы уверены, что хотите внести изменения в компанию? В таком случае все предыдущие запросы связанные с данной компанией аннулируются!");
+            final FormLayout content = new FormLayout(areSure,buttons);
+
+            window.setContent(content);
+            UI.getCurrent().addWindow(window);
+            ok.addClickListener(u->{
+                companyService.addCompany(company);
+                testMehod(company.getCompanyName());
+                window.close();
+            });
+            no.addClickListener(u->{
+                window.close();
+            });
+
         });
+
         delete.addClickListener(e -> {
             companyService.deleteCompany(company);
             companyLowerVerticalLayout.setVisible(false);
         });
+
         cancel.addClickListener(e -> {
             editCompany(company);
             companyLowerVerticalLayout.setVisible(false);
@@ -165,6 +187,18 @@ public class CompanyView extends VerticalLayout implements View  {
     public void fillCompanyridByAll(){
         companyGrid.setContainerDataSource(new BeanItemContainer(Company.class, companyRepository.findAll()));
     }
+
+    public void testMehod(String text){
+
+        for(Company company:companyRepository.findByCompanyNameStartsWithIgnoreCase(text))
+        {
+            for(Request request:requestRepository.findByCompany(company)){
+                requestVerifyService.setRequestCondition(request,false);
+            }
+        }
+
+    }
+
 
     public final void editCompany(Company c){
         final boolean persisted = c.getId() != null;

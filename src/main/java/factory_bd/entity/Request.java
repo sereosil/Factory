@@ -143,7 +143,7 @@ public class Request {
 
     @Override
     public String toString() {
-        return "Запрос:" +
+        return
                 "id=" + id +
                 ", компания=" + company +
                 ", создан=" + createdBy +

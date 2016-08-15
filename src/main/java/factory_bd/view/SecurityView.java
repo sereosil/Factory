@@ -40,7 +40,7 @@ public class SecurityView extends VerticalLayout implements View {
         this.companyRepository = companyRepository;
         this.securityGrid = new Grid();
         this.filterRequest = new TextField();
-        this.searchLabel = new Label("Поиск:");
+        this.searchLabel = new Label("Поиск по компаниям:");
 
     }
     public void update(){
@@ -52,6 +52,7 @@ public class SecurityView extends VerticalLayout implements View {
     public void init(){
         filterRequest.setInputPrompt("Поиск по имени компании");
         filterRequest.setWidth("250");
+
 
         HorizontalLayout searchLayout = new HorizontalLayout(searchLabel,filterRequest);
         searchLayout.setSpacing(true);

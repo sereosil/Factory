@@ -5,6 +5,7 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.ListSelect;
 import factory_bd.entity.*;
+import factory_bd.repository.CompanyRepository;
 import factory_bd.repository.RequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,6 +18,7 @@ import java.util.List;
  */
 public class RequestService {
     private RequestRepository requestRepository;
+
 
     public RequestService(RequestRepository requestRepository) {
         this.requestRepository = requestRepository;
@@ -77,5 +79,6 @@ public class RequestService {
     {
         grid.setContainerDataSource( new BeanItemContainer(Request.class,requestRepository.findByAccepted(true)));
     }
+
 
 }

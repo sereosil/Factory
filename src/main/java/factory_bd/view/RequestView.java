@@ -104,10 +104,10 @@ public class RequestView extends VerticalLayout implements View {
     }
 
     public void init() {
-        //dateFrom.setValue();
+
         dateFrom.setRangeStart(new Date());
         dateTo.setRangeStart(new Date());
-        // description.setStyleName(FontAwesome);
+
         VerticalLayout dateFieldsVerticalLayout = new VerticalLayout(dateFrom, dateTo, description);
         dateFieldsVerticalLayout.setSpacing(true);
         VerticalLayout listLayout = new VerticalLayout(companyList, personList, carList, confirmChoiseButton);
@@ -132,10 +132,7 @@ public class RequestView extends VerticalLayout implements View {
         listVisualStyleEdit(carList);
 
         finalLoyout.setSpacing(true);
-        /*finalLoyout.setMargin(true);
-        finalLoyout.setVisible(true);
 
-        addComponent(finalLoyout);*/
         finalVerticalLayout.setSpacing(true);
         finalVerticalLayout.setMargin(true);
         finalVerticalLayout.setVisible(true);
@@ -146,13 +143,9 @@ public class RequestView extends VerticalLayout implements View {
         carList.setMultiSelect(true);
 
         companyList.addValueChangeListener(e -> {
-
             personService.fillPersonListInRequest(personList, (Company) e.getProperty().getValue());
             carService.fillCarListInRequest(carList, (Company) e.getProperty().getValue());
             company = (Company) e.getProperty().getValue();
-
-            //personsListTest.clear();
-            //carListTest.clear();
         });
 
         personList.addValueChangeListener(e -> {
@@ -201,6 +194,10 @@ public class RequestView extends VerticalLayout implements View {
                         Notification.show("Запрос успешно добавлен!",
                                 requestService.getRequest(request).toString(),
                                 Notification.Type.TRAY_NOTIFICATION.TRAY_NOTIFICATION);
+
+                        dateFrom.clear();
+                        dateTo.clear();
+                        description.clear();
                     } catch (Throwable t) {
                         Notification.show("Error!:",
                                 t.toString(),

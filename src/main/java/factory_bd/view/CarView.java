@@ -2,7 +2,6 @@ package factory_bd.view;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.event.ShortcutAction;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
@@ -13,13 +12,15 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import factory_bd.entity.Car;
 import factory_bd.entity.Company;
+import factory_bd.entity.Request;
 import factory_bd.entity.User;
 import factory_bd.repository.CarRepository;
+import factory_bd.repository.CompanyRepository;
+import factory_bd.repository.RequestRepository;
 import factory_bd.service.CarService;
+import factory_bd.service.RequestVerifyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-
-import static factory_bd.view.LoginScreenView.SESSION_USER_KEY;
 
 
 /**
@@ -33,7 +34,8 @@ public class CarView extends VerticalLayout implements View{
 
     public static final String VIEW_NAME = "CAR_VIEW";
     private final CarRepository carRepository;
-
+    private final RequestRepository requestRepository;
+    private final CompanyRepository companyRepository;
     private Car car;
     public Company selectedCompany;
 
@@ -42,7 +44,7 @@ public class CarView extends VerticalLayout implements View{
     TextField carRegistrationNumber = new TextField("Рег. №");
     TextField filterCar;
 
-
+    RequestVerifyService requestVerifyService;
     Label searchLabel;
 
     Button save = new Button("Сохранить", FontAwesome.SAVE);
@@ -54,8 +56,10 @@ public class CarView extends VerticalLayout implements View{
 
 
     @Autowired
-    public CarView(CarRepository carRepository) {
+    public CarView(CarRepository carRepository, RequestRepository requestRepository, CompanyRepository companyRepository) {
         this.carRepository = carRepository;
+        this.requestRepository = requestRepository;
+        this.companyRepository = companyRepository;
         this.addNewCarButton = new Button("Новый автомобиль", FontAwesome.PLUS);
         this.filterCar = new TextField( );
         this.carGrid = new Grid();
@@ -77,6 +81,7 @@ public class CarView extends VerticalLayout implements View{
     }
 
     public void init(){
+        requestVerifyService =new RequestVerifyService(requestRepository);
         carGrid.setHeight(300,Unit.PIXELS);
         carGrid.setColumns("id","carModel","carColor","carRegistrationNumber");
         carGrid.getColumn("id").setHeaderCaption("ID");
@@ -126,8 +131,29 @@ public class CarView extends VerticalLayout implements View{
         filterCar.addTextChangeListener(e -> fillCarGridByCarModel(e.getText(),selectedCompany));
 
         save.addClickListener(e->{
-            carService.addCar(car);
-            carLowerVerticalLayout.setVisible(false);
+
+            final Window window = new Window("Внимание");
+            window.setWidth(300.0f, Unit.PIXELS);
+            window.setPosition(400,150);
+            Button ok = new Button("Да");
+            Button no = new Button("Нет");
+            HorizontalLayout buttons = new HorizontalLayout(ok,no);
+            buttons.setSpacing(true);
+            Label areSure = new Label("Вы уверены, что хотите изменить параметры выбранного транспортного средства? В таком случае все предыдущие запросы связанные с ним аннулируются!");
+            final FormLayout content = new FormLayout(areSure,buttons);
+
+            window.setContent(content);
+            UI.getCurrent().addWindow(window);
+            ok.addClickListener(u->{
+                carService.addCar(car);
+                testMehod(selectedCompany.getCompanyName());
+                carLowerVerticalLayout.setVisible(false);
+                window.close();
+            });
+            no.addClickListener(u->{
+                window.close();
+            });
+
 
         });
         delete.addClickListener(e->{
@@ -147,6 +173,17 @@ public class CarView extends VerticalLayout implements View{
     public interface ChangeHandler {
 
         void onChange();
+    }
+
+    public void testMehod(String text){
+        for(Company company:companyRepository.findByCompanyNameStartsWithIgnoreCase(selectedCompany.getCompanyName())) {
+            for (Car car : carRepository.findByCompany(company)) {
+                for (Request request : requestRepository.findByCars(car)) {
+                    requestVerifyService.setRequestCondition(request, false);
+                }
+            }
+        }
+
     }
 
     public  void fillCarGridByCarModel (String text, Company selectedCompany){
