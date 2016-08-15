@@ -145,7 +145,7 @@ class SpecialView  extends VerticalLayout implements View {
 
         });
         addComponents(buttonsLayout,tabSheet);
-
+        settings.addClickListener(e->getUI().getNavigator().navigateTo(SpecialView.VIEW_NAME));
         logOut.addClickListener(e->{
             getUI().getSession().setAttribute(SESSION_USER_KEY, null);
             getUI().getNavigator().navigateTo(LoginScreenView.VIEW_NAME);

@@ -1,5 +1,6 @@
 package factory_bd.view;
 
+import com.google.gwt.thirdparty.guava.common.primitives.Chars;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ShortcutAction;
@@ -112,7 +113,6 @@ public class AdminWindowView extends VerticalLayout implements View {
             buttons.setSpacing(true);
             Label areSure = new Label("Сохранить?");
             final FormLayout content = new FormLayout(areSure,buttons);
-
             window.setContent(content);
             UI.getCurrent().addWindow(window);
             ok.addClickListener(u->{
@@ -128,7 +128,10 @@ public class AdminWindowView extends VerticalLayout implements View {
                    // String checkPasswordLength;
                    // checkPasswordLength=password.toString();
                     if (password.getValue().length() <= 4) {
-                        newPasswordIsTooSmall.setVisible(true);
+                        Notification.show("Внимание!",
+                                "пароль должен быть не менее 5 символов!",
+                                Notification.Type.TRAY_NOTIFICATION.WARNING_MESSAGE);
+                        //newPasswordIsTooSmall.setVisible(true);
                         password.clear();
                         window.close();
                         return;

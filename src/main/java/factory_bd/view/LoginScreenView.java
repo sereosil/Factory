@@ -53,7 +53,9 @@ public class LoginScreenView extends VerticalLayout implements View{
         loginScreenLayout.setMargin(true);
         actions.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
         ok.setStyleName(ValoTheme.BUTTON_PRIMARY);
+        change.setStyleName(ValoTheme.BUTTON_PRIMARY);
         ok.setClickShortcut(ShortcutAction.KeyCode.ENTER);
+
         ok.addClickListener(e -> loginUser());
         //change.addClickListener(e -> userService.changePassword(email.getValue(),password.getValue(),newPassword.getValue()));
         //cancel.addClickListener(e -> editCustomer(customer));
@@ -103,13 +105,17 @@ public class LoginScreenView extends VerticalLayout implements View{
                     change.setVisible(true);
                     askToChangePass.setVisible(true);
                     ok.setVisible(false);
+                    change.setClickShortcut(ShortcutAction.KeyCode.ENTER);
                     newPasswordIsTooSmall.setVisible(false);
                     change.addClickListener(e->{
                         //String checkPasswordLength;
                         newPassword.getValue().length();
                        // checkPasswordLength=newPassword.toString();
                         if(newPassword.getValue().length()<=4) {
-                            newPasswordIsTooSmall.setVisible(true);
+                            Notification.show("Внимание!",
+                                    "пароль должен быть не менее 5 символов!",
+                                    Notification.Type.TRAY_NOTIFICATION.WARNING_MESSAGE);
+                           // newPasswordIsTooSmall.setVisible(true);
                            // newPassword.setVisible(false);
                            // confirmPassword.setVisible(false);
                             //change.setVisible(false);

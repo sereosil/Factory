@@ -150,7 +150,10 @@ public class UserSettingsView extends VerticalLayout implements View {
         //checkPasswordLength=newPassword.toString();
         if(!newPassword.getValue().isEmpty()){
             if(newPassword.getValue().length()<=4){
-                newPasswordIsTooSmall.setVisible(true);
+                Notification.show("Внимание!",
+                        "пароль должен быть не менее 5 символов!",
+                        Notification.Type.TRAY_NOTIFICATION.WARNING_MESSAGE);
+               // newPasswordIsTooSmall.setVisible(true);
                 oldPassword.clear();
                 newPassword.clear();
                 confirmPassword.clear();
