@@ -163,4 +163,24 @@ public class Request {
                 ", начало=" + dateFrom +
                 ", конец=" + dateTo + ", acepted=" + accepted + "***" + getPersons();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Request request = (Request) o;
+
+        if (persons != null ? !persons.equals(request.persons) : request.persons != null) return false;
+        if (cars != null ? !cars.equals(request.cars) : request.cars != null) return false;
+        if (company != null ? !company.equals(request.company) : request.company != null) return false;
+        if (dateFrom != null ? !dateFrom.equals(request.dateFrom) : request.dateFrom != null) return false;
+        return dateTo != null ? dateTo.equals(request.dateTo) : request.dateTo == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
 }

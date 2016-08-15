@@ -102,4 +102,26 @@ public class Company {
                 "Адрес: " + companyAdress + "; " +
                 "Телефон: " + phoneNumber ;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Company company = (Company) o;
+
+        if (person != null ? !person.equals(company.person) : company.person != null) return false;
+        if (additionDate != null ? !additionDate.equals(company.additionDate) : company.additionDate != null)
+            return false;
+        if (endDate != null ? !endDate.equals(company.endDate) : company.endDate != null) return false;
+        if (companyName != null ? !companyName.equals(company.companyName) : company.companyName != null) return false;
+        if (phoneNumber != null ? !phoneNumber.equals(company.phoneNumber) : company.phoneNumber != null) return false;
+        return companyAdress != null ? companyAdress.equals(company.companyAdress) : company.companyAdress == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
 }

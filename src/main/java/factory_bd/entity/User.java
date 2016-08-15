@@ -19,7 +19,7 @@ public class User {
     private String lastName;
     private String email;
     private String passwordHash;
-    private boolean needToChangePassword=true;
+    private boolean needToChangePassword=false;
     protected User(){
     }
 

@@ -189,14 +189,14 @@ public class RequestView extends VerticalLayout implements View {
                             requestService.setCompanyToRequest(request, company);
                             requestService.setPersonsList(request, new ArrayList<>(personsListTest));
                             requestService.setCarList(request, new ArrayList<>(carListTest));
-                            requestService.setDateFrom(request, dateFrom.getValue());
-                            requestService.setDateTo(request, dateTo.getValue());
+                            requestService.setDateFrom(request, (Date) dateFrom.getValue());
+                            requestService.setDateTo(request, (Date) dateTo.getValue());
                             requestService.setDescription(request, description.getValue());
                             requestService.setCreatedBy(request, user);
 
                             if(requestService.doRepositoryHaveRequest(request))
                             {
-                                Notification.show("Запрос уже существует!!",
+                                Notification.show("Запрос уже существует!",
                                         requestService.getRequest(request).toString(),
                                         Notification.Type.TRAY_NOTIFICATION.WARNING_MESSAGE);
                             }else {

@@ -88,4 +88,25 @@ public class Person {
                 lastName + ", " +
                 "№ паспорта: " + passportIdentification + "\n";
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Person person = (Person) o;
+
+        if (firstName != null ? !firstName.equals(person.firstName) : person.firstName != null) return false;
+        if (lastName != null ? !lastName.equals(person.lastName) : person.lastName != null) return false;
+        if (passportIdentification != null ? !passportIdentification.equals(person.passportIdentification) : person.passportIdentification != null)
+            return false;
+        if (company != null ? !company.equals(person.company) : person.company != null) return false;
+        return companyName != null ? companyName.equals(person.companyName) : person.companyName == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
 }

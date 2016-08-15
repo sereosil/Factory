@@ -44,12 +44,12 @@ public class Application {
             roleRepository.save(role2 = new UserRole(true, true, true, false));
             roleRepository.save(role3 = new UserRole(false, true, false, true));
 
-            String pass="55555";
+            String pass="1";
             pass= DigestUtils.md5Hex(pass);
             repository.save(ivan=new User("Иван", "Иванов","88005553535",role,"dfdf",pass));
             ivan.setNeedToChangePassword(false);
              repository.save(new User("Иван", "Васильевич","88001478268",role,"test@mail.ru",pass));
-             repository.save(new User("Василий", "Петров","12345678900",role1,"superuser@mail.ru",pass));
+             repository.save(new User("Василий", "Петров","12345678900",role1,"1",pass));
              repository.save(new User("Петр", "Сидоров","12",role2,"user1@mail.ru",pass));
              repository.save(new User("Сидор", "Васильев","22",role3,"user2@mail.ru",pass));
             // выборка всех кастомеров

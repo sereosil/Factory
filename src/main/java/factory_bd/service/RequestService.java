@@ -83,8 +83,9 @@ public class RequestService {
         boolean check = false;
         if(request != null){
             for (Request req:requestRepository.findAll()){
-                if( req.getCompany() == request.getCompany()  /*&&
-                         && req.getPersons().equals(request.getPersons()) && req.getCars().equals(request.getCars())*/){
+                if( req.getCompany().equals(request.getCompany())  &&
+                        req.getDateTo().getTime() == request.getDateTo().getTime()
+                        /* && req.getPersons().equals(request.getPersons()) && *//*req.getCars().equals(request.getCars())*/ /*&& req.isAccepted()*/){
                     check = true;
                     break;
                 }

@@ -81,4 +81,25 @@ public class Car {
         return  carModel + ", "  + carColor +
                 ", рег. №'" + carRegistrationNumber;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Car car = (Car) o;
+
+        if (carModel != null ? !carModel.equals(car.carModel) : car.carModel != null) return false;
+        if (carColor != null ? !carColor.equals(car.carColor) : car.carColor != null) return false;
+        if (carRegistrationNumber != null ? !carRegistrationNumber.equals(car.carRegistrationNumber) : car.carRegistrationNumber != null)
+            return false;
+        if (company != null ? !company.equals(car.company) : car.company != null) return false;
+        return companyName != null ? companyName.equals(car.companyName) : car.companyName == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
 }
