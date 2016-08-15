@@ -51,7 +51,7 @@ public class RequestView extends VerticalLayout implements View {
     CarRepository carRepository;
 
     RequestRepository requestRepository;
-
+    Request testRequest;
     Company company;
     Person person;
     Car car;
@@ -70,6 +70,7 @@ public class RequestView extends VerticalLayout implements View {
 
     Label informationLabel = new Label("Если отсутствуют необходимые компании, сотрудники или траспортные средства их можно добавить во вкладке \"Контрагенты\" ");
 
+    //Request request;
     private RequestView() {
 
     }
@@ -142,6 +143,7 @@ public class RequestView extends VerticalLayout implements View {
         personList.setMultiSelect(true);
         carList.setMultiSelect(true);
 
+
         companyList.addValueChangeListener(e -> {
             personService.fillPersonListInRequest(personList, (Company) e.getProperty().getValue());
             carService.fillCarListInRequest(carList, (Company) e.getProperty().getValue());
@@ -156,59 +158,70 @@ public class RequestView extends VerticalLayout implements View {
             carListTest = (Set<Car>) e.getProperty().getValue();
         });
 
+
         confirmChoiseButton.addClickListener(e -> {
-            if( personsListTest.isEmpty()){
+
+
+
+            if (personsListTest.isEmpty() || dateFrom.isEmpty() || dateTo.isEmpty()) {
                 Notification.show("Внимание!",
-                        "Для создания запроса необходимо выбрать как минимум одного сотрудника.",
+                        "Остались незаполненные поля!",
                         //Notification.Type.TRAY_NOTIFICATION.TRAY_NOTIFICATION);
                         Notification.Type.TRAY_NOTIFICATION.WARNING_MESSAGE);
+            } else {
+                    final Window window = new Window("Внимание!");
+                    window.setWidth(300.0f, Unit.PIXELS);
+                    window.setPosition(400, 150);
+                    Button ok = new Button("Да");
+                    Button no = new Button("Нет");
+                    HorizontalLayout buttons = new HorizontalLayout(ok, no);
+                    buttons.setSpacing(true);
+                    Label areSure = new Label("Вы уверены, что хотите добавить заявку?");
+                    final FormLayout content = new FormLayout(areSure, buttons);
+
+                    window.setContent(content);
+                    UI.getCurrent().addWindow(window);
+
+                    ok.addClickListener(u -> {
+                        try {
+                            Request request = new Request();
+                            requestService.createNewRequest(request, company);
+                            requestService.setCompanyToRequest(request, company);
+                            requestService.setPersonsList(request, new ArrayList<>(personsListTest));
+                            requestService.setCarList(request, new ArrayList<>(carListTest));
+                            requestService.setDateFrom(request, dateFrom.getValue());
+                            requestService.setDateTo(request, dateTo.getValue());
+                            requestService.setDescription(request, description.getValue());
+                            requestService.setCreatedBy(request, user);
+
+                            if(requestService.doRepositoryHaveRequest(request))
+                            {
+                                Notification.show("Запрос уже существует!!",
+                                        requestService.getRequest(request).toString(),
+                                        Notification.Type.TRAY_NOTIFICATION.WARNING_MESSAGE);
+                            }else {
+                                requestService.addRequest(request);
+                                Notification.show("Запрос успешно добавлен!",
+                                        requestService.getRequest(request).toString(),
+                                        Notification.Type.TRAY_NOTIFICATION.TRAY_NOTIFICATION);
+                            }
+                            dateFrom.clear();
+                            dateTo.clear();
+                            description.clear();
+                        } catch (Throwable t) {
+                            Notification.show("Error!:",
+                                    t.toString(),
+                                    Notification.Type.HUMANIZED_MESSAGE.TRAY_NOTIFICATION);
+                        }
+                        window.close();
+                    });
+                    no.addClickListener(u -> {
+                        window.close();
+                    });
+
             }
-            else {
-                final Window window = new Window("Внимание!");
-                window.setWidth(300.0f, Unit.PIXELS);
-                window.setPosition(400, 150);
-                Button ok = new Button("Да");
-                Button no = new Button("Нет");
-                HorizontalLayout buttons = new HorizontalLayout(ok, no);
-                buttons.setSpacing(true);
-                Label areSure = new Label("Вы уверены, что хотите добавить заявку?");
-                final FormLayout content = new FormLayout(areSure, buttons);
 
-                window.setContent(content);
-                UI.getCurrent().addWindow(window);
 
-                ok.addClickListener(u -> {
-                    try {
-                        Request request = new Request();
-
-                        requestService.createNewRequest(request, company);
-                        requestService.setCompanyToRequest(request, company);
-                        requestService.setPersonsList(request, new ArrayList<>(personsListTest));
-                        requestService.setCarList(request, new ArrayList<>(carListTest));
-                        requestService.setDateFrom(request, dateFrom.getValue());
-                        requestService.setDateTo(request, dateTo.getValue());
-                        requestService.setDescription(request, description.getValue());
-                        requestService.setApprovedBy(request, user);
-                        requestService.addRequest(request);
-
-                        Notification.show("Запрос успешно добавлен!",
-                                requestService.getRequest(request).toString(),
-                                Notification.Type.TRAY_NOTIFICATION.TRAY_NOTIFICATION);
-
-                        dateFrom.clear();
-                        dateTo.clear();
-                        description.clear();
-                    } catch (Throwable t) {
-                        Notification.show("Error!:",
-                                t.toString(),
-                                Notification.Type.HUMANIZED_MESSAGE.TRAY_NOTIFICATION);
-                    }
-                    window.close();
-                });
-                no.addClickListener(u -> {
-                    window.close();
-                });
-            }
         });
     }
 

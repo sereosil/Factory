@@ -71,7 +71,10 @@ public class RequestVerifyView extends VerticalLayout implements View {
 
         requestList.setRows((int) requestRepository.count());
         requestList.setNullSelectionAllowed(false);
+        requestList.setImmediate(true);
         addComponent(finalLayout);
+
+
 
         requestList.addValueChangeListener( e -> {
             try {
@@ -129,7 +132,8 @@ public class RequestVerifyView extends VerticalLayout implements View {
                 if (request != null) {
                     requestVerifyService.setRequestCondition(request,false);
                     requestVerifyService.removeRequest(request);
-                    //requestList.removeItem(request);
+                    requestVerifyService.setApprovedBy(request,user);
+                    requestList.removeItem(request);
                 }
                 window.close();
             });

@@ -40,4 +40,18 @@ public class PersonService {
     {
         grid.setContainerDataSource( new BeanItemContainer(Person.class,personRepository.findByCompany(company)));
     }
+    public boolean doRepositoryHavePerson(Person person){
+        boolean check = false;
+        for (Person personToFind:personRepository.findAll()){
+            if(/* person.equals(personToFind) ||*/ person.getPassportIdentification().equals( personToFind.getPassportIdentification()) ){
+                check = true;
+                break;
+            }
+            else {
+                check = false;
+
+            }
+        }
+        return check;
+    }
 }

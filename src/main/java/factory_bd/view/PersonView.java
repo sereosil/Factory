@@ -26,10 +26,10 @@ import org.springframework.util.StringUtils;
 /**
  * Created by Валерий on 27.07.2016.
  */
-@SpringView (name = PersonView.VIEW_NAME)
+@SpringView(name = PersonView.VIEW_NAME)
 @SpringComponent
 @UIScope
-public class PersonView extends VerticalLayout implements View{
+public class PersonView extends VerticalLayout implements View {
     public static final String VIEW_NAME = "PERSON_VIEW";
 
     private User user;
@@ -37,7 +37,7 @@ public class PersonView extends VerticalLayout implements View{
     private final RequestRepository requestRepository;
     private final CompanyRepository companyRepository;
     private Person person;
-    public   Company selectedCompany;
+    public Company selectedCompany;
     RequestVerifyService requestVerifyService;
     TextField firstName = new TextField("Имя");
     TextField lastName = new TextField("Фамилия");
@@ -64,24 +64,26 @@ public class PersonView extends VerticalLayout implements View{
         this.searchLabel = new Label("Поиск:");
 
     }
+
     public void setUser(User user) {
         this.user = user;
     }
+
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
-       // this.user = (User) getUI().getSession().getAttribute(SESSION_USER_KEY);
+        // this.user = (User) getUI().getSession().getAttribute(SESSION_USER_KEY);
         init();
     }
 
 
-    public void update(){
+    public void update() {
         PersonService personService = new PersonService(personRepository);
-        personService.fillPersonGrid(personGrid,selectedCompany);
+        personService.fillPersonGrid(personGrid, selectedCompany);
     }
 
-    public void init(){
-        personGrid.setHeight(300,Unit.PIXELS);
-        personGrid.setColumns("id","firstName","lastName","passportIdentification");
+    public void init() {
+        personGrid.setHeight(300, Unit.PIXELS);
+        personGrid.setColumns("id", "firstName", "lastName", "passportIdentification");
         requestVerifyService = new RequestVerifyService(requestRepository);
 
         personGrid.getColumn("id").setHeaderCaption("ID");
@@ -91,23 +93,23 @@ public class PersonView extends VerticalLayout implements View{
 
 
         filterPerson.setInputPrompt("Поиск по фамилии");
-        filterPerson.addTextChangeListener( e-> fillPersonGridByLastName(e.getText(),selectedCompany));
+        filterPerson.addTextChangeListener(e -> fillPersonGridByLastName(e.getText(), selectedCompany));
 
 
-        HorizontalLayout personUpperHorizontalLayout = new HorizontalLayout(searchLabel,filterPerson,addNewPersonButton);
+        HorizontalLayout personUpperHorizontalLayout = new HorizontalLayout(searchLabel, filterPerson, addNewPersonButton);
         personUpperHorizontalLayout.setSpacing(true);
 
         VerticalLayout personMiddleVerticalLayout = new VerticalLayout(personGrid);
 
-        HorizontalLayout personActionButtonsLayout = new HorizontalLayout(save,cancel);
+        HorizontalLayout personActionButtonsLayout = new HorizontalLayout(save, cancel);
         personActionButtonsLayout.setSpacing(true);
 
-        VerticalLayout personLowerVerticalLayout = new VerticalLayout(firstName,lastName,passportIdentification,personActionButtonsLayout);
+        VerticalLayout personLowerVerticalLayout = new VerticalLayout(firstName, lastName, passportIdentification, personActionButtonsLayout);
         personLowerVerticalLayout.setSpacing(true);
         personLowerVerticalLayout.setVisible(false);
 
         VerticalLayout personFinalVerticalLayout = new VerticalLayout(personUpperHorizontalLayout,
-                personMiddleVerticalLayout,personLowerVerticalLayout);
+                personMiddleVerticalLayout, personLowerVerticalLayout);
 
         personFinalVerticalLayout.setVisible(true);
         personFinalVerticalLayout.setMargin(true);
@@ -116,11 +118,10 @@ public class PersonView extends VerticalLayout implements View{
         addComponent(personFinalVerticalLayout);
 
 
-        personGrid.addSelectionListener(e ->{
-            if(e.getSelected().isEmpty()){
+        personGrid.addSelectionListener(e -> {
+            if (e.getSelected().isEmpty()) {
                 personLowerVerticalLayout.setVisible(false);
-            }
-            else{
+            } else {
                 personLowerVerticalLayout.setVisible(true);
                 this.editPerson((Person) personGrid.getSelectedRow());
             }
@@ -128,7 +129,7 @@ public class PersonView extends VerticalLayout implements View{
 
 
         addNewPersonButton.addClickListener(e -> {
-            editPerson(new Person("","",selectedCompany,""));
+            editPerson(new Person("", "", selectedCompany, ""));
             personLowerVerticalLayout.setVisible(true);
 
         });
@@ -138,38 +139,46 @@ public class PersonView extends VerticalLayout implements View{
 
         PersonService personService = new PersonService(personRepository);
 
-        save.addClickListener(e->{
+        save.addClickListener(e -> {
+            if (personService.doRepositoryHavePerson(person)) {
+                Notification.show("Внимание!",
+                    "Сотрудник с данными номером паспорта уже существует!",
+                    Notification.Type.TRAY_NOTIFICATION.WARNING_MESSAGE);
+            }
+            else {
 
-            final Window window = new Window("Внимание");
-            window.setWidth(300.0f, Unit.PIXELS);
-            window.setPosition(400,150);
-            Button ok = new Button("Да");
-            Button no = new Button("Нет");
-            HorizontalLayout buttons = new HorizontalLayout(ok,no);
-            buttons.setSpacing(true);
-            Label areSure = new Label("Вы уверены, что хотите изменить параметры выбранного сотрудника? В таком случае все предыдущие запросы связанные с ним аннулируются!");
-            final FormLayout content = new FormLayout(areSure,buttons);
+                final Window window = new Window("Внимание");
+                window.setWidth(300.0f, Unit.PIXELS);
+                window.setPosition(400, 150);
+                Button ok = new Button("Да");
+                Button no = new Button("Нет");
+                HorizontalLayout buttons = new HorizontalLayout(ok, no);
+                buttons.setSpacing(true);
+                Label areSure = new Label("Вы уверены, что хотите изменить параметры выбранного сотрудника? В таком случае все предыдущие запросы связанные с ним аннулируются!");
+                final FormLayout content = new FormLayout(areSure, buttons);
+                window.setContent(content);
+                UI.getCurrent().addWindow(window);
+                ok.addClickListener(u -> {
 
-            window.setContent(content);
-            UI.getCurrent().addWindow(window);
-            ok.addClickListener(u->{
+                    personService.addPeson(person);
+                    testMehod(selectedCompany.getCompanyName());
+                    personLowerVerticalLayout.setVisible(false);
+                    fillPersonGridBySelectedCompany(selectedCompany);
+                    window.close();
 
-                personService.addPeson(person);
-                testMehod(selectedCompany.getCompanyName());
-                personLowerVerticalLayout.setVisible(false);
-                window.close();
+                });
+                no.addClickListener(u -> {
+                    window.close();
+                });
+            }
 
-            });
-            no.addClickListener(u->{
-                window.close();
-            });
 
         });
-        delete.addClickListener(e->{
+        delete.addClickListener(e -> {
             personService.deletePerson(person);
             personLowerVerticalLayout.setVisible(false);
         });
-        cancel.addClickListener(e->{
+        cancel.addClickListener(e -> {
             editPerson(person);
             personLowerVerticalLayout.setVisible(false);
         });
@@ -181,34 +190,31 @@ public class PersonView extends VerticalLayout implements View{
     }
 
 
-    public  void fillPersonGridByLastName(String text, Company selectedCompany){
-        if(StringUtils.isEmpty(text)){
+    public void fillPersonGridByLastName(String text, Company selectedCompany) {
+        if (StringUtils.isEmpty(text)) {
             personGrid.setContainerDataSource(new BeanItemContainer(Person.class,
                     personRepository.findByCompanyName(selectedCompany.getCompanyName())));
-        }
-        else {
+        } else {
             personGrid.setContainerDataSource(new BeanItemContainer(Person.class,
                     personRepository.findByLastNameStartsWithIgnoreCase(text)));
         }
     }
-    public void fillPersonGridBySelectedCompany(Company selectedCompany){
-        if (selectedCompany == null){
+
+    public void fillPersonGridBySelectedCompany(Company selectedCompany) {
+        if (selectedCompany == null) {
             personGrid.setContainerDataSource(new BeanItemContainer(Person.class,
                     personRepository.findByCompany(selectedCompany)));
-        }
-        else {
+        } else {
             personGrid.setContainerDataSource(new BeanItemContainer(Person.class,
                     personRepository.findByCompany(selectedCompany)));
         }
     }
 
-    public void testMehod(String text){
-        for(Company company:companyRepository.findByCompanyNameStartsWithIgnoreCase(selectedCompany.getCompanyName()))
-        {
-            for(Person person:personRepository.findByCompany(company))
-            {
-                for(Request request:requestRepository.findByPersons(person)){
-                    requestVerifyService.setRequestCondition(request,false);
+    public void testMehod(String text) {
+        for (Company company : companyRepository.findByCompanyNameStartsWithIgnoreCase(selectedCompany.getCompanyName())) {
+            for (Person person : personRepository.findByCompany(company)) {
+                for (Request request : requestRepository.findByPersons(person)) {
+                    requestVerifyService.setRequestCondition(request, false);
                 }
             }
         }
@@ -216,18 +222,17 @@ public class PersonView extends VerticalLayout implements View{
 
     }
 
-    public final void editPerson(Person p){
+    public final void editPerson(Person p) {
         final boolean persisted = p.getId() != null;
 
-        if (persisted){
+        if (persisted) {
             person = personRepository.findOne(p.getId());
-        }
-        else {
+        } else {
             person = p;
         }
         cancel.setVisible(persisted);
 
-        BeanFieldGroup.bindFieldsUnbuffered(person,this);
+        BeanFieldGroup.bindFieldsUnbuffered(person, this);
 
         setVisible(true);
 
@@ -236,11 +241,11 @@ public class PersonView extends VerticalLayout implements View{
         firstName.selectAll();
 
     }
+
     public void setChangeHandler(PersonView.ChangeHandler h) {
         save.addClickListener(e -> h.onChange());
         delete.addClickListener(e -> h.onChange());
     }
-
 
 
 }

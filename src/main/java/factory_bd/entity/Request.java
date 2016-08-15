@@ -141,6 +141,17 @@ public class Request {
         this.dateTo = dateTo;
     }
 
+  /*  @Override
+    public String toString() {
+        return
+                "id=" + id +
+                ", компания=" + company +
+                ", создан=" + createdBy +
+                ", подтвержден=" + approvedBy +
+                ", описание='" + description + '\'' +
+                ", начало=" + dateFrom +
+                ", конец=" + dateTo + ", acepted=" + accepted + "***" + getPersons();
+    } */
     @Override
     public String toString() {
         return

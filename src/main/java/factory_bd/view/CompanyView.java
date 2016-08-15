@@ -62,7 +62,7 @@ public class CompanyView extends VerticalLayout implements View  {
 
     }
 
-    @Deprecated
+
     public void update(){
         CompanyService companyService = new CompanyService(companyRepository);
         companyService.fillCompanyGrid(companyGrid);
@@ -121,26 +121,37 @@ public class CompanyView extends VerticalLayout implements View  {
         CompanyService companyService = new CompanyService(companyRepository);
 
         save.addClickListener(e -> {
-            final Window window = new Window("Внимание");
-            window.setWidth(300.0f, Unit.PIXELS);
-            window.setPosition(400,150);
-            Button ok = new Button("Да");
-            Button no = new Button("Нет");
-            HorizontalLayout buttons = new HorizontalLayout(ok,no);
-            buttons.setSpacing(true);
-            Label areSure = new Label("Вы уверены, что хотите внести изменения в компанию? В таком случае все предыдущие запросы связанные с данной компанией аннулируются!");
-            final FormLayout content = new FormLayout(areSure,buttons);
+            if(companyService.doRepositoryHaveCompany(company))
+            {
 
-            window.setContent(content);
-            UI.getCurrent().addWindow(window);
-            ok.addClickListener(u->{
-                companyService.addCompany(company);
-                testMehod(company.getCompanyName());
-                window.close();
-            });
-            no.addClickListener(u->{
-                window.close();
-            });
+            }
+            else
+            {
+                final Window window = new Window("Внимание");
+                window.setWidth(300.0f, Unit.PIXELS);
+                window.setPosition(400,150);
+                Button ok = new Button("Да");
+                Button no = new Button("Нет");
+                HorizontalLayout buttons = new HorizontalLayout(ok,no);
+                buttons.setSpacing(true);
+                Label areSure = new Label("Вы уверены, что хотите внести изменения в компанию? В таком случае все предыдущие запросы связанные с данной компанией аннулируются!");
+                final FormLayout content = new FormLayout(areSure,buttons);
+
+                window.setContent(content);
+                UI.getCurrent().addWindow(window);
+                ok.addClickListener(u->{
+
+                    companyService.addCompany(company);
+                    testMehod(company.getCompanyName());
+                    companyGrid.setContainerDataSource(new BeanItemContainer(Company.class, companyRepository.findAll()));
+                    window.close();
+
+                });
+                no.addClickListener(u->{
+                    window.close();
+                });
+            }
+
 
         });
 

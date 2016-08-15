@@ -1,6 +1,7 @@
 package factory_bd.service;
 
 import com.vaadin.ui.ListSelect;
+import factory_bd.entity.User;
 import factory_bd.repository.RequestRepository;
 import factory_bd.entity.Request;
 /**
@@ -29,5 +30,11 @@ public class RequestVerifyService {
     }
     public void removeRequest(Request request){
         requestRepository.delete(request);
+    }
+
+    public void setApprovedBy(Request request, User user )
+    {
+        request.setApprovedBy(user);
+        requestRepository.save(request);
     }
 }

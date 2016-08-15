@@ -78,8 +78,7 @@ public class Car {
 
     @Override
     public String toString() {
-        return  carModel + ", " +
-                ", " + carColor +
+        return  carModel + ", "  + carColor +
                 ", рег. №'" + carRegistrationNumber;
     }
 }

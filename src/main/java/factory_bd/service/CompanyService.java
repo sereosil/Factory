@@ -22,7 +22,7 @@ public class CompanyService {
 
     private Company company;
 
-    @Autowired//внедрение зависимостей - в
+    @Autowired
     public CompanyService(CompanyRepository companyRepository) {
         this.companyRepository = companyRepository;
 
@@ -32,11 +32,24 @@ public class CompanyService {
         return companyRepository.count();
     }
 
-    public boolean doRepositoryHaveCompany(String companyName){
+  /*  public boolean doRepositoryHaveCompany(String companyName){
         for (Company comp:companyRepository.findByCompanyNameStartsWithIgnoreCase(companyName)){
             return true;
         }
         return false;
+    } */
+    public boolean doRepositoryHaveCompany(Company company){
+        boolean check = false;
+        for (Company comp:companyRepository.findAll()){
+            if( comp.getCompanyName().equals(company.getCompanyName())){
+                check = true;
+                break;
+            }
+            else {
+                check = false;
+            }
+        }
+        return check;
     }
     public void addCompany(Company companyToAdd){
         companyRepository.save(companyToAdd);

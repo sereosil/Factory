@@ -131,28 +131,37 @@ public class CarView extends VerticalLayout implements View{
         filterCar.addTextChangeListener(e -> fillCarGridByCarModel(e.getText(),selectedCompany));
 
         save.addClickListener(e->{
+            if (carService.doRepositoryHaveCar(car)){
+                Notification.show("Внимание!",
+                        "Транспротное средство с данными регистрационным номером уже существует!",
+                        //Notification.Type.TRAY_NOTIFICATION.TRAY_NOTIFICATION);
+                        Notification.Type.TRAY_NOTIFICATION.WARNING_MESSAGE);
+            }
+            else {
+                final Window window = new Window("Внимание");
+                window.setWidth(300.0f, Unit.PIXELS);
+                window.setPosition(400,150);
+                Button ok = new Button("Да");
+                Button no = new Button("Нет");
+                HorizontalLayout buttons = new HorizontalLayout(ok,no);
+                buttons.setSpacing(true);
+                Label areSure = new Label("Вы уверены, что хотите изменить параметры выбранного транспортного средства? В таком случае все предыдущие запросы связанные с ним аннулируются!");
+                final FormLayout content = new FormLayout(areSure,buttons);
 
-            final Window window = new Window("Внимание");
-            window.setWidth(300.0f, Unit.PIXELS);
-            window.setPosition(400,150);
-            Button ok = new Button("Да");
-            Button no = new Button("Нет");
-            HorizontalLayout buttons = new HorizontalLayout(ok,no);
-            buttons.setSpacing(true);
-            Label areSure = new Label("Вы уверены, что хотите изменить параметры выбранного транспортного средства? В таком случае все предыдущие запросы связанные с ним аннулируются!");
-            final FormLayout content = new FormLayout(areSure,buttons);
+                window.setContent(content);
+                UI.getCurrent().addWindow(window);
+                ok.addClickListener(u->{
+                    carService.addCar(car);
+                    testMehod(selectedCompany.getCompanyName());
+                    carLowerVerticalLayout.setVisible(false);
+                    fillCarGridBySelectedCompany(selectedCompany);
+                    window.close();
+                });
+                no.addClickListener(u->{
+                    window.close();
+                });
+            }
 
-            window.setContent(content);
-            UI.getCurrent().addWindow(window);
-            ok.addClickListener(u->{
-                carService.addCar(car);
-                testMehod(selectedCompany.getCompanyName());
-                carLowerVerticalLayout.setVisible(false);
-                window.close();
-            });
-            no.addClickListener(u->{
-                window.close();
-            });
 
 
         });

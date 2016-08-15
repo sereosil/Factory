@@ -111,8 +111,8 @@ public class User {
     @Override
     public String toString() {
         return
-                ", Телефон: '" + contact + '\'' +
-                ", Имя: '" + firstName + '\'' +
-                ", Фамилия: '" + lastName + '\'';
+                "Имя: '" + firstName + '\'' +
+                        ", Фамилия: '" + lastName + '\'' +
+                        ", Телефон: '" + contact + '\'';
     }
 }

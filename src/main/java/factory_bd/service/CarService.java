@@ -24,13 +24,7 @@ public class CarService {
         this.carRepository = carRepository;
     }
 
-    @Deprecated
-    public boolean doRepositoryHaveCar(String carRegistrationNumber){
-        for (Car car:carRepository.findByCarModelStartsWithIgnoreCase(carRegistrationNumber)){
-            return true;
-        }
-        return false;
-    }
+
     public void addCar(Car car){
         carRepository.save(car);
     }
@@ -57,5 +51,19 @@ public class CarService {
     public void fillCarGrid(Grid grid, Company company)
     {
         grid.setContainerDataSource( new BeanItemContainer(Car.class,carRepository.findByCompany(company)));
+    }
+
+    public boolean doRepositoryHaveCar(Car car){
+        boolean check = false;
+        for (Car searchedCar:carRepository.findAll()){
+            if( car.getCarRegistrationNumber().equals(searchedCar.getCarRegistrationNumber())){
+                check = true;
+                break;
+            }
+            else {
+                check = false;
+            }
+        }
+        return check;
     }
 }

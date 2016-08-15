@@ -79,6 +79,21 @@ public class RequestService {
     {
         grid.setContainerDataSource( new BeanItemContainer(Request.class,requestRepository.findByAccepted(true)));
     }
-
+    public boolean doRepositoryHaveRequest(Request request){
+        boolean check = false;
+        if(request != null){
+            for (Request req:requestRepository.findAll()){
+                if( req.getCompany() == request.getCompany()  /*&&
+                         && req.getPersons().equals(request.getPersons()) && req.getCars().equals(request.getCars())*/){
+                    check = true;
+                    break;
+                }
+                else {
+                    check = false;
+                }
+            }
+        }
+        return check;
+    }
 
 }
