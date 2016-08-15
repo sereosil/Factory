@@ -18,7 +18,7 @@ public interface RequestRepository extends JpaRepository<Request,Integer> {
     List<Request> findByCreatedBy(User createdBy);
     List<Request> findByApprovedBy(User approvedBy);
     List<Request> findByCompany(Company company);
-
+    List<Request> findByCompanyOrCarsOrPersons(Company company,Car cars,Person persons);
     List<Request> findByDescription(String description);
     List<Request> findByPersons(Person persons);
     List<Request> findByCars(Car cars);

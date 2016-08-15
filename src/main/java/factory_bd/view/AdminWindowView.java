@@ -124,7 +124,15 @@ public class AdminWindowView extends VerticalLayout implements View {
                     userNew.setFirstName(firstName.getValue());
                     userNew.setLastName(lastName.getValue());
                     userNew.setContact(contact.getValue());
-                    userNew.setEmail(email.getValue());
+
+                    if(userService.haveUser(email.getValue())){
+                        Notification.show("Внимание!",
+                                "Пользователь с таким e-mail уже существует!",
+                                Notification.Type.TRAY_NOTIFICATION.WARNING_MESSAGE);
+                        window.close();
+                        return;
+                    }
+                        userNew.setEmail(email.getValue());
                    // String checkPasswordLength;
                    // checkPasswordLength=password.toString();
                     if (password.getValue().length() <= 4) {

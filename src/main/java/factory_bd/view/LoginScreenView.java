@@ -77,6 +77,7 @@ public class LoginScreenView extends VerticalLayout implements View{
         loginScreenLayout.setMargin(true);
         removeAllComponents();
         addComponent(loginScreenLayout);
+
     }
 
     @Override
@@ -92,6 +93,9 @@ public class LoginScreenView extends VerticalLayout implements View{
         void onChange();
     }
     public final void loginUser(){
+        Notification.show("Внимание!",
+                "Если у вас включен AdBlock сервисы могут работать некорректно!",
+                Notification.Type.TRAY_NOTIFICATION.WARNING_MESSAGE);
         wrongPassOrLogin.setVisible(false);
         if(!userService.haveUser(email.getValue())) {
             wrongPassOrLogin.setVisible(true);
@@ -122,6 +126,14 @@ public class LoginScreenView extends VerticalLayout implements View{
                             askToChangePass.setVisible(false);
                             //ok.setVisible(true);
                            // password.clear();
+                            newPassword.clear();
+                            confirmPassword.clear();
+                            return;
+                        }
+                        if(password.getValue().equals(newPassword.getValue())){
+                            Notification.show("Внимание!",
+                                    "Новый пароль не должен совпадать со старым!",
+                                    Notification.Type.TRAY_NOTIFICATION.WARNING_MESSAGE);
                             newPassword.clear();
                             confirmPassword.clear();
                             return;
