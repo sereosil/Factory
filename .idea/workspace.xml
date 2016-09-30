@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="126e8f53-3697-4427-880b-bd0053bb2901" name="Default" comment="To be perfectly honest commit messages I have seen is not appropriate. I would like ask you to make it more complex and feasible.&#10;In this commit. Package name changed to company package.&#10;Add application properties&#10;Fix table and column naming in entities&#10;Add init function through number of command line parameters&#10;Change pom application name">
+    <list default="true" id="126e8f53-3697-4427-880b-bd0053bb2901" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/ru/od/factory_bd/Application.java" afterPath="$PROJECT_DIR$/src/main/java/ru/od/factory_bd/Application.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/application.properties" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" />
     </list>
     <ignored path="Factory.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -768,7 +766,7 @@
       <updated>1469531154508</updated>
       <workItem from="1475125963057" duration="1492000" />
       <workItem from="1475154524609" duration="6114000" />
-      <workItem from="1475234341338" duration="1453000" />
+      <workItem from="1475234341338" duration="1560000" />
     </task>
     <task id="LOCAL-00001" summary="Добавлено дофига всего, но в основном это исправлены View. Завтра раскидаю функционал по Service">
       <created>1470136430367</created>
@@ -840,11 +838,18 @@
       <option name="project" value="LOCAL" />
       <updated>1475160209295</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Fix roles">
+      <created>1475240720672</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1475240720672</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="9059000" />
+    <option name="totallyTimeSpent" value="9166000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -929,7 +934,8 @@
     <MESSAGE value="Мои изменения с пятницы" />
     <MESSAGE value="ЩОВДЛОАМЭДЦУ" />
     <MESSAGE value="To be perfectly honest commit messages I have seen is not appropriate. I would like ask you to make it more complex and feasible.&#10;In this commit. Package name changed to company package.&#10;Add application properties&#10;Fix table and column naming in entities&#10;Add init function through number of command line parameters&#10;Change pom application name" />
-    <option name="LAST_COMMIT_MESSAGE" value="To be perfectly honest commit messages I have seen is not appropriate. I would like ask you to make it more complex and feasible.&#10;In this commit. Package name changed to company package.&#10;Add application properties&#10;Fix table and column naming in entities&#10;Add init function through number of command line parameters&#10;Change pom application name" />
+    <MESSAGE value="Fix roles" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix roles" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
