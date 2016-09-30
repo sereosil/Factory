@@ -31,7 +31,7 @@ public class Application {
                                       CarRepository carRepository,
                                       CompanyRepository companyRepository) {
         return (args) -> {
-            if (args.length > 0) {
+            if (args.length == 0) {
                 log.info("Init database");
                 //добавить немного  кастомеров
                 UserRole role;
@@ -45,7 +45,7 @@ public class Application {
                 roleRepository.save(role = new UserRole(true, false, true, false));
                 roleRepository.save(role1 = new UserRole(true, true, true, true));
                 roleRepository.save(role2 = new UserRole(true, true, true, false));
-                roleRepository.save(role3 = new UserRole(false, true, false, true));
+                roleRepository.save(role3 = new UserRole(false, true, false, false));
 
                 String pass = "1";
                 pass = DigestUtils.md5Hex(pass);
