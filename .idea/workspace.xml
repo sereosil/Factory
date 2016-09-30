@@ -766,7 +766,7 @@
       <updated>1469531154508</updated>
       <workItem from="1475125963057" duration="1492000" />
       <workItem from="1475154524609" duration="6114000" />
-      <workItem from="1475234341338" duration="1560000" />
+      <workItem from="1475234341338" duration="1658000" />
     </task>
     <task id="LOCAL-00001" summary="Добавлено дофига всего, но в основном это исправлены View. Завтра раскидаю функционал по Service">
       <created>1470136430367</created>
@@ -845,11 +845,18 @@
       <option name="project" value="LOCAL" />
       <updated>1475240720672</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Fix roles">
+      <created>1475240816804</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1475240816804</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="9166000" />
+    <option name="totallyTimeSpent" value="9264000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
